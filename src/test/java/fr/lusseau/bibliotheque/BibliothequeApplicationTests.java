@@ -1,4 +1,4 @@
-package com.example.bibliotheque;
+package fr.lusseau.bibliotheque;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
