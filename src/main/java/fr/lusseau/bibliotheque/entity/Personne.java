@@ -27,11 +27,11 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -91,7 +91,7 @@ public class Personne implements Serializable, UserDetails {
 	@OneToMany(targetEntity = Emprunt.class, mappedBy = "personne", fetch = FetchType.LAZY)
 	private List<Emprunt> emprunts;
 
-	@DateTimeFormat(pattern="dd/MM/yyyy")
+	@JsonFormat(pattern = "dd-MM-yyy HH:mm", timezone = "UTC")
 	@Column(columnDefinition = "DATETIME")
 	@NotNull
 	private LocalDateTime dateInscription;

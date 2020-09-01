@@ -3,7 +3,6 @@
  */
 package fr.lusseau.bibliotheque.controller;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +10,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,6 +53,7 @@ public class PersonneController {
 	@PostConstruct
 	private void init() {
 	}
+	
 
 	@RequestMapping(path = "/listePersonnes", method = RequestMethod.GET)
 	public ModelAndView listerPersonnes() {
@@ -96,7 +95,6 @@ public class PersonneController {
 	@RequestMapping(value = "/detailsPersonne", method = RequestMethod.GET)
 	public ModelAndView detailsPersonne(String index) {
 		int i = Integer.parseInt(index.substring(1));
-		ModelMap model = new ModelMap();
 		Personne pers;
 		Role role = null;
 		Caution caution = null;
@@ -105,12 +103,10 @@ public class PersonneController {
 		pers = gp.trouverPersonne(i);
 		
 		ModelAndView mav = new ModelAndView("/admin/details/detailsPersonne", "pers", pers);
-		model.addAttribute("localDateTimeFormat", DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
 		mav.getModelMap().addAttribute(index, role);
 		mav.getModelMap().addAttribute(index, caution);
 		mav.getModelMap().addAttribute(index, coordonnee);
 		mav.getModelMap().addAttribute(index, emprunts);
-		
 		
 		return mav;
 

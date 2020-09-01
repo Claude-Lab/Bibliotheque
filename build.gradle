@@ -48,8 +48,12 @@ dependencies {
 	providedCompile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.37'
 	// https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jasper
 	compile group: 'org.apache.tomcat', name: 'tomcat-jasper', version: '9.0.37'
+	// https://mvnrepository.com/artifact/taglibs/fmt
+	compile group: 'taglibs', name: 'fmt', version: '1.1.2'	
 	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.2'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
