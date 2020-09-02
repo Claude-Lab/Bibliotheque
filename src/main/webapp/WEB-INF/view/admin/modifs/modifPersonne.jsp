@@ -38,8 +38,9 @@
 
 							<form:form action="modifierPersonneValid" method="POST" cssClass="form-horizontal" modelAttribute="pers">
 								<form:hidden path="idPersonne" />
-								<form:hidden path="password" />
+								<form:hidden path="password"/>
 								<form:hidden path="confirmPassword" />
+								<form:hidden path="username"/>
 
 								<div class="form-group row">
 									<div class="col-sm-6 mb-3 mb-sm-0">
@@ -53,6 +54,14 @@
 										<form:label path="prenom"> Prénom : </form:label>
 										<form:input path="prenom" type="text" pattern="[-[:alpha:] ]{2,30}" title="chiffre et signe spéciaux interdit" class="form-control form-control-user" placeholder="Prénom" required="required"></form:input>
 										<form:errors path="prenom" cssClass="erreur"></form:errors>
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<div class="col-sm-6 mb-3 mb-sm-0">
+										<form:label path="username"> Login de connexion : </form:label>
+										<form:input path="username" type="text" pattern="[-[:alpha:] ]{2,30}" title="chiffre et signe spéciaux interdit" class="form-control form-control-user" placeholder="Prénom" required="required"></form:input>
+										<form:errors path="username" cssClass="erreur"></form:errors>
 									</div>
 								</div>
 
