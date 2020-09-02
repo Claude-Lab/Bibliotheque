@@ -10,7 +10,7 @@ import org.springframework.web.servlet.view.JstlView;
 @SpringBootApplication
 @ComponentScan(basePackages = {"fr.lusseau.bibliotheque"})
 public class BibliothequeApplication {
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(BibliothequeApplication.class, args);
 	}
@@ -22,5 +22,4 @@ public class BibliothequeApplication {
         resolver.setViewClass(JstlView.class);
         registry.viewResolver(resolver);
     }
-
 }
