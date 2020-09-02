@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.entity.Caution;
@@ -26,7 +26,7 @@ import fr.lusseau.bibliotheque.service.GestionCaution;
  * @author Claude LUSSEAU
  *
  */
-@Controller
+@RestController
 public class CautionController {
 	
 	@Autowired
@@ -60,12 +60,12 @@ public class CautionController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,  value = "/validCaution")
-	public String ajoutCautionValid(@ModelAttribute("caution") @Valid Caution caution, BindingResult result) {
+	public ModelAndView ajoutCautionValid(@ModelAttribute("caution") @Valid Caution caution, BindingResult result) {
 		if (result.hasErrors())
-			return "/admin/ajouts/ajoutCaution";
+			return new ModelAndView("/admin/ajouts/ajoutCaution");
 		else
 			gc.ajouterCaution(caution);
-			return "redirect:/gestionCautions";
+			return new ModelAndView("redirect:/gestionCautions");
 	}
 	
 	

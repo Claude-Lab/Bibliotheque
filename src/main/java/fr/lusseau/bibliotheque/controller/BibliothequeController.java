@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.entity.Bibliotheque;
@@ -27,7 +27,7 @@ import fr.lusseau.bibliotheque.service.GestionBibliotheque;
  * @author Claude LUSSEAU
  *
  */
-@Controller
+@RestController
 public class BibliothequeController {
 
 	@Autowired
@@ -61,12 +61,12 @@ public class BibliothequeController {
 	}
 	
 	@RequestMapping( value = "/validBibliotheque", method = RequestMethod.POST)
-	public String ajoutBibliothequeValid(@Valid @ModelAttribute("bibliotheque") Bibliotheque bibliotheque, BindingResult result) {
+	public ModelAndView ajoutBibliothequeValid(@Valid @ModelAttribute("bibliotheque") Bibliotheque bibliotheque, BindingResult result) {
 		if (result.hasErrors()) 
-			return "/admin/ajouts/ajoutBibliotheque";
+			return new ModelAndView("/admin/ajouts/ajoutBibliotheque");
 		 else
 			gb.ajouterBibliotheque(bibliotheque);
-			return "redirect:/gestionBibliotheques";
+			return new ModelAndView("redirect:/gestionBibliotheques");
 	}
 	
 	@RequestMapping(value = "/detailsBibliotheque", method = RequestMethod.GET)

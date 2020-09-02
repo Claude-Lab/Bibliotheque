@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.entity.Etat;
@@ -26,7 +26,7 @@ import fr.lusseau.bibliotheque.service.GestionEtat;
  * @author Claude LUSSEAU
  *
  */
-@Controller
+@RestController
 public class EtatController {
 
 	@Autowired
@@ -60,12 +60,12 @@ public class EtatController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST,  value = "/validEtat")
-	public String ajoutEtatValid(@ModelAttribute("etat") @Valid Etat etat, BindingResult result) {
+	public ModelAndView ajoutEtatValid(@ModelAttribute("etat") @Valid Etat etat, BindingResult result) {
 		if (result.hasErrors())
-			return "/admin/ajouts/ajoutEtat";
+			return new ModelAndView("/admin/ajouts/ajoutEtat");
 		else
 			ge.ajouterEtat(etat);
-			return "redirect:/gestionEtats";
+			return new ModelAndView("redirect:/gestionEtats");
 	}
 	
 	@RequestMapping(value="/modifierEtat", method=RequestMethod.GET)

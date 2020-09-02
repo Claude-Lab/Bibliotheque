@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.entity.Style;
@@ -26,7 +26,7 @@ import fr.lusseau.bibliotheque.service.GestionStyle;
  * @author Claude LUSSEAU
  *
  */
-@Controller
+@RestController
 public class StyleController {
 	
 	@Autowired
@@ -60,12 +60,12 @@ public class StyleController {
 	}
 	
 	@RequestMapping( value = "/validStyle", method = RequestMethod.POST)
-	public String ajoutStyleValid(@ModelAttribute("style") @Valid Style style, BindingResult result) {
+	public ModelAndView ajoutStyleValid(@ModelAttribute("style") @Valid Style style, BindingResult result) {
 		if (result.hasErrors()) 
-			return "/admin/ajouts/ajoutStyle";
+			return new ModelAndView("/admin/ajouts/ajoutStyle");
 		 else
 			gs.ajouterStyle(style);
-			return "redirect:/gestionStyles";
+			return new ModelAndView("redirect:/gestionStyles");
 	}
 	
 	@RequestMapping(value="/modifierStyle", method=RequestMethod.GET)

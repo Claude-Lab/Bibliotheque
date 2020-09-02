@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.entity.Role;
@@ -28,7 +28,7 @@ import fr.lusseau.bibliotheque.service.GestionRole;
  *
  */
 
-@Controller
+@RestController
 public class RoleController {
 	
 	@Autowired
@@ -61,12 +61,12 @@ public class RoleController {
 	}
 
 	@RequestMapping( value = "/validRole", method = RequestMethod.POST)
-	public String ajoutRoleValid(@ModelAttribute("role") @Valid Role role, BindingResult result) {
+	public ModelAndView ajoutRoleValid(@ModelAttribute("role") @Valid Role role, BindingResult result) {
 		if (result.hasErrors()) 
-			return "/admin/ajouts/ajoutRole";
+			return new ModelAndView("/admin/ajouts/ajoutRole");
 		 else
 			gr.ajouterRole(role);
-			return "redirect:/gestionRoles";
+			return new ModelAndView("redirect:/gestionRoles");
 	}
 	
 	

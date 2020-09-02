@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.entity.Coordonnee;
@@ -27,7 +27,7 @@ import fr.lusseau.bibliotheque.service.GestionEditeur;
  * @author Claude LUSSEAU
  *
  */
-@Controller
+@RestController
 public class EditeurController {
 
 	@Autowired
@@ -61,12 +61,12 @@ public class EditeurController {
 	}
 	
 	@RequestMapping( value = "/validEditeur", method = RequestMethod.POST)
-	public String ajoutEditeurValid(@Valid @ModelAttribute("editeur, coordonnee") Editeur editeur, Coordonnee coordonee, BindingResult result) {
+	public ModelAndView ajoutEditeurValid(@Valid @ModelAttribute("editeur, coordonnee") Editeur editeur, Coordonnee coordonee, BindingResult result) {
 		if (result.hasErrors()) 
-			return "/admin/ajouts/ajoutEditeur";
+			return new ModelAndView("/admin/ajouts/ajoutEditeur");
 		 else
 			ge.ajouterEditeur(editeur);
-			return "redirect:/gestionEditeurs";
+			return new ModelAndView("redirect:/gestionEditeurs");
 	}
 	
 	@RequestMapping(value = "/detailsEditeur", method = RequestMethod.GET)

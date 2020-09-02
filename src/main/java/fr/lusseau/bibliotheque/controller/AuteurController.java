@@ -9,11 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.entity.Auteur;
@@ -26,7 +26,7 @@ import fr.lusseau.bibliotheque.service.GestionAuteur;
  * @author Claude LUSSEAU
  *
  */
-@Controller
+@RestController
 public class AuteurController {
 
 	@Autowired
@@ -60,12 +60,12 @@ public class AuteurController {
 	}
 	
 	@RequestMapping( value = "/validAuteur", method = RequestMethod.POST)
-	public String ajoutAuteurValid(@Valid @ModelAttribute("auteur") Auteur auteur, BindingResult result) {
+	public ModelAndView ajoutAuteurValid(@Valid @ModelAttribute("auteur") Auteur auteur, BindingResult result) {
 		if (result.hasErrors()) 
-			return "/admin/ajouts/ajoutAuteur";
+			return new ModelAndView("/admin/ajouts/ajoutAuteur");
 		 else
 			ga.ajouterAuteur(auteur);
-			return "redirect:/gestionAuteurs";
+			return new ModelAndView( "redirect:/gestionAuteurs");
 	}
 	
 	

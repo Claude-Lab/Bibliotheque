@@ -9,13 +9,16 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.lusseau.bibliotheque.configuration.DateToString;
 import fr.lusseau.bibliotheque.entity.Caution;
 import fr.lusseau.bibliotheque.entity.Coordonnee;
 import fr.lusseau.bibliotheque.entity.Emprunt;
@@ -36,9 +39,12 @@ import fr.lusseau.bibliotheque.service.GestionRole;
  * @author Claude LUSSEAU
  *
  */
-@Controller
+@RestController
 public class PersonneController {
-
+	
+	
+	@Qualifier
+	static DateToString dts = new DateToString();
 	@Autowired
 	GestionPersonne gp;
 	@Autowired
@@ -82,18 +88,18 @@ public class PersonneController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/validPersonne")
-	public String ajoutPersonneValid(@Valid @ModelAttribute("pers, coordonnee, caution, role") Personne pers,
+	public ModelAndView ajoutPersonneValid(@Valid @ModelAttribute("pers, coordonnee, caution, role") Personne pers,
 			Coordonnee coordonnee, BindingResult result) {
 		if (result.hasErrors()) {
-			return "/admin/ajouts/ajoutPersonne";
+			return new ModelAndView("/admin/ajouts/ajoutPersonne");
 		} else {
 			gp.ajouterPersonne(pers);
-			return "redirect:/gestionPersonnes";
+			return new ModelAndView("redirect:/gestionPersonnes");
 		}
 	}
 
 	@RequestMapping(value = "/detailsPersonne", method = RequestMethod.GET)
-	public ModelAndView detailsPersonne(String index) {
+	public ModelAndView detailsPersonne(String index, @RequestParam(value="pers.getDateInscription()", required = false) String date)  {
 		int i = Integer.parseInt(index.substring(1));
 		Personne pers;
 		Role role = null;
@@ -101,12 +107,14 @@ public class PersonneController {
 		Coordonnee coordonnee = null;
 		List<Emprunt> emprunts = null;
 		pers = gp.trouverPersonne(i);
-		
+		date = dts.convert(pers.getDateInscription());
 		ModelAndView mav = new ModelAndView("/admin/details/detailsPersonne", "pers", pers);
+		
 		mav.getModelMap().addAttribute(index, role);
 		mav.getModelMap().addAttribute(index, caution);
 		mav.getModelMap().addAttribute(index, coordonnee);
 		mav.getModelMap().addAttribute(index, emprunts);
+		mav.addObject("date", date);
 		
 		return mav;
 
@@ -126,7 +134,7 @@ public class PersonneController {
 	@RequestMapping(value = "/modifierPersonneValid", method = RequestMethod.POST)
 	public ModelAndView listePersonneValid(Personne pers) {
 		gp.modifierPersonne(pers);
-		return gererPersonnes();
+		return new ModelAndView ("redirect:/gestionPersonnes");
 	}
 
 	@RequestMapping(value = "/supprimerPersonne", method = RequestMethod.GET)
