@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<%@ page session="true" %>
 
-	
 <!DOCTYPE html>
 <html lang="fr">
 
 <%@include file="includes/header.html"%>
+<%@include file="includes/taglibs.jsp"%>
 
 <body id="page-top">
 
@@ -41,8 +40,11 @@
 											class="text-xs font-weight-bold text-primary text-uppercase mb-1">Nombre
 											de personnes en base</div>
 										<div class="h5 mb-0 font-weight-bold text-gray-800">
-										
-											<p><c:out value="${valuePersonnes}" /> personnes</p>
+
+											<p>
+												<c:out value="${valuePersonnes}" />
+												personnes
+											</p>
 										</div>
 									</div>
 									<div class="col-auto">
@@ -60,8 +62,14 @@
 								<div class="row no-gutters align-items-center">
 									<div class="col mr-2">
 										<div
-											class="text-xs font-weight-bold text-success text-uppercase mb-1">Nombre d'euvres en base</div>
-										<div class="h5 mb-0 font-weight-bold text-gray-800"><p><c:out value="${valueLivres}" /> oeuvres</p></div>
+											class="text-xs font-weight-bold text-success text-uppercase mb-1">Nombre
+											d'euvres en base</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800">
+											<p>
+												<c:out value="${valueLivres}" />
+												oeuvres
+											</p>
+										</div>
 									</div>
 									<div class="col-auto">
 										<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -78,10 +86,16 @@
 								<div class="row no-gutters align-items-center">
 									<div class="col mr-2">
 										<div
-											class="text-xs font-weight-bold text-info text-uppercase mb-1">Nombre d'emprunt en cours</div>
+											class="text-xs font-weight-bold text-info text-uppercase mb-1">Nombre
+											d'emprunt en cours</div>
 										<div class="row no-gutters align-items-center">
 											<div class="col-auto">
-												<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><p><c:out value="${valueEmprunt}" /> emprunts</p></div>
+												<div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+													<p>
+														<c:out value="${valueEmprunt}" />
+														emprunts
+													</p>
+												</div>
 											</div>
 											<div class="col">
 												<div class="progress progress-sm mr-2">
@@ -107,8 +121,14 @@
 								<div class="row no-gutters align-items-center">
 									<div class="col mr-2">
 										<div
-											class="text-xs font-weight-bold text-warning text-uppercase mb-1">Cumul des cotisations</div>
-										<div class="h5 mb-0 font-weight-bold text-gray-800"><p><c:out value="${valueCotisation}" /> €</p></div>
+											class="text-xs font-weight-bold text-warning text-uppercase mb-1">Cumul
+											des cotisations</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800">
+											<p>
+												<c:out value="${valueCotisation}" />
+												€
+											</p>
+										</div>
 									</div>
 									<div class="col-auto">
 										<i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -124,10 +144,13 @@
 			<!-- /.container-fluid -->
 
 		</div>
-	</div>
-	</div>
+	
+	
+
 	<!-- End of Main Content -->
 	<%@include file="includes/footer.html"%>
-	
-	</body>
+
+
+	<!-- End of Page Wrapper -->
+</body>
 </html>
