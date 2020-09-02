@@ -43,7 +43,7 @@
 							<h6>Nom : ${pers.nom}</h6>
 							<h6>Prenom : ${pers.prenom}</h6>
 							<h6>Login : ${pers.username}</h6>
-							<h6>Date d'inscription : ${pers.dateInscription} </h6>
+							<h6>Date d'inscription : ${date} </h6>
 							<br>
 							<h4>Coordonnées</h4>
 							<h6>${pers.coordonnee.rue}</h6>
