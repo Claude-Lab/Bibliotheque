@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.configuration;
+package fr.lusseau.bibliotheque.utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +16,7 @@ import org.springframework.core.convert.converter.Converter;
  * @author Claude LUSSEAU
  *
  */
-public class DateToString implements Converter<LocalDateTime, String>{
+public class DateTimeToString implements Converter<LocalDateTime, String>{
 	
 	
 
