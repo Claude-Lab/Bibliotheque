@@ -125,7 +125,7 @@
 											des cotisations</div>
 										<div class="h5 mb-0 font-weight-bold text-gray-800">
 											<p>
-												<c:out value="${valueCotisation}" />
+												<c:out value="${sumCaution}" />
 												€
 											</p>
 										</div>

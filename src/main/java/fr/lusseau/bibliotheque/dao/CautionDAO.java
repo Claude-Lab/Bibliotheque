@@ -6,6 +6,7 @@ package fr.lusseau.bibliotheque.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import fr.lusseau.bibliotheque.entity.Caution;
 
@@ -22,4 +23,8 @@ public interface CautionDAO extends JpaRepository<Caution, Integer>{
 	List<Caution> findByOrderByNbLivresDesc();
 	List<Caution> findByOrderByValeurAsc();
 	List<Caution> findByOrderByValeurDesc();
+	
+	@Query(value = "SELECT SUM(valeur) FROM Caution", nativeQuery = true)
+	public float sumCaution();
+	
 }

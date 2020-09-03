@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.lusseau.bibliotheque.service.GestionCaution;
 import fr.lusseau.bibliotheque.service.GestionLivre;
 import fr.lusseau.bibliotheque.service.GestionPersonne;
 
@@ -29,9 +30,10 @@ public class NavigationController {
 
 	@Autowired
 	GestionPersonne gp;
-	
 	@Autowired
 	GestionLivre gl;
+	@Autowired
+	GestionCaution gc;
 	
 	@PostConstruct
 	private void init() {
@@ -41,8 +43,10 @@ public class NavigationController {
 	public ModelAndView accueilAdmin() {
 		long comptagePers = gp.countPersonne();
 		long comptageLivre = gl.countLivre();
+		float sumCaution = gc.sumCaution();
 		ModelAndView mav = new ModelAndView("/admin/accueil", "comptagePers",comptagePers);
 		mav.getModelMap().addAttribute("comptageLivre", comptageLivre);
+		mav.getModelMap().addAttribute("sumCaution", sumCaution);
 		return mav;
 	}
 	
