@@ -30,6 +30,7 @@ public class GestionPersonne implements UserDetailsService {
 
 	private final PersonneDAO dao;
 
+	
 	@Autowired
 	public GestionPersonne(PersonneDAO dao) {
 		this.dao = dao;
@@ -108,5 +109,11 @@ public class GestionPersonne implements UserDetailsService {
 
 		return liste;
 	}
+	
+	public long countPersonne() {
+		return dao.count();
+	}
+	
+
 
 }

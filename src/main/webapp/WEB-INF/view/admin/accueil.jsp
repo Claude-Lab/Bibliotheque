@@ -42,7 +42,7 @@
 										<div class="h5 mb-0 font-weight-bold text-gray-800">
 
 											<p>
-												<c:out value="${valuePersonnes}" />
+												<c:out value="${comptagePers}" />
 												personnes
 											</p>
 										</div>
@@ -66,7 +66,7 @@
 											d'euvres en base</div>
 										<div class="h5 mb-0 font-weight-bold text-gray-800">
 											<p>
-												<c:out value="${valueLivres}" />
+												<c:out value="${comptageLivre}" />
 												oeuvres
 											</p>
 										</div>

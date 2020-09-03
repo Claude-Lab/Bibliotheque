@@ -26,5 +26,6 @@ public interface LivreDAO extends JpaRepository<Livre, Integer> {
 	Iterable<Livre> findByOrderByIsbnDesc();
 	Livre findByTitre(String titre);
 	
+	long count();
 	
 }

@@ -33,5 +33,7 @@ public interface PersonneDAO extends JpaRepository<Personne, Integer> {
 	List<Personne> findByOrderByPrenomDesc();
 	List<Personne> findByOrderByDateInscriptionAsc();
 	List<Personne> findByOrderByDateInscriptionDesc();
+	
+	long count();
 
 }

@@ -114,6 +114,10 @@ public class GestionLivre {
 
 		return liste;
 	}
+	
+	public long countLivre() {
+		return daoL.count();
+	}
 
 	
 	
