@@ -37,10 +37,10 @@
 
 								<thead>
 									<tr>
-										<th><a href="trier?par=iA"></a>ID<a href="trier?par=iD"></a></th>
 										<th><a href="trier?par=nD"></a>NOM<a href="trier?par=nD"></a></th>
 										<th><a href="trier?par=pD"></a>PRENOM<a href="trier?par=pD"></a></th>
-										<th><a href="trier?par=pD"></a>ROLE<a href="trier?par=pD"></a></th>
+<!-- 										<th><a href="trier?par=pD"></a>ROLE<a href="trier?par=pD"></a></th> -->
+										<th></th>
 									</tr>
 								</thead></thead>
 
@@ -48,11 +48,10 @@
 								<tbody>
 									<c:forEach items="${listeP}" var="pers" varStatus="pStatus">
 										<tr>
-											<td>${pers.idPersonne}</td>
 											<td>${pers.nom}</td>
 											<td>${pers.prenom}</td>
-											<td>${pers.role.libelle}</td>
-
+<%-- 											<td>${pers.role.libelle}</td> --%>
+											<td class="centre"><a href="detailsPersonne?index=s${pers.idPersonne}"><span class="detail fas fa-binoculars"></span></a></td>
 										</tr>
 									</c:forEach>
 								</tbody>

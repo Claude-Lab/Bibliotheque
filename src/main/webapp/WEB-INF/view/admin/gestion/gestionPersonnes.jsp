@@ -26,7 +26,7 @@
 				<p class="mb-4"></p>
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
-						<a href="ajoutPersonne" class="btn btn-success" role="button" aria-pressed="true">Ajouter une personne</a>
+						<a href="ajoutPersonne" class="btn btn-warning"  role="button" aria-pressed="true">Ajouter une personne</a>
 					</div>
 				</div>
 				<!-- DataTales Example -->

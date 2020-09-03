@@ -24,11 +24,7 @@
 				<!-- Page Heading -->
 				<h1 class="h3 mb-2 text-gray-800">Bibliothèque</h1>
 				<p class="mb-4"></p>
-				<div class="card shadow mb-4">
-					<div class="card-header py-3">
-						<a href="ajoutBibliotheque" class="btn btn-warning" role="button" aria-pressed="true">Ajouter une bibliothèque</a>
-					</div>
-				</div>
+			
 				<!-- DataTales Example -->
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
@@ -41,9 +37,7 @@
 									<tr>
 										<th><a href="trier?par=iA"></a>ID<a href="trier?par=iD"></a></th>
 										<th><a href="trier?par=nD"></a>NOM<a href="trier?par=nD"></a></th>
-										<th></th>
-										<th></th>
-										<th></th>
+										<th><a>Details</a></th>
 									</tr>
 								</thead>
 
@@ -53,8 +47,6 @@
 											<td>${bibliotheque.idBibliotheque}</td>
 											<td>${bibliotheque.nom}</td>
 											<td class="centre" title="Details"><a href="detailsBibliotheque?index=s${bibliotheque.idBibliotheque}"><span class="detail fas fa-binoculars"></span></a></td>
-											<td class="centre" title="Modifier"><a href="modifierBibliotheque?index=s${bibliotheque.idBibliotheque}"><span class="modif fas fa-edit vert"></span></a></td>
-											<td class="centre" title="Supprimer"><a href="supprimerBibliotheque?index=s${bibliotheque.idBibliotheque}"><span class="supp far fa-trash-alt rouge"></span></a></td>
 
 										</tr>
 									</c:forEach>

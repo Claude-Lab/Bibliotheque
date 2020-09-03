@@ -84,7 +84,7 @@
 						
 
 								<input type="submit" value="VALIDER" class="btn btn-primary btn-user " />
-								<a href="gestionBibliothèques" class="btn btn-secondary" role="button" aria-pressed="true">ANNULER</a> <br>
+								<a href="gestionBibliotheques" class="btn btn-secondary" role="button" aria-pressed="true">ANNULER</a> <br>
 
 								<hr>
 

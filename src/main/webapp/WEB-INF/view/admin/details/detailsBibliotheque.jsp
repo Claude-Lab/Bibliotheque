@@ -19,7 +19,7 @@
 			<%@include file="../includes/topbar.jsp"%>
 			<!-- Begin Page Content -->
 			<div class="container-fluid">
-				<a href="gestionBibliotheques" class="btn btn-primary" role="button" aria-pressed="true">Retour à la gestion des bibliothèques</a> <br>
+				<a href="javascript:history.go(-1)" class="btn btn-primary" role="button" aria-pressed="true">Retour</a> <br>
 				<br>
 				<!-- Page Heading -->
 				<h1 class="h3 mb-2 text-gray-800">Fiche de la "${bibliotheque.nom}"</h1>
