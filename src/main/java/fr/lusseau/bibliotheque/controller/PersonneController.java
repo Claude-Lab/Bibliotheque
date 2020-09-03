@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import fr.lusseau.bibliotheque.configuration.DateToString;
 import fr.lusseau.bibliotheque.entity.Caution;
 import fr.lusseau.bibliotheque.entity.Coordonnee;
 import fr.lusseau.bibliotheque.entity.Emprunt;
@@ -29,6 +28,7 @@ import fr.lusseau.bibliotheque.service.GestionCoordonnee;
 import fr.lusseau.bibliotheque.service.GestionEmprunt;
 import fr.lusseau.bibliotheque.service.GestionPersonne;
 import fr.lusseau.bibliotheque.service.GestionRole;
+import fr.lusseau.bibliotheque.utils.DateToString;
 
 /**
  * Classe en charge de la gestion et de la synchronisation des événements liés à
