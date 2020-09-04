@@ -64,7 +64,7 @@ public class Personne implements Serializable, UserDetails {
 	private String prenom;
 
 	@Column(name = "username")
-	private String username = convertUsername(prenom+nom);
+	private String username;
 
 	@NotBlank
 	private String password;
@@ -418,16 +418,6 @@ public class Personne implements Serializable, UserDetails {
 		this.password = password;
 	}
 	
-	/**
-	 * Methode en charge de la convertionde la chaine de caractères de username.
-	 * @param username
-	 * @return
-	 */
-	public String convertUsername(String username) {
-		String strTemp = Normalizer.normalize(this.prenom+this.nom, Normalizer.Form.NFD);
-		username = strTemp;
-        return username.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").toLowerCase();
-	}
 
 	/**
 	 * @{inheritDoc}
