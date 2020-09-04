@@ -37,6 +37,8 @@
 
 
 							<form:form action="validPersonne" method="POST" cssClass="form-horizontal" modelAttribute="pers" >
+							
+							
 								<div class="form-group row">
 									<div class="col-sm-6 mb-3 mb-sm-0">
 										<form:label path="nom"> Nom : </form:label>
@@ -51,6 +53,8 @@
 										<form:errors path="prenom" cssClass="erreur"></form:errors>
 									</div>
 								</div>
+								
+								<form:hidden path="username" />
 								
 								<div class="form-group row">
 									<div class="col-sm-6 mb-3 mb-sm-0">

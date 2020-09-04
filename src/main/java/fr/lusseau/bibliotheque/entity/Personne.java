@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.entity;
 
 import java.io.Serializable;
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class Personne implements Serializable, UserDetails {
 	private String prenom;
 
 	@Column(name = "username")
-	private String username;
+	private String username = convertUsername(prenom+nom);
 
 	@NotBlank
 	private String password;
@@ -90,6 +91,7 @@ public class Personne implements Serializable, UserDetails {
 	@Column(columnDefinition = "DATETIME")
 	@NotNull
 	private LocalDateTime dateInscription;
+
 
 
 	/**
@@ -184,8 +186,9 @@ public class Personne implements Serializable, UserDetails {
 	 */
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return (this.prenom + this.nom).toLowerCase();
+		String strTemp = Normalizer.normalize(this.prenom+this.nom, Normalizer.Form.NFD);
+		username = strTemp.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").toLowerCase();;
+        return username;
 	}
 
 	/**
@@ -401,7 +404,7 @@ public class Personne implements Serializable, UserDetails {
 	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
-		this.username = (prenom + nom).toLowerCase();
+		this.username = username;
 	}
 	
 	
@@ -413,6 +416,17 @@ public class Personne implements Serializable, UserDetails {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	/**
+	 * Methode en charge de la convertionde la chaine de caractères de username.
+	 * @param username
+	 * @return
+	 */
+	public String convertUsername(String username) {
+		String strTemp = Normalizer.normalize(this.prenom+this.nom, Normalizer.Form.NFD);
+		username = strTemp;
+        return username.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").toLowerCase();
 	}
 
 	/**
