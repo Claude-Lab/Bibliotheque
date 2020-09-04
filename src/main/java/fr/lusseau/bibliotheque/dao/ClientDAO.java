@@ -3,7 +3,12 @@
  */
 package fr.lusseau.bibliotheque.dao;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import fr.lusseau.bibliotheque.entity.Client;
 
@@ -15,5 +20,20 @@ import fr.lusseau.bibliotheque.entity.Client;
  *
  */
 public interface ClientDAO extends JpaRepository<Client, Integer>{
+	
+	@Query(value = "select id_personne, email from Personne p, join coordonnee c On c.id_personne = p.id_personne where c.email= :email", nativeQuery = true)
+	Optional<Client> findByEmail(@Param("email") String email);
+	
+	@Query("select p from Personne p where p.username = ?1")
+    Optional<Client> findClientWithUsername(String username);
+	
+	List<Client> findByOrderByNomAsc();
+	List<Client> findByOrderByNomDesc();
+	List<Client> findByOrderByPrenomAsc();
+	List<Client> findByOrderByPrenomDesc();
+	List<Client> findByOrderByDateInscriptionAsc();
+	List<Client> findByOrderByDateInscriptionDesc();
+	
+	long count();
 
 }

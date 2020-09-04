@@ -36,7 +36,7 @@
 						<div class="card-body">
 
 
-							<form:form action="modifierPersonneValid" method="POST" cssClass="form-horizontal" modelAttribute="pers">
+							<form:form action="modifierClientValid" method="POST" cssClass="form-horizontal" modelAttribute="pers">
 								<form:hidden path="idPersonne" />
 								<form:hidden path="password"/>
 								<form:hidden path="confirmPassword" />
@@ -120,21 +120,11 @@
 											</form:select>
 										</div>
 									</div>
-									<div class="col-sm-6 mb-3 mb-sm-0">
-										<form:label path="role.idRole" cssClass="col-xs-2 control-label">Role :</form:label>
-										<div class="col-xs-10">
-											<form:select path="role.idRole" cssClass="form-control" required="required">
-												<option value="" title="Veuillez choisir le role">-- ROLE --</option>
-												<form:options items="${listeRoles}" itemValue="idRole" itemLabel="libelle" />
-											</form:select>
-										</div>
-									</div>
-
 								</div>
 
 
 								<input type="submit" value="VALIDER" class="btn btn-primary btn-user " />
-								<a href="gestionPersonnes" class="btn btn-secondary" role="button" aria-pressed="true">ANNULER</a>
+								<a href="javascript:history.go(-1)" class="btn btn-secondary" role="button" aria-pressed="true">ANNULER</a>
 
 							</form:form>
 						</div>

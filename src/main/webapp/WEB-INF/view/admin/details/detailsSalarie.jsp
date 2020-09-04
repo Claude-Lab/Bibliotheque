@@ -34,7 +34,7 @@
 				<div class="card shadow mb-10">
 					<!-- Card Header - Accordion -->
 					<a href="#collapseCard1" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCard1">
-						<h6 class="m-1 font-weight-bold text-primary">Detail du compte</h6>
+						<h6 class="m-1 font-weight-bold text-primary">Detail du compte Salarié</h6>
 					</a>
 					<!-- Card Content - Collapse -->
 					<div class="collapse show" id="collapseCard1">

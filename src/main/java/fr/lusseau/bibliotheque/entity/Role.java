@@ -36,8 +36,8 @@ public class Role implements Serializable {
 	@Column(unique = true)
 	private String libelle;
 	
-	@OneToMany(targetEntity = Personne.class, mappedBy = "role")
-	private List<Personne> personnes;
+	@OneToMany(targetEntity = Salarie.class, mappedBy = "role")
+	private List<Salarie> personnes;
 	
 	/**
 	 * Constructeur.
@@ -50,7 +50,7 @@ public class Role implements Serializable {
 	 * @param libelle
 	 * @param personnes
 	 */
-	public Role(String libelle, List<Personne> personnes) {
+	public Role(String libelle, List<Salarie> personnes) {
 		super();
 		this.libelle = libelle;
 		this.personnes = personnes;
@@ -62,7 +62,7 @@ public class Role implements Serializable {
 	 * @param libelle
 	 * @param personnes
 	 */
-	public Role(int idRole, String libelle, List<Personne> personnes) {
+	public Role(int idRole, String libelle, List<Salarie> personnes) {
 		super();
 		this.idRole = idRole;
 		this.libelle = libelle;
@@ -105,7 +105,7 @@ public class Role implements Serializable {
 	 * Méthode en charge de récupérer la valeur de personnes.
 	 * @return the personnes
 	 */
-	public List<Personne> getPersonnes() {
+	public List<Salarie> getPersonnes() {
 		return personnes;
 	}
 
@@ -113,7 +113,7 @@ public class Role implements Serializable {
 	 * Méthode en charge de définir la valeur de personnes.
 	 * @param personnes the personnes to set
 	 */
-	public void setPersonnes(List<Personne> personnes) {
+	public void setPersonnes(List<Salarie> personnes) {
 		this.personnes = personnes;
 	}
 

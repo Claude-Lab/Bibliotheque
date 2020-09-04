@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import fr.lusseau.bibliotheque.service.GestionCaution;
+import fr.lusseau.bibliotheque.service.GestionClient;
 import fr.lusseau.bibliotheque.service.GestionLivre;
-import fr.lusseau.bibliotheque.service.GestionPersonne;
 
 /**
  * Classe en charge de la navigation despages statiques.
@@ -29,7 +29,7 @@ import fr.lusseau.bibliotheque.service.GestionPersonne;
 public class NavigationController {
 
 	@Autowired
-	GestionPersonne gp;
+	GestionClient gp;
 	@Autowired
 	GestionLivre gl;
 	@Autowired
@@ -41,7 +41,7 @@ public class NavigationController {
 	
 	@RequestMapping(value = "/accueil", method = RequestMethod.GET)
 	public ModelAndView accueilAdmin() {
-		long comptagePers = gp.countPersonne();
+		long comptagePers = gp.countClient();
 		long comptageLivre = gl.countLivre();
 		float sumCaution = gc.sumCaution();
 		ModelAndView mav = new ModelAndView("/admin/accueil", "comptagePers",comptagePers);

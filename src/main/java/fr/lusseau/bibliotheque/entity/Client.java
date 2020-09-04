@@ -4,11 +4,12 @@
 package fr.lusseau.bibliotheque.entity;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * Classe en charge de definir la classe Client.
@@ -18,6 +19,7 @@ import javax.persistence.Entity;
  *
  */
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idPersonne")
 public class Client extends Personne {
 
 	private static final long serialVersionUID = 5583248516979540804L;
@@ -26,7 +28,7 @@ public class Client extends Personne {
 	 * Constructeur sans parametre.
 	 */
 	public Client() {
-		super(0,"","","","",new Coordonnee(), new Caution(), new Role(), new ArrayList<>(), LocalDateTime.now(ZoneId.of("Europe/Paris")));
+		super();
 	}
 
 	
@@ -45,10 +47,18 @@ public class Client extends Personne {
 	 * @param emprunts
 	 * @param dateInscription
 	 */
-	public Client(int idPersonne,String nom, String prenom, String password, String confirmPassword, Coordonnee coordonnee, Caution caution, Role role,
+	public Client(int idPersonne,String nom, String prenom, String username, String password, String confirmPassword, Coordonnee coordonnee, Caution caution,
 			List<Emprunt> emprunts, LocalDateTime dateInscription) {
-		super(idPersonne, nom, prenom, password, confirmPassword, coordonnee, caution, role, emprunts,
-				dateInscription);
+		setIdPersonne(idPersonne);
+		setPrenom(prenom);
+		setPrenom(prenom);
+		setPassword(password);
+		setConfirmPassword(confirmPassword);
+		setCoordonnee(coordonnee);
+		setCaution(caution);
+		setUsername(username);
+		setEmprunts(emprunts);
+		setDateInscription(dateInscription);
 	}
 
 
@@ -66,9 +76,17 @@ public class Client extends Personne {
 	 * @param emprunts
 	 * @param dateInscription
 	 */
-	public Client(String nom, String prenom, String password, String confirmPassword, Coordonnee coordonnee, Caution caution, Role role,
+	public Client(String nom, String prenom, String password, String username, String confirmPassword, Coordonnee coordonnee, Caution caution,
 			List<Emprunt> emprunts, LocalDateTime dateInscription) {
-		super(nom, prenom, password, confirmPassword, coordonnee, caution, role, emprunts, dateInscription);
+		setPrenom(prenom);
+		setPrenom(prenom);
+		setPassword(password);
+		setConfirmPassword(confirmPassword);
+		setCoordonnee(coordonnee);
+		setCaution(caution);
+		setUsername(username);
+		setEmprunts(emprunts);
+		setDateInscription(dateInscription);
 	}
 
 

@@ -123,7 +123,7 @@ public class LivreController {
 
 			gl.saveLivre(livre);
 
-			return gererLivres();
+			return new ModelAndView("redirect:/gestionLivres");
 		}
 	}
 

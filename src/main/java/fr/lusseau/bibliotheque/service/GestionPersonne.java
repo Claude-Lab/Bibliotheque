@@ -4,12 +4,8 @@
 package fr.lusseau.bibliotheque.service;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +22,7 @@ import fr.lusseau.bibliotheque.entity.Personne;
  */
 @Service(value = "gestionPersonne")
 @Transactional
-public class GestionPersonne implements UserDetailsService {
+public class GestionPersonne   {
 
 	private final PersonneDAO dao;
 
@@ -36,16 +32,7 @@ public class GestionPersonne implements UserDetailsService {
 		this.dao = dao;
 	}
 
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Objects.requireNonNull(username);
-		Personne personne = dao.findPersonneWithUsername(username).orElseThrow(() -> new UsernameNotFoundException("Personne introuvable"));
-		return personne;
-	}
-
+	
 	public List<Personne> listePersonnes() {
 		return dao.findAll();
 	}
@@ -54,25 +41,6 @@ public class GestionPersonne implements UserDetailsService {
 		return dao.findById(i).get();
 	}
 
-	public Personne ajouterPersonne(Personne model) {
-		Personne personne = new Personne();
-
-		personne.setPrenom(model.getPrenom());
-		personne.setPrenom(model.getNom());
-		personne.setCoordonnee(model.getCoordonnee());
-		personne.setRole(model.getRole());
-
-		return dao.save(model);
-	}
-
-	public void modifierPersonne(Personne personne) {
-//		Personne personne = dao.findOne(p.getId());
-//		personne.setNom(p.getNom());
-//		personne.setPrenom(p.getPrenom());
-//		personne.setMotDePasse(p.getMotDePasse());
-//		dao.save(personne);
-		dao.save(personne);
-	}
 
 	public void supprimerPersonne(Personne p) {
 		dao.delete(p);

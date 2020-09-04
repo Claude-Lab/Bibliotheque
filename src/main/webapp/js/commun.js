@@ -19,3 +19,13 @@ $(function(){
 $(document).ready( function() {
    $("#control_1, #control_2, #control_3, #control_4").multiSelect();
 });
+
+$('salarie').on('click', function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
+
+$('client').on('click', function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})

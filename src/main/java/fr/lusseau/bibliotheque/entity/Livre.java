@@ -21,6 +21,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -43,6 +45,7 @@ public class Livre implements Serializable {
 	private String titre;
 	
 	@Column(unique = true)
+	@UniqueElements
 	private String isbn;
 	
 	@Lob

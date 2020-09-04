@@ -22,7 +22,7 @@
 			<div class="container-fluid">
 
 				<!-- Page Heading -->
-				<h1 class="h3 mb-2 text-gray-800">Personnes</h1>
+				<h1 class="h3 mb-2 text-gray-800">Client</h1>
 				<p class="mb-4"></p>
 
 				<!-- DataTales Example -->
@@ -32,13 +32,13 @@
 
 					<div class="card mb-4">
 						<div class="card-header py-3">
-							<h6 class="m-2 font-weight-bold text-primary">Ajouter une
-								personne</h6>
+							<h6 class="m-2 font-weight-bold text-primary">Ajouter un.e
+								client.e</h6>
 						</div>
 						<div class="card-body">
 
 
-							<form:form action="validPersonne" method="POST"
+							<form:form action="validClient" method="POST"
 								cssClass="form-horizontal" modelAttribute="pers">
 
 
@@ -165,25 +165,12 @@
 											</form:select>
 										</div>
 									</div>
-									<div class="col-sm-6 mb-3 mb-sm-0">
-										<form:label path="role.idRole"
-											cssClass="col-xs-2 control-label">Role :</form:label>
-										<div class="col-xs-10">
-											<form:select path="role.idRole" cssClass="form-control"
-												required="required">
-												<option value="" title="Veuillez choisir le role">--
-													ROLE --</option>
-												<form:options items="${listeRoles}" itemValue="idRole"
-													itemLabel="libelle" />
-											</form:select>
-										</div>
-									</div>
 
 								</div>
 
 								<input type="submit" value="VALIDER"
 									class="btn btn-primary btn-user " />
-								<a href="gestionPersonnes" class="btn btn-secondary"
+								<a href="gestionClients" class="btn btn-secondary"
 									role="button" aria-pressed="true">ANNULER</a>
 								<br>
 

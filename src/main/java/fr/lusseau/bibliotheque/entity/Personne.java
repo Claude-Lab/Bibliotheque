@@ -8,7 +8,6 @@ import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,8 +26,6 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -47,7 +44,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Component
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idPersonne")
-public class Personne implements Serializable, UserDetails {
+public abstract class Personne implements Serializable {
 
 	private static final long serialVersionUID = 5259404382419783534L;
 
@@ -80,10 +77,6 @@ public class Personne implements Serializable, UserDetails {
 	@JoinColumn(name = "idCaution", nullable = false)
 	private Caution caution;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idRole", nullable = false)
-	private Role role;
-
 	@OneToMany(targetEntity = Emprunt.class, mappedBy = "personne", fetch = FetchType.LAZY)
 	private List<Emprunt> emprunts;
 
@@ -98,7 +91,7 @@ public class Personne implements Serializable, UserDetails {
 	 * Constructeur.
 	 */
 	public Personne() {
-		this(0, "", "", "", "", new Coordonnee(), new Caution(), new Role(), new ArrayList<Emprunt>(),
+		this(0, "", "", "", "", new Coordonnee(), new Caution(), new ArrayList<Emprunt>(),
 				LocalDateTime.now(ZoneId.of("Europe/Paris")));
 
 	}
@@ -118,7 +111,7 @@ public class Personne implements Serializable, UserDetails {
 	 * @param dateInscription
 	 */
 	public Personne(String nom, String prenom, String password, String confirmPassword,
-			Coordonnee coordonnee, Caution caution, Role role, List<Emprunt> emprunts, LocalDateTime dateInscription) {
+			Coordonnee coordonnee, Caution caution, List<Emprunt> emprunts, LocalDateTime dateInscription) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
@@ -127,7 +120,6 @@ public class Personne implements Serializable, UserDetails {
 		this.confirmPassword = confirmPassword;
 		this.coordonnee = coordonnee;
 		this.caution = caution;
-		this.role = role;
 		this.emprunts = emprunts;
 		this.dateInscription = dateInscription;
 	}
@@ -148,7 +140,7 @@ public class Personne implements Serializable, UserDetails {
 	 * @param dateInscription
 	 */
 	public Personne(int idPersonne, String nom, String prenom, String password, String confirmPassword,
-			Coordonnee coordonnee, Caution caution, Role role, List<Emprunt> emprunts, LocalDateTime dateInscription) {
+			Coordonnee coordonnee, Caution caution, List<Emprunt> emprunts, LocalDateTime dateInscription) {
 		super();
 		this.idPersonne = idPersonne;
 		this.nom = nom;
@@ -158,73 +150,28 @@ public class Personne implements Serializable, UserDetails {
 		this.confirmPassword = confirmPassword;
 		this.coordonnee = coordonnee;
 		this.caution = caution;
-		this.role = role;
 		this.emprunts = emprunts;
 		this.dateInscription = dateInscription;
 	}
 
+
+	
 	/**
-	 * @{inheritDoc}
+	 * Méthode en charge de définir la valeur de username.
+	 * 
+	 * @param username the username to set
 	 */
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
 	 * @{inheritDoc}
 	 */
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return this.password;
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
 	public String getUsername() {
 		String strTemp = Normalizer.normalize(this.prenom+"."+this.nom, Normalizer.Form.NFD);
 		username = strTemp.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").toLowerCase();;
         return username;
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	/**
@@ -336,24 +283,6 @@ public class Personne implements Serializable, UserDetails {
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de role.
-	 * 
-	 * @return the role
-	 */
-	public Role getRole() {
-		return role;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de role.
-	 * 
-	 * @param role the role to set
-	 */
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	/**
 	 * Méthode en charge de récupérer la valeur de emprunts.
 	 * 
 	 * @return the emprunts
@@ -399,17 +328,6 @@ public class Personne implements Serializable, UserDetails {
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de username.
-	 * 
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	
-
-	/**
 	 * Méthode en charge de définir la valeur de password.
 	 * 
 	 * @param password the password to set
@@ -418,6 +336,13 @@ public class Personne implements Serializable, UserDetails {
 		this.password = password;
 	}
 	
+	/**
+	 * @{inheritDoc}
+	 */
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return this.password;
+	}
 
 	/**
 	 * @{inheritDoc}
@@ -435,7 +360,6 @@ public class Personne implements Serializable, UserDetails {
 		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((prenom == null) ? 0 : prenom.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -494,11 +418,6 @@ public class Personne implements Serializable, UserDetails {
 				return false;
 		} else if (!prenom.equals(other.prenom))
 			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -529,8 +448,6 @@ public class Personne implements Serializable, UserDetails {
 		builder.append(coordonnee);
 		builder.append(", caution=");
 		builder.append(caution);
-		builder.append(", role=");
-		builder.append(role);
 		builder.append(", emprunts=");
 		builder.append(emprunts);
 		builder.append(", dateInscription=");
@@ -538,6 +455,7 @@ public class Personne implements Serializable, UserDetails {
 		builder.append("]");
 		return builder.toString();
 	}
+	
 
 	
 
