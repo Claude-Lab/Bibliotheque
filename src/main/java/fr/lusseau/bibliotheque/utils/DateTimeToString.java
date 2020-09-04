@@ -3,6 +3,7 @@
  */
 package fr.lusseau.bibliotheque.utils;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,9 +17,10 @@ import org.springframework.core.convert.converter.Converter;
  * @author Claude LUSSEAU
  *
  */
-public class DateTimeToString implements Converter<LocalDateTime, String>{
+public class DateTimeToString implements Converter<LocalDateTime, String>, Serializable {
 	
 	
+	private static final long serialVersionUID = -2382317313482415397L;
 
 	/**
 	 * @{inheritDoc}

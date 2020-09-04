@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,8 +41,7 @@ import fr.lusseau.bibliotheque.utils.DateToString;
 @RestController
 public class PersonneController {
 	
-	
-	@Qualifier
+	@Autowired
 	static DateToString dts = new DateToString();
 	@Autowired
 	GestionPersonne gp;

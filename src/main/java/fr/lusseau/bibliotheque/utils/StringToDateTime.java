@@ -3,6 +3,7 @@
  */
 package fr.lusseau.bibliotheque.utils;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -16,8 +17,9 @@ import org.springframework.core.convert.converter.Converter;
  * @author Claude LUSSEAU
  *
  */
-public class StringToDateTime implements Converter<String, LocalDateTime> {
+public class StringToDateTime implements Converter<String, LocalDateTime>, Serializable {
 
+	private static final long serialVersionUID = -4618102058150588315L;
 
 	/**
 	 * @{inheritDoc}
