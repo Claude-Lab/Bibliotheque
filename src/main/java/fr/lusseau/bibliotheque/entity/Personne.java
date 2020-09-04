@@ -186,7 +186,7 @@ public class Personne implements Serializable, UserDetails {
 	 */
 	@Override
 	public String getUsername() {
-		String strTemp = Normalizer.normalize(this.prenom+this.nom, Normalizer.Form.NFD);
+		String strTemp = Normalizer.normalize(this.prenom+"."+this.nom, Normalizer.Form.NFD);
 		username = strTemp.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").toLowerCase();;
         return username;
 	}
