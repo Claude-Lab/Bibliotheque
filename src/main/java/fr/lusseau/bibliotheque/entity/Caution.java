@@ -35,7 +35,7 @@ public class Caution implements Serializable {
 	@NotNull
 	@Min(value=0)
 	@Column(unique = true)
-	private int valeur;
+	private double valeur;
 	
 	@NotNull
 	@Min(value=0)
@@ -99,7 +99,7 @@ public class Caution implements Serializable {
 	 * Méthode en charge de récupérer la valeur de valeur.
 	 * @return the valeur
 	 */
-	public int getValeur() {
+	public double getValeur() {
 		return this.valeur;
 	}
 
@@ -107,7 +107,7 @@ public class Caution implements Serializable {
 	 * Méthode en charge de définir la valeur de valeur.
 	 * @param valeur the valeur to set
 	 */
-	public void setValeur(int valeur) {
+	public void setValeur(double valeur) {
 		this.valeur = valeur;
 	}
 
@@ -161,7 +161,9 @@ public class Caution implements Serializable {
 		result = prime * result + idCaution;
 		result = prime * result + nbLivres;
 		result = prime * result + ((personnes == null) ? 0 : personnes.hashCode());
-		result = prime * result + valeur;
+		long temp;
+		temp = Double.doubleToLongBits(valeur);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -186,7 +188,7 @@ public class Caution implements Serializable {
 				return false;
 		} else if (!personnes.equals(other.personnes))
 			return false;
-		if (valeur != other.valeur)
+		if (Double.doubleToLongBits(valeur) != Double.doubleToLongBits(other.valeur))
 			return false;
 		return true;
 	}

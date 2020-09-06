@@ -26,7 +26,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
-	implementation 'org.springframework.session:spring-session-jdbc'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
@@ -35,25 +34,20 @@ dependencies {
 	providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 	compile group: 'javax.servlet', name: 'jstl', version: '1.2'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	// https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
 	compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.1.5.Final'
-	// https://mvnrepository.com/artifact/org.hibernate/hibernate-core
 	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.19.Final'
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.3.3.RELEASE'
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-actuator-autoconfigure
 	compile group: 'org.springframework.boot', name: 'spring-boot-actuator-autoconfigure', version: '2.3.3.RELEASE'
-	// https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jsp-api
 	compile group: 'org.apache.tomcat', name: 'tomcat-jsp-api', version: '9.0.37'
 	providedCompile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.37'
-	// https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jasper
 	compile group: 'org.apache.tomcat', name: 'tomcat-jasper', version: '9.0.37'
-	// https://mvnrepository.com/artifact/taglibs/fmt
 	compile group: 'taglibs', name: 'fmt', version: '1.1.2'	
-	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.2'
-	// https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
+	//compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+	
+	
+	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

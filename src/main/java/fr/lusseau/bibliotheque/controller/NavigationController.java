@@ -43,7 +43,7 @@ public class NavigationController {
 	public ModelAndView accueilAdmin() {
 		long comptagePers = gp.countClient();
 		long comptageLivre = gl.countLivre();
-		float sumCaution = gc.sumCaution();
+		double sumCaution = gc.sumCaution();
 		ModelAndView mav = new ModelAndView("/admin/accueil", "comptagePers",comptagePers);
 		mav.getModelMap().addAttribute("comptageLivre", comptageLivre);
 		mav.getModelMap().addAttribute("sumCaution", sumCaution);
