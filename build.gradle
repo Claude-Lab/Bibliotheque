@@ -41,10 +41,10 @@ dependencies {
 	compile group: 'org.apache.tomcat', name: 'tomcat-jsp-api', version: '9.0.37'
 	providedCompile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.37'
 	compile group: 'org.apache.tomcat', name: 'tomcat-jasper', version: '9.0.37'
-	compile group: 'taglibs', name: 'fmt', version: '1.1.2'	
+	compile group: 'taglibs', name: 'fmt', version: '1.1.2'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.2'
 	//compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
-	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+	//compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	
 	
 	
