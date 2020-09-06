@@ -42,7 +42,7 @@
 								<div class="form-group row">
 									<div class="col-sm-6 mb-3 mb-sm-0">
 										<form:label path="valeur"> Indiquez la valeur de la nouvelle caution : </form:label>
-										<form:input path="valeur" type="number" pattern="[0-9]{5}" class="form-control form-control-user" placeholder="Valeur" title="Chiffre obligatoire" required="required"></form:input>
+										<form:input path="valeur" type="number" pattern="[+-]?([0-9]*[.])?[0-9]+" class="form-control form-control-user" placeholder="Valeur" title="Chiffre obligatoire" required="required"></form:input>
 										<form:errors path="valeur" cssClass="form-control"></form:errors>
 									</div>
 									<div class="col-sm-6 mb-3 mb-sm-0">

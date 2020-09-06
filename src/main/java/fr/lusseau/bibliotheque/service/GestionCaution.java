@@ -65,7 +65,7 @@ public class GestionCaution {
 		return liste;
 	}
 	
-	public float sumCaution() {
+	public double sumCaution() {
 		return dao.sumCaution();
 	}
 	

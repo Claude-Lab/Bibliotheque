@@ -12,5 +12,12 @@
 <!-- 		<welcome-file>default.jsp</welcome-file> -->
 	</welcome-file-list>
 	
+<!-- 	<listener> -->
+<!--     	<listener-class> -->
+<!--      	 org.springframework.security.web.session.HttpSessionEventPublisher -->
+<!--     	</listener-class> -->
+<!-- 	</listener> -->
+	
+	
 
 </web-app>
