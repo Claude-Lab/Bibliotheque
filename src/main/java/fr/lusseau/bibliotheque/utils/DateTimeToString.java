@@ -27,9 +27,10 @@ public class DateTimeToString implements Converter<LocalDateTime, String>, Seria
 	*/
 	@Override
 	public String convert(LocalDateTime source) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		String formatDateTime = source.format(formatter);
 		return formatDateTime;
 	}
 
+	
 }

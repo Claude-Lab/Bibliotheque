@@ -8,7 +8,7 @@
 
 <body id="page-top">
 
-	<%@include file="../includes/sidebar.html"%>
+	<%@include file="../includes/sidebarAdmin.html"%>
 	<!-- Content Wrapper -->
 	<div id="content-wrapper" class="d-flex flex-column">
 

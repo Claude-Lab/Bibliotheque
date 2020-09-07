@@ -36,7 +36,7 @@
 						<div class="card-body">
 
 
-							<form:form action="modifierSalarieValid" method="POST" cssClass="form-horizontal" modelAttribute="pers">
+							<form:form action="modifierPersonneValid" method="POST" cssClass="form-horizontal" modelAttribute="pers">
 								<form:hidden path="idPersonne" />
 								<form:hidden path="password"/>
 								<form:hidden path="confirmPassword" />
@@ -129,6 +129,20 @@
 											</form:select>
 										</div>
 									</div>
+									<div class="col-sm-6 mb-3 mb-sm-0">
+										<form:label path="type.idType"
+											cssClass="col-xs-2 control-label">Type :</form:label>
+										<div class="col-xs-10">
+											<form:select path="type.idType" cssClass="form-control"
+												required="required">
+												<option value="" title="Veuillez choisir le role">--
+													TYPE --</option>
+												<form:options items="${listeTypes}" itemValue="idType"
+													itemLabel="libelle" />
+											</form:select>
+										</div>
+									</div>
+									
 
 								</div>
 

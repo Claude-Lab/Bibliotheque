@@ -57,14 +57,28 @@ public class GestionEmprunt {
 		case "nD": liste = (List<Emprunt>) dao.findByOrderByDateRetraitDesc(); break;
 		case "pA": liste = (List<Emprunt>) dao.findByOrderByDateRetourAsc(); break;
 		case "pD": liste = (List<Emprunt>) dao.findByOrderByDateRetourDesc(); break;
-//		case "lA": liste = (List<Emprunt>) dao.findByOrderByPersonneAsc(); break;
-//		case "lD": liste = (List<Emprunt>) dao.findByOrderByPersonneDesc(); break;
-//		case "iA": liste = (List<Emprunt>) dao.findByOrderByLivresAsc(); break;
-//		case "iD": liste = (List<Emprunt>) dao.findByOrderByLivresDesc(); break;
 		default : liste = dao.findAll();
 
 		}
 		
 		return liste;
+	}
+	
+	public void countEmprunt() {
+		dao.count();
+	}
+
+	
+	public List<Emprunt> listeEmpruntsPasses() {
+		return dao.findAllWithDateRetourBefore();
+	}
+	
+	public List<Emprunt> listeEmpruntsFuturs() {
+		return dao.findAllWithDateRetraitAfter();
+	}
+	
+	public List<Emprunt> listeEmpruntsEnCours() {
+		return dao.findAllWithEmpruntNow();
+		
 	}
 }

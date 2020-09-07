@@ -22,17 +22,17 @@
 			<div class="container-fluid">
 
 				<!-- Page Heading -->
-				<h1 class="h3 mb-2 text-gray-800">Livres</h1>
+				<h1 class="h3 mb-2 text-gray-800">Emprunts</h1>
 				<p class="mb-4"></p>
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
-						<a href="ajoutLivre" class="btn btn-warning"  role="button" aria-pressed="true">Ajouter un livre</a>
+						<a href="ajoutEmprunt" class="btn btn-warning"  role="button" aria-pressed="true">Ajouter un emprunt</a>
 					</div>
 				</div>
 				<!-- DataTales Example -->
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
-						<h6 class="m-0 font-weight-bold text-primary">Liste des Livres</h6>
+						<h6 class="m-0 font-weight-bold text-primary">Liste de tout les emprunts</h6>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -40,8 +40,10 @@
 								<thead>
 									<tr>
 										<th><a href="trier?par=iA"></a>ID<a href="trier?par=iD"></a></th>
-										<th><a href="trier?par=tD"></a>TITRE<a href="trier?par=tD"></a></th>
-										<th><a href="trier?par=tD"></a>Auteurs<a href="trier?par=tD"></a></th>
+										<th><a href="trier?par=tD"></a>LIVRES<a href="trier?par=tD"></a></th>
+										<th><a href="trier?par=tD"></a>EMPRUNTEURS<a href="trier?par=tD"></a></th>
+										<th><a href="trier?par=tD"></a>Date du retrait<a href="trier?par=tD"></a></th>
+										<th><a href="trier?par=tD"></a>Date du retour<a href="trier?par=tD"></a></th>
 										<th></th>
 										<th></th>
 										<th></th>
@@ -49,14 +51,16 @@
 								</thead>
 
 								<tbody>
-									<c:forEach items="${listeL}" var="livre" varStatus="lStatus">
+									<c:forEach items="${liste}" var="emprunt" varStatus="mStatus">
 										<tr>
-											<td>${livre.idLivre}</td>
-											<td>${livre.titre}</td>
-											<td><c:forEach var="listeAuteurs" items="${livre.auteurs}"> ${listeAuteurs}</c:forEach></td>
-											<td class="centre" title="Details"><a href="detailsLivre?index=s${livre.idLivre}"><span class="detail fas fa-binoculars"></span></a></td>
-											<td class="centre" title="Modifier"><a href="modifierLivre?index=s${livre.idLivre}"><span class="modif fas fa-edit vert"></span></a></td>
-											<td class="centre" title="Supprimer"><a href="supprimerLivre?index=s${livre.idLivre}"><span class="supp far fa-trash-alt rouge"></span></a></td>
+											<td>${emprunt.idEmprunt}</td>
+											<td>${emprunt.livre.titre}</td>
+											<td>${emprunt.personne.prenom} ${emprunt.personne.nom}</td>
+											<td>${dateRetrait}</td>
+											<td>${dateRetour}</td>
+											<td class="centre" title="Details"><a href="detailsEmprunt?index=s${emprunt.idEmprunt}"><span class="detail fas fa-binoculars"></span></a></td>
+											<td class="centre" title="Modifier"><a href="modifierEmprunt?index=s${emprunt.idEmprunt}"><span class="modif fas fa-edit vert"></span></a></td>
+											<td class="centre" title="Supprimer"><a href="supprimerEmprunt?index=s${emprunt.idEmprunt}"><span class="supp far fa-trash-alt rouge"></span></a></td>
 
 										</tr>
 									</c:forEach>

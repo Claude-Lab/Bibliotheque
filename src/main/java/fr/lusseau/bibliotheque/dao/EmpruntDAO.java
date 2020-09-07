@@ -3,7 +3,10 @@
  */
 package fr.lusseau.bibliotheque.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import fr.lusseau.bibliotheque.entity.Emprunt;
 
@@ -20,8 +23,19 @@ public interface EmpruntDAO extends JpaRepository<Emprunt, Integer>{
 	Iterable<Emprunt> findByOrderByDateRetraitDesc();
 	Iterable<Emprunt> findByOrderByDateRetourAsc();
 	Iterable<Emprunt> findByOrderByDateRetourDesc();
-//	Iterable<Emprunt> findByOrderByLivresAsc();
-//	Iterable<Emprunt> findByOrderByLivresDesc();
-//	Iterable<Emprunt> findByOrderByPersonneAsc();
-//	Iterable<Emprunt> findByOrderByPersonneDesc();
+	
+	@Query("select e from Emprunt e where e.dateRetour < NOW()")
+    List<Emprunt> findAllWithDateRetourBefore();
+	
+	@Query("select e from Emprunt e where e.dateRetrait > NOW()")
+    List<Emprunt> findAllWithDateRetraitAfter();
+	
+	@Query("select e from Emprunt e where e.dateRetrait < NOW() AND e.dateRetour > NOW()")
+    List<Emprunt> findAllWithEmpruntNow();
+	
+	Emprunt findByPersonne(int id);
+	
+	Emprunt findByLivre(int id);
+	
+	long count();
 }

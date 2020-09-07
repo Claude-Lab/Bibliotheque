@@ -96,7 +96,7 @@ public class PersonneController {
 	}
 	
 	@RequestMapping(path = "/gestionPersonnes", method = RequestMethod.GET)
-	public ModelAndView gererSalaries() {
+	public ModelAndView gererPersonnes() {
 		List<Personne> listeP = gp.listePersonnes();
 		Personne pers = new Personne();
 		ModelAndView mav = new ModelAndView("/admin/gestion/gestionPersonnes", "listeP", listeP);
@@ -129,7 +129,7 @@ public class PersonneController {
 	}
 	
 	@RequestMapping(value = "/modifierPersonne", method = RequestMethod.GET)
-	public ModelAndView modifSalarie(String index) {
+	public ModelAndView modifPersonne(String index) {
 		int i = Integer.parseInt(index.substring(1));
 		List<Role> listeRoles = gr.listeRoles();
 		List<Caution> listeCautions = gc.listeCautions();
@@ -142,7 +142,7 @@ public class PersonneController {
 	}
 
 	@RequestMapping(value = "/modifierPersonneValid", method = RequestMethod.POST)
-	public ModelAndView listePersonneValid(Personne pers) {
+	public ModelAndView modifPersonneValid(Personne pers) {
 		gp.modifierPersonne(pers);
 		return new ModelAndView ("redirect:/gestionPersonnes");
 	}
@@ -156,7 +156,7 @@ public class PersonneController {
 		} catch (Exception e) {
 		}
 
-		return gererSalaries();
+		return gererPersonnes();
 	}
 
 }

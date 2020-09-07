@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -33,25 +32,25 @@ public class Emprunt implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idEmprunt;
 	
-	@DateTimeFormat(pattern="dd/MM/yyyy")
+	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
 	@Column(columnDefinition = "DATETIME")
 	@NotNull
 	private LocalDateTime dateRetrait;
 	
-	@DateTimeFormat(pattern="dd/MM/yyyy")
+	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
 	@Column(columnDefinition = "DATETIME")
 	@NotNull
 	private LocalDateTime dateRetour;
 	
-	@DateTimeFormat(pattern="dd/MM/yyyy HH:mm")
+	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
 	@Column(columnDefinition = "DATETIME")
 	private LocalDateTime retraitClientOk;
 	
-	@DateTimeFormat(pattern="dd/MM/yyyy HH:mm")
+	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
 	@Column(columnDefinition = "DATETIME")
 	private LocalDateTime retourClientOk;
 	
-	@ManyToOne
+	@OneToOne
 	private Livre livre;
 	
 	@OneToOne

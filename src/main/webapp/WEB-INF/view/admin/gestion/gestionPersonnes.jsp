@@ -9,7 +9,7 @@
 
 <body id="page-top">
 
-	<%@include file="../includes/sidebar.html"%>
+	<%@include file="../includes/sidebarAdmin.html"%>
 	<!-- Content Wrapper -->
 	<div id="content-wrapper" class="d-flex flex-column">
 
@@ -56,9 +56,9 @@
 											<td>${pers.nom}</td>
 											<td>${pers.prenom}</td>
 											<td>${pers.role.libelle}</td>
-											<td class="centre"><a href="detailsSalarie?index=s${pers.idPersonne}"><span class="detail fas fa-binoculars"></span></a></td>
-											<td class="centre"><a href="modifierSalarie?index=s${pers.idPersonne}"><span class="modif fas fa-edit vert"></span></a></td>
-											<td class="centre"><a href="supprimerSalarie?index=s${pers.idPersonne}"><span class="supp far fa-trash-alt rouge"></span></a></td>
+											<td class="centre"><a href="detailsPersonne?index=s${pers.idPersonne}"><span class="detail fas fa-binoculars"></span></a></td>
+											<td class="centre"><a href="modifierPersonne?index=s${pers.idPersonne}"><span class="modif fas fa-edit vert"></span></a></td>
+											<td class="centre"><a href="supprimerPersonne?index=s${pers.idPersonne}"><span class="supp far fa-trash-alt rouge"></span></a></td>
 
 										</tr>
 									</c:forEach>

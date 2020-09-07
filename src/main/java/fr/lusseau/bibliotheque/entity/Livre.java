@@ -18,8 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -73,9 +72,7 @@ public class Livre implements Serializable {
 	@JoinColumn(name="idEtat", nullable=false)
 	private Etat etat;
 	
-	@Transient
-	@OneToMany(targetEntity = Emprunt.class, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "idEmprunt", nullable = false)
+	@OneToOne
 	private Emprunt emprunt;
 	
 	

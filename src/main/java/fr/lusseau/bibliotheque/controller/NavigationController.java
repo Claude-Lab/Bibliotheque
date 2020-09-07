@@ -45,12 +45,19 @@ public class NavigationController {
 		long comptagePers = gp.countPersonne();
 		long comptageLivre = gl.countLivre();
 		double sumCaution = gc.sumCaution();
-		ModelAndView mav = new ModelAndView("/admin/accueil", "comptagePers", comptagePers);
-		if (sumCaution == 0 || comptageLivre == 0) {
-			mav.getModelMap().addAttribute("comptageLivre", comptageLivre);
-		} else if (sumCaution >= 0) {
+		ModelAndView mav = new ModelAndView("/admin/accueil");
+		if (sumCaution == 0) {
+			mav.getModelMap().addAttribute("", sumCaution);
+			mav.getModelMap().addAttribute("comptageLivre", 0);
+			mav.getModelMap().addAttribute("comptagePers", 0);
+		} else if (comptagePers == 0) {
+			mav.getModelMap().addAttribute("comptagePers", 0);
 			mav.getModelMap().addAttribute("comptageLivre", comptageLivre);
 			mav.getModelMap().addAttribute("sumCaution", sumCaution);
+		} else {
+			mav.getModelMap().addAttribute("comptageLivre", comptageLivre);
+			mav.getModelMap().addAttribute("sumCaution", sumCaution);
+			mav.getModelMap().addAttribute("comptagePers", comptagePers);
 		}
 		return mav;
 	}
