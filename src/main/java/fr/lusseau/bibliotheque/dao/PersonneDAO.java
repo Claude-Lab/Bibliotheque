@@ -27,8 +27,6 @@ public interface PersonneDAO extends JpaRepository<Personne, Integer> {
 	@Query("select p from Personne p where p.username = :username")
     Personne findByUsername(String username);
 	
-//	@Query("SELECT u FROM User u WHERE u.username = :username")
-//    public Personne getPersonneByUsername(@Param("username") String username);
 	
 	List<Personne> findByOrderByNomAsc();
 	List<Personne> findByOrderByNomDesc();

@@ -22,17 +22,17 @@
 			<div class="container-fluid">
 
 				<!-- Page Heading -->
-				<h1 class="h3 mb-2 text-gray-800">Clients</h1>
+				<h1 class="h3 mb-2 text-gray-800">Salaries</h1>
 				<p class="mb-4"></p>
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
-						<a href="ajoutClient" class="btn btn-warning"  role="button" aria-pressed="true">Ajouter un.e client.e</a>
+						<a href="ajoutPersonne" class="btn btn-warning"  role="button" aria-pressed="true">Ajouter une personne</a>
 					</div>
 				</div>
 				<!-- DataTales Example -->
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
-						<h6 class="m-0 font-weight-bold text-primary">Liste des client.e.s</h6>
+						<h6 class="m-0 font-weight-bold text-primary">Liste des personnes</h6>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -42,6 +42,7 @@
 										<th><a href="trier?par=iA"></a>ID<a href="trier?par=iD"></a></th>
 										<th><a href="trier?par=nD"></a>NOM<a href="trier?par=nD"></a></th>
 										<th><a href="trier?par=pD"></a>PRENOM<a href="trier?par=pD"></a></th>
+										<th><a href="trier?par=pD"></a>ROLE<a href="trier?par=pD"></a></th>
 										<th></th>
 										<th></th>
 										<th></th>
@@ -54,9 +55,10 @@
 											<td>${pers.idPersonne}</td>
 											<td>${pers.nom}</td>
 											<td>${pers.prenom}</td>
-											<td class="centre"><a href="detailsClient?index=s${pers.idPersonne}"><span class="detail fas fa-binoculars"></span></a></td>
-											<td class="centre"><a href="modifierClient?index=s${pers.idPersonne}"><span class="modif fas fa-edit vert"></span></a></td>
-											<td class="centre"><a href="supprimerClient?index=s${pers.idPersonne}"><span class="supp far fa-trash-alt rouge"></span></a></td>
+											<td>${pers.role.libelle}</td>
+											<td class="centre"><a href="detailsSalarie?index=s${pers.idPersonne}"><span class="detail fas fa-binoculars"></span></a></td>
+											<td class="centre"><a href="modifierSalarie?index=s${pers.idPersonne}"><span class="modif fas fa-edit vert"></span></a></td>
+											<td class="centre"><a href="supprimerSalarie?index=s${pers.idPersonne}"><span class="supp far fa-trash-alt rouge"></span></a></td>
 
 										</tr>
 									</c:forEach>

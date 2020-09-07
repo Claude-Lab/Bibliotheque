@@ -40,6 +40,27 @@ public class GestionPersonne   {
 	public Personne trouverPersonne(int i) {
 		return dao.findById(i).get();
 	}
+	
+	public Personne ajouterPersonne(Personne model) {
+		Personne personne = new Personne();
+
+		personne.setPrenom(model.getPrenom());
+		personne.setPrenom(model.getNom());
+		personne.setCoordonnee(model.getCoordonnee());
+		personne.setRole(model.getRole());
+		personne.setType(model.getType());
+
+		return dao.save(model);
+	}
+	
+	public void modifierPersonne(Personne personne) {
+//		Personne personne = dao.findOne(p.getId());
+//		personne.setNom(p.getNom());
+//		personne.setPrenom(p.getPrenom());
+//		personne.setMotDePasse(p.getMotDePasse());
+//		dao.save(personne);
+		dao.save(personne);
+	}
 
 
 	public void supprimerPersonne(Personne p) {

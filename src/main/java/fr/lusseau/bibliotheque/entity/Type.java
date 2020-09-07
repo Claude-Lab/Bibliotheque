@@ -7,84 +7,80 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 
 /**
- * Classe en charge de definir le bean Role.
+ * Classe en charge de
  * @Version Bibliotheque -v1,0
- * @date  14 août 2020 - 09:49:04
+ * @date  7 sept. 2020 - 08:59:13
  * @author Claude LUSSEAU
  *
  */
 @Entity
-public class Role implements Serializable {
+public class Type implements Serializable {
 
-	private static final long serialVersionUID = -1206324468919735945L;
+	private static final long serialVersionUID = 8350639088866797309L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idRole;
+	private int idType;
 	
-	@NotBlank
-	@Pattern(regexp = "^[a-zA-Z]{3,15}$")
-	@Column(unique = true)
+	@NotNull
 	private String libelle;
 	
-	@OneToMany(targetEntity = Personne.class, mappedBy = "role")
-	private List<Personne> personnes;
+	@OneToMany( targetEntity=Personne.class, mappedBy="type" )
+	private List<Personne> personne;
 	
 	/**
 	 * Constructeur.
 	 */
-	public Role() {
+	public Type() {
 		this(0, "", new ArrayList<>());
 	}
 
 	/**
 	 * Constructeur.
 	 * @param libelle
-	 * @param personnes
+	 * @param personne
 	 */
-	public Role(@NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Personne> personnes) {
+	public Type(@NotNull String libelle, List<Personne> personne) {
 		super();
 		this.libelle = libelle;
-		this.personnes = personnes;
+		this.personne = personne;
 	}
 
 	/**
 	 * Constructeur.
-	 * @param idRole
+	 * @param idType
 	 * @param libelle
-	 * @param personnes
+	 * @param personne
 	 */
-	public Role(int idRole, @NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Personne> personnes) {
+	public Type(int idType, @NotNull String libelle, List<Personne> personne) {
 		super();
-		this.idRole = idRole;
+		this.idType = idType;
 		this.libelle = libelle;
-		this.personnes = personnes;
+		this.personne = personne;
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de idRole.
-	 * @return the idRole
+	 * Méthode en charge de récupérer la valeur de idType.
+	 * @return the idType
 	 */
-	public int getIdRole() {
-		return idRole;
+	public int getIdType() {
+		return idType;
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de idRole.
-	 * @param idRole the idRole to set
+	 * Méthode en charge de définir la valeur de idType.
+	 * @param idType the idType to set
 	 */
-	public void setIdRole(int idRole) {
-		this.idRole = idRole;
+	public void setIdType(int idType) {
+		this.idType = idType;
 	}
 
 	/**
@@ -104,19 +100,19 @@ public class Role implements Serializable {
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de personnes.
-	 * @return the personnes
+	 * Méthode en charge de récupérer la valeur de personne.
+	 * @return the personne
 	 */
-	public List<Personne> getPersonnes() {
-		return personnes;
+	public List<Personne> getPersonne() {
+		return personne;
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de personnes.
-	 * @param personnes the personnes to set
+	 * Méthode en charge de définir la valeur de personne.
+	 * @param personne the personne to set
 	 */
-	public void setPersonnes(List<Personne> personnes) {
-		this.personnes = personnes;
+	public void setPersonne(List<Personne> personne) {
+		this.personne = personne;
 	}
 
 	/**
@@ -134,9 +130,9 @@ public class Role implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + idRole;
+		result = prime * result + idType;
 		result = prime * result + ((libelle == null) ? 0 : libelle.hashCode());
-		result = prime * result + ((personnes == null) ? 0 : personnes.hashCode());
+		result = prime * result + ((personne == null) ? 0 : personne.hashCode());
 		return result;
 	}
 
@@ -151,18 +147,18 @@ public class Role implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Role other = (Role) obj;
-		if (idRole != other.idRole)
+		Type other = (Type) obj;
+		if (idType != other.idType)
 			return false;
 		if (libelle == null) {
 			if (other.libelle != null)
 				return false;
 		} else if (!libelle.equals(other.libelle))
 			return false;
-		if (personnes == null) {
-			if (other.personnes != null)
+		if (personne == null) {
+			if (other.personne != null)
 				return false;
-		} else if (!personnes.equals(other.personnes))
+		} else if (!personne.equals(other.personne))
 			return false;
 		return true;
 	}
@@ -173,16 +169,17 @@ public class Role implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Role [idRole=");
-		builder.append(idRole);
+		builder.append("Type [idType=");
+		builder.append(idType);
 		builder.append(", libelle=");
 		builder.append(libelle);
-		builder.append(", personnes=");
-		builder.append(personnes);
+		builder.append(", personne=");
+		builder.append(personne);
 		builder.append("]");
 		return builder.toString();
 	}
 
 	
 	
+
 }

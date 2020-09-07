@@ -44,7 +44,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Component
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idPersonne")
-public abstract class Personne implements Serializable {
+public class Personne implements Serializable {
 
 	private static final long serialVersionUID = 5259404382419783534L;
 
@@ -85,6 +85,12 @@ public abstract class Personne implements Serializable {
 	@NotNull
 	private LocalDateTime dateInscription;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idType", nullable = false)
+	private Type type;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idRole", nullable = false)
 	private Role role;
 	
 	private boolean enabled;
@@ -93,12 +99,11 @@ public abstract class Personne implements Serializable {
 	 * Constructeur.
 	 */
 	public Personne() {
-		this(0, "", "", "", "", new Coordonnee(), new Caution(), new ArrayList<Emprunt>(),
-				LocalDateTime.now(ZoneId.of("Europe/Paris")), false);
+		this(0, "", "", "", "", "", new Coordonnee(), new Caution(), new ArrayList<Emprunt>(),
+				LocalDateTime.now(ZoneId.of("Europe/Paris")), new Type(), new Role(), false);
 
 	}
 
-	
 	/**
 	 * Constructeur.
 	 * @param nom
@@ -110,22 +115,28 @@ public abstract class Personne implements Serializable {
 	 * @param caution
 	 * @param emprunts
 	 * @param dateInscription
+	 * @param type
+	 * @param role
 	 * @param enabled
 	 */
-	public Personne(@NotBlank String nom, @NotBlank String prenom, @NotBlank String password,
+	public Personne(@NotBlank String nom, @NotBlank String prenom, String username, @NotBlank String password,
 			@NotBlank String confirmPassword, Coordonnee coordonnee, Caution caution, List<Emprunt> emprunts,
-			@NotNull LocalDateTime dateInscription, boolean enabled) {
+			@NotNull LocalDateTime dateInscription, Type type, Role role, boolean enabled) {
 		super();
 		this.nom = nom;
 		this.prenom = prenom;
+		this.username = username;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
 		this.coordonnee = coordonnee;
 		this.caution = caution;
 		this.emprunts = emprunts;
 		this.dateInscription = dateInscription;
+		this.type = type;
+		this.role = role;
 		this.enabled = enabled;
 	}
+
 
 
 
@@ -141,24 +152,28 @@ public abstract class Personne implements Serializable {
 	 * @param caution
 	 * @param emprunts
 	 * @param dateInscription
+	 * @param type
+	 * @param role
 	 * @param enabled
 	 */
-	public Personne(int idPersonne, @NotBlank String nom, @NotBlank String prenom,
+	public Personne(int idPersonne, @NotBlank String nom, @NotBlank String prenom, String username,
 			@NotBlank String password, @NotBlank String confirmPassword, Coordonnee coordonnee, Caution caution,
-			List<Emprunt> emprunts, @NotNull LocalDateTime dateInscription, boolean enabled) {
+			List<Emprunt> emprunts, @NotNull LocalDateTime dateInscription, Type type, Role role, boolean enabled) {
 		super();
 		this.idPersonne = idPersonne;
 		this.nom = nom;
 		this.prenom = prenom;
+		this.username = username;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
 		this.coordonnee = coordonnee;
 		this.caution = caution;
 		this.emprunts = emprunts;
 		this.dateInscription = dateInscription;
+		this.type = type;
+		this.role = role;
 		this.enabled = enabled;
 	}
-
 
 
 	/**
@@ -170,7 +185,6 @@ public abstract class Personne implements Serializable {
 	}
 
 
-
 	/**
 	 * Méthode en charge de définir la valeur de idPersonne.
 	 * @param idPersonne the idPersonne to set
@@ -178,7 +192,6 @@ public abstract class Personne implements Serializable {
 	public void setIdPersonne(int idPersonne) {
 		this.idPersonne = idPersonne;
 	}
-
 
 
 	/**
@@ -190,7 +203,6 @@ public abstract class Personne implements Serializable {
 	}
 
 
-
 	/**
 	 * Méthode en charge de définir la valeur de nom.
 	 * @param nom the nom to set
@@ -198,7 +210,6 @@ public abstract class Personne implements Serializable {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-
 
 
 	/**
@@ -210,163 +221,12 @@ public abstract class Personne implements Serializable {
 	}
 
 
-
 	/**
 	 * Méthode en charge de définir la valeur de prenom.
 	 * @param prenom the prenom to set
 	 */
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de password.
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-
-
-	/**
-	 * Méthode en charge de définir la valeur de password.
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de confirmPassword.
-	 * @return the confirmPassword
-	 */
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-
-
-	/**
-	 * Méthode en charge de définir la valeur de confirmPassword.
-	 * @param confirmPassword the confirmPassword to set
-	 */
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de coordonnee.
-	 * @return the coordonnee
-	 */
-	public Coordonnee getCoordonnee() {
-		return coordonnee;
-	}
-
-
-
-	/**
-	 * Méthode en charge de définir la valeur de coordonnee.
-	 * @param coordonnee the coordonnee to set
-	 */
-	public void setCoordonnee(Coordonnee coordonnee) {
-		this.coordonnee = coordonnee;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de caution.
-	 * @return the caution
-	 */
-	public Caution getCaution() {
-		return caution;
-	}
-
-
-
-	/**
-	 * Méthode en charge de définir la valeur de caution.
-	 * @param caution the caution to set
-	 */
-	public void setCaution(Caution caution) {
-		this.caution = caution;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de emprunts.
-	 * @return the emprunts
-	 */
-	public List<Emprunt> getEmprunts() {
-		return emprunts;
-	}
-
-
-
-	/**
-	 * Méthode en charge de définir la valeur de emprunts.
-	 * @param emprunts the emprunts to set
-	 */
-	public void setEmprunts(List<Emprunt> emprunts) {
-		this.emprunts = emprunts;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de dateInscription.
-	 * @return the dateInscription
-	 */
-	public LocalDateTime getDateInscription() {
-		return dateInscription;
-	}
-
-
-
-	/**
-	 * Méthode en charge de définir la valeur de dateInscription.
-	 * @param dateInscription the dateInscription to set
-	 */
-	public void setDateInscription(LocalDateTime dateInscription) {
-		this.dateInscription = dateInscription;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de enabled.
-	 * @return the enabled
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-
-
-	/**
-	 * Méthode en charge de définir la valeur de enabled.
-	 * @param enabled the enabled to set
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-
-
-	/**
-	 * Méthode en charge de récupérer la valeur de serialversionuid.
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 
@@ -389,6 +249,131 @@ public abstract class Personne implements Serializable {
 	}
 
 
+	/**
+	 * Méthode en charge de récupérer la valeur de password.
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de password.
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	/**
+	 * Méthode en charge de récupérer la valeur de confirmPassword.
+	 * @return the confirmPassword
+	 */
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de confirmPassword.
+	 * @param confirmPassword the confirmPassword to set
+	 */
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
+
+
+	/**
+	 * Méthode en charge de récupérer la valeur de coordonnee.
+	 * @return the coordonnee
+	 */
+	public Coordonnee getCoordonnee() {
+		return coordonnee;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de coordonnee.
+	 * @param coordonnee the coordonnee to set
+	 */
+	public void setCoordonnee(Coordonnee coordonnee) {
+		this.coordonnee = coordonnee;
+	}
+
+
+	/**
+	 * Méthode en charge de récupérer la valeur de caution.
+	 * @return the caution
+	 */
+	public Caution getCaution() {
+		return caution;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de caution.
+	 * @param caution the caution to set
+	 */
+	public void setCaution(Caution caution) {
+		this.caution = caution;
+	}
+
+
+	/**
+	 * Méthode en charge de récupérer la valeur de emprunts.
+	 * @return the emprunts
+	 */
+	public List<Emprunt> getEmprunts() {
+		return emprunts;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de emprunts.
+	 * @param emprunts the emprunts to set
+	 */
+	public void setEmprunts(List<Emprunt> emprunts) {
+		this.emprunts = emprunts;
+	}
+
+
+	/**
+	 * Méthode en charge de récupérer la valeur de dateInscription.
+	 * @return the dateInscription
+	 */
+	public LocalDateTime getDateInscription() {
+		return dateInscription;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de dateInscription.
+	 * @param dateInscription the dateInscription to set
+	 */
+	public void setDateInscription(LocalDateTime dateInscription) {
+		this.dateInscription = dateInscription;
+	}
+
+
+	/**
+	 * Méthode en charge de récupérer la valeur de type.
+	 * @return the type
+	 */
+	public Type getType() {
+		return type;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de type.
+	 * @param type the type to set
+	 */
+	public void setType(Type type) {
+		this.type = type;
+	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de role.
@@ -409,6 +394,33 @@ public abstract class Personne implements Serializable {
 
 
 	/**
+	 * Méthode en charge de récupérer la valeur de enabled.
+	 * @return the enabled
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de enabled.
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+
+	/**
+	 * Méthode en charge de récupérer la valeur de serialversionuid.
+	 * @return the serialversionuid
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+	/**
 	 * @{inheritDoc}
 	*/
 	@Override
@@ -425,10 +437,11 @@ public abstract class Personne implements Serializable {
 		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((prenom == null) ? 0 : prenom.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
-
 
 
 	/**
@@ -487,6 +500,16 @@ public abstract class Personne implements Serializable {
 				return false;
 		} else if (!prenom.equals(other.prenom))
 			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -494,7 +517,6 @@ public abstract class Personne implements Serializable {
 			return false;
 		return true;
 	}
-
 
 
 	/**
@@ -523,11 +545,14 @@ public abstract class Personne implements Serializable {
 		builder.append(emprunts);
 		builder.append(", dateInscription=");
 		builder.append(dateInscription);
+		builder.append(", type=");
+		builder.append(type);
+		builder.append(", role=");
+		builder.append(role);
 		builder.append(", enabled=");
 		builder.append(enabled);
 		builder.append("]");
 		return builder.toString();
 	}
-
 	
 }
