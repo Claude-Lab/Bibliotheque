@@ -40,7 +40,8 @@
 
 							<form:form action="validClient" method="POST"
 								cssClass="form-horizontal" modelAttribute="pers">
-
+								
+								
 
 								<div class="form-group row">
 									<div class="col-sm-6 mb-3 mb-sm-0">
@@ -66,6 +67,7 @@
 
 
 								<form:hidden path="username" />
+								
 
 								<div class="form-group row">
 									<div class="col-sm-6 mb-3 mb-sm-0">

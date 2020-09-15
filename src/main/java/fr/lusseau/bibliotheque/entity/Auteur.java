@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
@@ -41,9 +43,11 @@ public class Auteur implements Serializable {
 	private String nom;
 	
 	@Transient
+	@JsonIgnore
 	private String prenomNom = prenom + " " + nom;
 	
-	@ManyToMany(cascade = {CascadeType.REFRESH}, mappedBy = "auteurs",targetEntity = Livre.class)
+	@JsonIgnore 
+	@ManyToMany(cascade = {CascadeType.REFRESH}, mappedBy = "auteurs",targetEntity = Livre.class, fetch = FetchType.LAZY)
 	private Set<Livre> livres = new HashSet<Livre>();
 	
 	/**
@@ -231,15 +235,16 @@ public class Auteur implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(getPrenomNom());
+		builder.append("Auteur [idAuteur=");
+		builder.append(idAuteur);
+		builder.append(", prenom=");
+		builder.append(prenom);
+		builder.append(", nom=");
+		builder.append(nom);
+		builder.append(", prenomNom=");
+		builder.append(prenomNom);
+		builder.append("]");
 		return builder.toString();
 	}
-	
-	
 
-	
-
-	
-	
-	
 }

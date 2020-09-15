@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import fr.lusseau.bibliotheque.entity.Emprunt;
 
@@ -32,6 +33,13 @@ public interface EmpruntDAO extends JpaRepository<Emprunt, Integer>{
 	
 	@Query("select e from Emprunt e where e.dateRetrait < NOW() AND e.dateRetour > NOW()")
     List<Emprunt> findAllWithEmpruntNow();
+	
+	@Query(value = "select * from Emprunt e where e.id_livre = :id_livre order by e.date_retrait desc", nativeQuery = true )
+	List<Emprunt> findAllEmpruntByLivre(@Param("id_livre") int id);
+	
+	@Query(value = "select * from Emprunt e where e.id_personne = :id_personne order by e.date_retrait desc", nativeQuery = true )
+	List<Emprunt> findAllEmpruntByPersonne(@Param("id_personne") int id);
+	
 	
 	Emprunt findByPersonne(int id);
 	

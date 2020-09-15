@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-	<!-- Page Wrapper -->
+pageEncoding="UTF-8"%>
+<!-- Page Wrapper -->
 <div id="wrapper">
 
 	<!-- Sidebar -->
@@ -9,7 +9,8 @@
 		id="accordionSidebar">
 
 		<!-- Sidebar - Brand -->
-		<a class="sidebar-brand d-flex align-items-center justify-content-center"
+		<a
+			class="sidebar-brand d-flex align-items-center justify-content-center"
 			href="accueil">
 			<div class="sidebar-brand-icon rotate-n-15"></div>
 			<div class="sidebar-brand-text mx-3">Administration
@@ -24,10 +25,9 @@
 				class="fas fa-fw fa-tachometer-alt"></i> <span>Accueil Admin</span></a>
 		</li>
 
-		
-		<li class="nav-item"><a class="nav-link" href="/Bibliotheques/client/accueil"> <i
-				class="fas fa-fw fa-tachometer-alt"></i> <span>Front site</span></a>
-		</li>
+
+		<li class="nav-item"><a class="nav-link" href="/"> <i
+				class="fas fa-fw fa-tachometer-alt"></i> <span>Front site</span></a></li>
 
 		<!-- Divider -->
 		<hr class="sidebar-divider">
@@ -52,9 +52,9 @@
 				aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
 					<h6 class="collapse-header">EMPRUNTS</h6>
-					<a class="collapse-item" href="empruntsPasses">Passée</a> <a
-						class="collapse-item" href="empruntsEnCours">En cours</a> <a
-						class="collapse-item" href="empruntsAVenir">A venir</a>
+					<a class="collapse-item" href="listeEmpruntsPasses">Passés</a> <a
+						class="collapse-item" href="listeEmpruntsEnCours">En cours</a> <a
+						class="collapse-item" href=listeEmpruntsAVenir>A venir</a>
 				</div>
 			</div></li>
 
@@ -70,16 +70,17 @@
 				data-parent="#accordionSidebar">
 				<div class="bg-white py-2 collapse-inner rounded">
 					<h6 class="collapse-header">Utilitaires :</h6>
-					<a class="collapse-item" href="gestionLivres">Gestion des
-						livres</a> <a class="collapse-item" href="gestionPersonnes">Gestion
-						des personnes</a> <a class="collapse-item" href="gestionBibliotheques">Gestion
+					<a class="collapse-item" href="gestionClients">Gestion des
+						clients</a> <a class="collapse-item" href="gestionSalaries">Gestion
+						des salaries</a><a class="collapse-item" href="gestionBibliotheques">Gestion
 						des bibliothèques</a> <a class="collapse-item" href="gestionEditeurs">Gestion
 						des éditeurs</a> <a class="collapse-item" href="gestionAuteurs">Gestion
 						des auteurs</a> <a class="collapse-item" href="gestionCautions">Gestion
 						des Cotisations</a> <a class="collapse-item" href="gestionRoles">Gestion
 						des Roles</a> <a class="collapse-item" href="gestionEtats">Gestion
-						des Etats</a><a class="collapse-item" href="gestionTypes">Gestion
-						des Types</a><a class="collapse-item" href="gestionEmprunts">Gestion
+						des Etats</a><a class="collapse-item" href="gestionStyles">Gestion
+						des Styles</a> <a class="collapse-item" href="gestionLivres">Gestion
+						des livres</a><a class="collapse-item" href="gestionEmprunts">Gestion
 						des Emprunts</a>
 
 				</div>
@@ -87,7 +88,7 @@
 
 
 		<!-- Divider -->
-		<hr class="sidebar-divider d-none d-md-block"/>
+		<hr class="sidebar-divider d-none d-md-block" />
 
 		<!-- Sidebar Toggler (Sidebar) -->
 		<div class="text-center d-none d-md-inline">

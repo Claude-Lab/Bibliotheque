@@ -20,17 +20,19 @@ repositories {
 }
 
 dependencies {
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.3.3.RELEASE', ext: 'pom'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-jersey'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
 	providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 	compile group: 'javax.servlet', name: 'jstl', version: '1.2'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
@@ -41,10 +43,15 @@ dependencies {
 	compile group: 'org.apache.tomcat', name: 'tomcat-jsp-api', version: '9.0.37'
 	providedCompile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.37'
 	compile group: 'org.apache.tomcat', name: 'tomcat-jasper', version: '9.0.37'
-	compile group: 'taglibs', name: 'fmt', version: '1.1.2'
+	// compile group: 'taglibs', name: 'fmt', version: '1.1.2'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.2'
-	//compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
-	//compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.2'
+	 // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
+    compile group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

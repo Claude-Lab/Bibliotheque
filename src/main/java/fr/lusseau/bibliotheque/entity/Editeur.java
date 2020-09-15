@@ -5,11 +5,13 @@ package fr.lusseau.bibliotheque.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,11 +38,11 @@ public class Editeur implements Serializable {
 	@Column(unique = true)
 	private String nom;
 	
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn( name="idCoordonnee", nullable=false )
 	private Coordonnee coordonnee;
 	
-	@OneToMany(targetEntity = Livre.class, mappedBy = "editeur" )
+	@OneToMany(targetEntity = Livre.class, mappedBy = "editeur", fetch = FetchType.LAZY )
 	private Set<Livre> livres;
 	
 	/**
@@ -150,18 +152,15 @@ public class Editeur implements Serializable {
 		return serialVersionUID;
 	}
 
+	
+
+
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((coordonnee == null) ? 0 : coordonnee.hashCode());
-		result = prime * result + idEditeur;
-		result = prime * result + ((livres == null) ? 0 : livres.hashCode());
-		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
-		return result;
+		return Objects.hash(coordonnee, idEditeur, livres, nom);
 	}
 
 	/**
@@ -176,24 +175,8 @@ public class Editeur implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Editeur other = (Editeur) obj;
-		if (coordonnee == null) {
-			if (other.coordonnee != null)
-				return false;
-		} else if (!coordonnee.equals(other.coordonnee))
-			return false;
-		if (idEditeur != other.idEditeur)
-			return false;
-		if (livres == null) {
-			if (other.livres != null)
-				return false;
-		} else if (!livres.equals(other.livres))
-			return false;
-		if (nom == null) {
-			if (other.nom != null)
-				return false;
-		} else if (!nom.equals(other.nom))
-			return false;
-		return true;
+		return Objects.equals(coordonnee, other.coordonnee) && idEditeur == other.idEditeur
+				&& Objects.equals(livres, other.livres) && Objects.equals(nom, other.nom);
 	}
 
 	/**

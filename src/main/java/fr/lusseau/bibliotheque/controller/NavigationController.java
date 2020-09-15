@@ -40,7 +40,7 @@ public class NavigationController {
 	private void init() {
 	}
 
-	@RequestMapping(value = "/accueil", method = RequestMethod.GET)
+	@RequestMapping(value = "/accueil", method = RequestMethod.GET )
 	public ModelAndView accueilAdmin() {
 		long comptagePers = gp.countPersonne();
 		long comptageLivre = gl.countLivre();

@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,8 +38,8 @@ public class Role implements Serializable {
 	@Column(unique = true)
 	private String libelle;
 	
-	@OneToMany(targetEntity = Personne.class, mappedBy = "role")
-	private List<Personne> personnes;
+	@OneToMany(targetEntity = Salarie.class, mappedBy = "role", fetch = FetchType.LAZY)
+	private List<Salarie> personnes;
 	
 	/**
 	 * Constructeur.
@@ -52,7 +53,7 @@ public class Role implements Serializable {
 	 * @param libelle
 	 * @param personnes
 	 */
-	public Role(@NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Personne> personnes) {
+	public Role(@NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Salarie> personnes) {
 		super();
 		this.libelle = libelle;
 		this.personnes = personnes;
@@ -64,7 +65,7 @@ public class Role implements Serializable {
 	 * @param libelle
 	 * @param personnes
 	 */
-	public Role(int idRole, @NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Personne> personnes) {
+	public Role(int idRole, @NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Salarie> personnes) {
 		super();
 		this.idRole = idRole;
 		this.libelle = libelle;
@@ -107,7 +108,7 @@ public class Role implements Serializable {
 	 * Méthode en charge de récupérer la valeur de personnes.
 	 * @return the personnes
 	 */
-	public List<Personne> getPersonnes() {
+	public List<Salarie> getPersonnes() {
 		return personnes;
 	}
 
@@ -115,7 +116,7 @@ public class Role implements Serializable {
 	 * Méthode en charge de définir la valeur de personnes.
 	 * @param personnes the personnes to set
 	 */
-	public void setPersonnes(List<Personne> personnes) {
+	public void setPersonnes(List<Salarie> personnes) {
 		this.personnes = personnes;
 	}
 
@@ -177,9 +178,6 @@ public class Role implements Serializable {
 		builder.append(idRole);
 		builder.append(", libelle=");
 		builder.append(libelle);
-		builder.append(", personnes=");
-		builder.append(personnes);
-		builder.append("]");
 		return builder.toString();
 	}
 

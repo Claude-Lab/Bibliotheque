@@ -4,14 +4,16 @@
 package fr.lusseau.bibliotheque.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,35 +34,36 @@ public class Emprunt implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idEmprunt;
 	
-	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
-	@Column(columnDefinition = "DATETIME")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(columnDefinition = "DATE")
 	@NotNull
-	private LocalDateTime dateRetrait;
+	private LocalDate dateRetrait;
 	
-	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
-	@Column(columnDefinition = "DATETIME")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(columnDefinition = "DATE")
 	@NotNull
-	private LocalDateTime dateRetour;
+	private LocalDate dateRetour;
 	
-	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
-	@Column(columnDefinition = "DATETIME")
-	private LocalDateTime retraitClientOk;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(columnDefinition = "DATE")
+	private LocalDate retraitClientOk;
 	
-	@DateTimeFormat(pattern="yyyy/MM/dd HH:mm")
-	@Column(columnDefinition = "DATETIME")
-	private LocalDateTime retourClientOk;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@Column(columnDefinition = "DATE")
+	private LocalDate retourClientOk;
 	
-	@OneToOne
+	@ManyToOne(targetEntity = Livre.class, fetch = FetchType.LAZY )
+	@JoinColumn(name="idLivre", nullable=false)
 	private Livre livre;
 	
-	@OneToOne
+	@ManyToOne(targetEntity = Personne.class, fetch = FetchType.LAZY )
+	@JoinColumn(name="idPersonne", nullable=false)
 	private Personne personne;
 	
 	/**
 	 * Constructeur.
 	 */
 	public Emprunt() {
-		//this(0, LocalDateTime.now(ZoneId.of("Europe/Paris")), LocalDateTime.now(ZoneId.of("Europe/Paris")), LocalDateTime.now(ZoneId.of("Europe/Paris")), LocalDateTime.now(ZoneId.of("Europe/Paris")), new Livre(), new Personne());
 	}
 
 	
@@ -74,8 +77,8 @@ public class Emprunt implements Serializable {
 	 * @param livre
 	 * @param personne
 	 */
-	public Emprunt(@NotNull LocalDateTime dateRetrait, @NotNull LocalDateTime dateRetour, LocalDateTime retraitClientOk,
-			LocalDateTime retourClientOk, Livre livre, Personne personne) {
+	public Emprunt(@NotNull LocalDate dateRetrait, @NotNull LocalDate dateRetour, LocalDate retraitClientOk,
+			LocalDate retourClientOk, Livre livre, Personne personne) {
 		this.dateRetrait = dateRetrait;
 		this.dateRetour = dateRetour;
 		this.retraitClientOk = retraitClientOk;
@@ -94,8 +97,8 @@ public class Emprunt implements Serializable {
 	 * @param livre
 	 * @param personne
 	 */
-	public Emprunt(int idEmprunt, @NotNull LocalDateTime dateRetrait, @NotNull LocalDateTime dateRetour,
-			LocalDateTime retraitClientOk, LocalDateTime retourClientOk, Livre livre, Personne personne) {
+	public Emprunt(int idEmprunt, @NotNull LocalDate dateRetrait, @NotNull LocalDate dateRetour,
+			LocalDate retraitClientOk, LocalDate retourClientOk, Livre livre, Personne personne) {
 		this.idEmprunt = idEmprunt;
 		this.dateRetrait = dateRetrait;
 		this.dateRetour = dateRetour;
@@ -127,7 +130,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de récupérer la valeur de dateRetrait.
 	 * @return the dateRetrait
 	 */
-	public LocalDateTime getDateRetrait() {
+	public LocalDate getDateRetrait() {
 		return dateRetrait;
 	}
 
@@ -135,7 +138,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de définir la valeur de dateRetrait.
 	 * @param dateRetrait the dateRetrait to set
 	 */
-	public void setDateRetrait(LocalDateTime dateRetrait) {
+	public void setDateRetrait(LocalDate dateRetrait) {
 		this.dateRetrait = dateRetrait;
 	}
 
@@ -143,7 +146,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de récupérer la valeur de dateRetour.
 	 * @return the dateRetour
 	 */
-	public LocalDateTime getDateRetour() {
+	public LocalDate getDateRetour() {
 		return dateRetour;
 	}
 
@@ -151,7 +154,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de définir la valeur de dateRetour.
 	 * @param dateRetour the dateRetour to set
 	 */
-	public void setDateRetour(LocalDateTime dateRetour) {
+	public void setDateRetour(LocalDate dateRetour) {
 		this.dateRetour = dateRetour;
 	}
 
@@ -192,7 +195,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de récupérer la valeur de retraitClientOk.
 	 * @return the retraitClientOk
 	 */
-	public LocalDateTime getRetraitClientOk() {
+	public LocalDate getRetraitClientOk() {
 		return retraitClientOk;
 	}
 
@@ -200,7 +203,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de définir la valeur de retraitClientOk.
 	 * @param retraitClientOk the retraitClientOk to set
 	 */
-	public void setRetraitClientOk(LocalDateTime retraitClientOk) {
+	public void setRetraitClientOk(LocalDate retraitClientOk) {
 		this.retraitClientOk = retraitClientOk;
 	}
 
@@ -208,7 +211,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de récupérer la valeur de retourClientOk.
 	 * @return the retourClientOk
 	 */
-	public LocalDateTime getRetourClientOk() {
+	public LocalDate getRetourClientOk() {
 		return retourClientOk;
 	}
 
@@ -216,7 +219,7 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de définir la valeur de retourClientOk.
 	 * @param retourClientOk the retourClientOk to set
 	 */
-	public void setRetourClientOk(LocalDateTime retourClientOk) {
+	public void setRetourClientOk(LocalDate retourClientOk) {
 		this.retourClientOk = retourClientOk;
 	}
 
@@ -307,6 +310,28 @@ public class Emprunt implements Serializable {
 			return false;
 		return true;
 	}
+
+
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Emprunt [idEmprunt=");
+		builder.append(idEmprunt);
+		builder.append(", dateRetrait=");
+		builder.append(dateRetrait);
+		builder.append(", dateRetour=");
+		builder.append(dateRetour);
+		builder.append(", retraitClientOk=");
+		builder.append(retraitClientOk);
+		builder.append(", retourClientOk=");
+		return builder.toString();
+	}
+	
+	
 
 	
 }

@@ -33,8 +33,8 @@ public class GestionAuteur {
 		return dao.findAuteurLivre(id);
 	}
 
-	public Auteur trouverAuteur(int i) {
-		return dao.findById(i).get();
+	public Auteur trouverAuteur(int idAuteur) {
+		return dao.findById(idAuteur).get();
 	}
 	
 	public void ajouterAuteur(Auteur a) {

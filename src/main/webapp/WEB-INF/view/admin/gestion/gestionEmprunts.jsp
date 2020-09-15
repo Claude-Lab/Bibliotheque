@@ -54,10 +54,10 @@
 									<c:forEach items="${liste}" var="emprunt" varStatus="mStatus">
 										<tr>
 											<td>${emprunt.idEmprunt}</td>
-											<td>${emprunt.livre.titre}</td>
-											<td>${emprunt.personne.prenom} ${emprunt.personne.nom}</td>
-											<td>${dateRetrait}</td>
-											<td>${dateRetour}</td>
+											<td><a href="detailsLivre?index=s${emprunt.livre.idLivre}">${emprunt.livre.titre}</a></td>
+											<td><a href="detailsPersonne?index=s${emprunt.personne.idPersonne}">${emprunt.personne.prenom} ${emprunt.personne.nom}</a></td>
+											<td>${localDateTimeFormat.format(emprunt.dateRetrait)}</td>
+											<td>${localDateTimeFormat.format(emprunt.dateRetour)}</td>
 											<td class="centre" title="Details"><a href="detailsEmprunt?index=s${emprunt.idEmprunt}"><span class="detail fas fa-binoculars"></span></a></td>
 											<td class="centre" title="Modifier"><a href="modifierEmprunt?index=s${emprunt.idEmprunt}"><span class="modif fas fa-edit vert"></span></a></td>
 											<td class="centre" title="Supprimer"><a href="supprimerEmprunt?index=s${emprunt.idEmprunt}"><span class="supp far fa-trash-alt rouge"></span></a></td>

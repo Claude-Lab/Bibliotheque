@@ -4,12 +4,15 @@
 package fr.lusseau.bibliotheque.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +21,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -47,56 +50,57 @@ public class Livre implements Serializable {
 	@Lob
 	private String description;
 	
-	@ManyToMany(targetEntity= Style.class, cascade = CascadeType.PERSIST)
+	@ManyToMany(targetEntity= Style.class, cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	@JoinTable(  name = "Livre_Style",
             joinColumns = @JoinColumn( name = "idLivre", referencedColumnName = "idLivre"),
             inverseJoinColumns = @JoinColumn( name = "idStyle", referencedColumnName = "idStyle" ) )
 	private Set<Style> styles = new HashSet<Style>();
 	
 
-	@ManyToMany(targetEntity= Auteur.class, cascade = CascadeType.PERSIST)
+	@ManyToMany(targetEntity= Auteur.class, cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable( name = "Livre_Auteur",
                 joinColumns = @JoinColumn( name = "idLivre", referencedColumnName = "idLivre" ),
                 inverseJoinColumns = @JoinColumn( name = "idAuteur", referencedColumnName = "idAuteur" ) )
 	private Set<Auteur> auteurs = new HashSet<Auteur>();
 	
-	@ManyToOne(targetEntity = Editeur.class, cascade = CascadeType.REFRESH)
+	@ManyToOne(targetEntity = Editeur.class, cascade = CascadeType.REFRESH, fetch = FetchType.LAZY) 
 	@JoinColumn(name="idEditeur", nullable=false)
 	private Editeur editeur;
 	
-	@ManyToOne(targetEntity = Bibliotheque.class )
+	@ManyToOne(targetEntity = Bibliotheque.class, fetch = FetchType.LAZY )
 	@JoinColumn(name="idBibliotheque", nullable=false)
 	private Bibliotheque bibliotheque;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idEtat", nullable=false)
 	private Etat etat;
 	
-	@OneToOne
-	private Emprunt emprunt;
+	@OneToMany( targetEntity=Emprunt.class, mappedBy="livre", fetch = FetchType.LAZY)
+	private List<Emprunt> emprunts;
 	
 	
 	/**
 	 * Constructeur sans parametre.
 	 */
 	public Livre() {
-		this("", "","", new HashSet<Style>(), new HashSet<Auteur>(), new Editeur(), new Bibliotheque(), new Etat(), new Emprunt());
+		this("", "","", new HashSet<Style>(), new HashSet<Auteur>(), new Editeur(), new Bibliotheque(), new Etat(), new ArrayList<Emprunt>() );
 	}
+
 
 	/**
 	 * Constructeur.
 	 * @param titre
 	 * @param isbn
 	 * @param description
-	 * @param stylesLivres
-	 * @param auteursLivres
+	 * @param styles
+	 * @param auteurs
 	 * @param editeur
 	 * @param bibliotheque
 	 * @param etat
-	 * @param emprunt
+	 * @param emprunts
 	 */
-	public Livre(String titre, String isbn, String description, Set<Style> styles, Set<Auteur> auteurs,
-			Editeur editeur, Bibliotheque bibliotheque, Etat etat, Emprunt emprunt) {
+	public Livre(String titre, String isbn, String description, Set<Style> styles, Set<Auteur> auteurs, Editeur editeur,
+			Bibliotheque bibliotheque, Etat etat, List<Emprunt> emprunts) {
 		super();
 		this.titre = titre;
 		this.isbn = isbn;
@@ -106,8 +110,9 @@ public class Livre implements Serializable {
 		this.editeur = editeur;
 		this.bibliotheque = bibliotheque;
 		this.etat = etat;
-		this.emprunt = emprunt;
+		this.emprunts = emprunts;
 	}
+
 
 	/**
 	 * Constructeur.
@@ -115,15 +120,15 @@ public class Livre implements Serializable {
 	 * @param titre
 	 * @param isbn
 	 * @param description
-	 * @param stylesLivres
-	 * @param auteursLivres
+	 * @param styles
+	 * @param auteurs
 	 * @param editeur
 	 * @param bibliotheque
 	 * @param etat
-	 * @param emprunt
+	 * @param emprunts
 	 */
-	public Livre(int idLivre, String titre, String isbn, String description, Set<Style> styles,
-			Set<Auteur> auteurs, Editeur editeur, Bibliotheque bibliotheque, Etat etat, Emprunt emprunt) {
+	public Livre(int idLivre, String titre, String isbn, String description, Set<Style> styles, Set<Auteur> auteurs,
+			Editeur editeur, Bibliotheque bibliotheque, Etat etat, List<Emprunt> emprunts) {
 		super();
 		this.idLivre = idLivre;
 		this.titre = titre;
@@ -134,8 +139,9 @@ public class Livre implements Serializable {
 		this.editeur = editeur;
 		this.bibliotheque = bibliotheque;
 		this.etat = etat;
-		this.emprunt = emprunt;
+		this.emprunts = emprunts;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de idLivre.
@@ -145,6 +151,7 @@ public class Livre implements Serializable {
 		return idLivre;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de idLivre.
 	 * @param idLivre the idLivre to set
@@ -152,6 +159,7 @@ public class Livre implements Serializable {
 	public void setIdLivre(int idLivre) {
 		this.idLivre = idLivre;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de titre.
@@ -161,6 +169,7 @@ public class Livre implements Serializable {
 		return titre;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de titre.
 	 * @param titre the titre to set
@@ -168,6 +177,7 @@ public class Livre implements Serializable {
 	public void setTitre(String titre) {
 		this.titre = titre;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de isbn.
@@ -177,6 +187,7 @@ public class Livre implements Serializable {
 		return isbn;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de isbn.
 	 * @param isbn the isbn to set
@@ -184,6 +195,7 @@ public class Livre implements Serializable {
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de description.
@@ -193,6 +205,7 @@ public class Livre implements Serializable {
 		return description;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de description.
 	 * @param description the description to set
@@ -200,6 +213,7 @@ public class Livre implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de styles.
@@ -209,6 +223,7 @@ public class Livre implements Serializable {
 		return styles;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de styles.
 	 * @param styles the styles to set
@@ -216,6 +231,7 @@ public class Livre implements Serializable {
 	public void setStyles(Set<Style> styles) {
 		this.styles = styles;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de auteurs.
@@ -225,6 +241,7 @@ public class Livre implements Serializable {
 		return auteurs;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de auteurs.
 	 * @param auteurs the auteurs to set
@@ -232,6 +249,7 @@ public class Livre implements Serializable {
 	public void setAuteurs(Set<Auteur> auteurs) {
 		this.auteurs = auteurs;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de editeur.
@@ -241,6 +259,7 @@ public class Livre implements Serializable {
 		return editeur;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de editeur.
 	 * @param editeur the editeur to set
@@ -248,6 +267,7 @@ public class Livre implements Serializable {
 	public void setEditeur(Editeur editeur) {
 		this.editeur = editeur;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de bibliotheque.
@@ -257,6 +277,7 @@ public class Livre implements Serializable {
 		return bibliotheque;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de bibliotheque.
 	 * @param bibliotheque the bibliotheque to set
@@ -264,6 +285,7 @@ public class Livre implements Serializable {
 	public void setBibliotheque(Bibliotheque bibliotheque) {
 		this.bibliotheque = bibliotheque;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de etat.
@@ -273,6 +295,7 @@ public class Livre implements Serializable {
 		return etat;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de etat.
 	 * @param etat the etat to set
@@ -281,22 +304,24 @@ public class Livre implements Serializable {
 		this.etat = etat;
 	}
 
-	
+
 	/**
 	 * Méthode en charge de récupérer la valeur de emprunts.
 	 * @return the emprunts
 	 */
-	public Emprunt getEmprunts() {
-		return emprunt;
+	public List<Emprunt> getEmprunts() {
+		return emprunts;
 	}
+
 
 	/**
 	 * Méthode en charge de définir la valeur de emprunts.
 	 * @param emprunts the emprunts to set
 	 */
-	public void setEmprunts(Emprunt emprunt) {
-		this.emprunt = emprunt;
+	public void setEmprunts(List<Emprunt> emprunts) {
+		this.emprunts = emprunts;
 	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de serialversionuid.
@@ -306,94 +331,22 @@ public class Livre implements Serializable {
 		return serialVersionUID;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((auteurs == null) ? 0 : auteurs.hashCode());
-		result = prime * result + ((bibliotheque == null) ? 0 : bibliotheque.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((emprunt == null) ? 0 : emprunt.hashCode());
-		result = prime * result + ((etat == null) ? 0 : etat.hashCode());
-		result = prime * result + idLivre;
-		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
-		result = prime * result + ((titre == null) ? 0 : titre.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Livre other = (Livre) obj;
-		if (auteurs == null) {
-			if (other.auteurs != null)
-				return false;
-		} else if (!auteurs.equals(other.auteurs))
-			return false;
-		if (bibliotheque == null) {
-			if (other.bibliotheque != null)
-				return false;
-		} else if (!bibliotheque.equals(other.bibliotheque))
-			return false;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
-		if (editeur == null) {
-			if (other.editeur != null)
-				return false;
-		} else if (!editeur.equals(other.editeur))
-			return false;
-		if (emprunt == null) {
-			if (other.emprunt != null)
-				return false;
-		} else if (!emprunt.equals(other.emprunt))
-			return false;
-		if (etat == null) {
-			if (other.etat != null)
-				return false;
-		} else if (!etat.equals(other.etat))
-			return false;
-		if (idLivre != other.idLivre)
-			return false;
-		if (isbn == null) {
-			if (other.isbn != null)
-				return false;
-		} else if (!isbn.equals(other.isbn))
-			return false;
-		if (styles == null) {
-			if (other.styles != null)
-				return false;
-		} else if (!styles.equals(other.styles))
-			return false;
-		if (titre == null) {
-			if (other.titre != null)
-				return false;
-		} else if (!titre.equals(other.titre))
-			return false;
-		return true;
-	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
 	public String toString() {
-		return "Livre [idLivre=" + idLivre + ", titre=" + titre + ", isbn=" + isbn + ", description=" + description  + "]";
+		StringBuilder builder = new StringBuilder();
+		builder.append("Livre [idLivre=");
+		builder.append(idLivre);
+		builder.append(", titre=");
+		builder.append(titre);
+		builder.append(", isbn=");
+		builder.append(isbn);
+		builder.append(", description=");
+		builder.append(description);
+		return builder.toString();
 	}
-
 	
-
 }

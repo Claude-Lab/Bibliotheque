@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.lusseau.bibliotheque.dao.AuteurDAO;
+import fr.lusseau.bibliotheque.dao.EmpruntDAO;
 import fr.lusseau.bibliotheque.dao.LivreDAO;
 import fr.lusseau.bibliotheque.dao.StyleDAO;
 import fr.lusseau.bibliotheque.entity.Livre;
@@ -28,12 +29,12 @@ public class GestionLivre {
 
 	@Autowired
 	LivreDAO daoL;
-	
 	@Autowired
 	AuteurDAO daoA;
-	
 	@Autowired
 	StyleDAO daoS;
+	@Autowired
+	EmpruntDAO daoE;
 	
 	
 	/**
@@ -53,6 +54,7 @@ public class GestionLivre {
 	public void ajouterLivre(Livre livre) {
 		daoL.save(livre);
 	}
+	
 	
 	@Transactional
 	public void saveLivre(Livre model) {
@@ -97,10 +99,6 @@ public class GestionLivre {
 		case "tD":
 			liste = (List<Livre>) daoL.findByOrderByTitreDesc();
 			break;
-//		case "eA": liste = (List<Livre>) daoL.findByOrderByEditeurAsc(); break;
-//		case "eD": liste = (List<Livre>) daoL.findByOrderByEditeurDesc(); break;
-//		case "aA": liste = (List<Livre>) daoL.findByOrderByAuteursAsc(); break;
-//		case "aD": liste = (List<Livre>) daoL.findByOrderByAuteursDesc(); break;
 		case "iA":
 			liste = (List<Livre>) daoL.findByOrderByIsbnAsc();
 			break;

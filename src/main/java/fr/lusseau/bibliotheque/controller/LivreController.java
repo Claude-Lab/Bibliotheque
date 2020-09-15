@@ -3,6 +3,7 @@
  */
 package fr.lusseau.bibliotheque.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import fr.lusseau.bibliotheque.entity.Auteur;
 import fr.lusseau.bibliotheque.entity.Bibliotheque;
 import fr.lusseau.bibliotheque.entity.Editeur;
+import fr.lusseau.bibliotheque.entity.Emprunt;
 import fr.lusseau.bibliotheque.entity.Etat;
 import fr.lusseau.bibliotheque.entity.Livre;
 import fr.lusseau.bibliotheque.entity.Style;
@@ -130,20 +132,11 @@ public class LivreController {
 	@RequestMapping(value = "/detailsLivre", method = RequestMethod.GET)
 	public ModelAndView detailsLivre(String index) {
 		int i = Integer.parseInt(index.substring(1));
-		Livre livre;
-		livre = gl.trouverLivre(i);
-		Bibliotheque bibliotheque = null;
-		Editeur editeur = null;
-		Etat etat = null;
-		List<Auteur> listeAuteurs =  ga.trouverAuteurLivre(i);
-		List<Style> listeStyles = gs.trouverStyleLivre(i);
-		
+		Livre livre= gl.trouverLivre(i);
+		List<Emprunt> listeEmprunt = gd.listEmpruntLivreenCoursEtAVenir(i);
 		ModelAndView mav = new ModelAndView("/admin/details/detailsLivre", "livre", livre);
-		mav.getModelMap().addAttribute(index, bibliotheque);
-		mav.getModelMap().addAttribute(index, editeur);
-		mav.getModelMap().addAttribute(index, etat);
-		mav.addObject("listeStyles", listeStyles);
-		mav.addObject("listeAuteurs", listeAuteurs);
+		mav.addObject("listeEmprunt",listeEmprunt);
+		mav.addObject("localDateTimeFormat", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		return mav;
 
 	}

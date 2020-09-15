@@ -41,18 +41,17 @@ public class GestionPersonne   {
 		return dao.findById(i).get();
 	}
 	
-	public Personne ajouterPersonne(Personne model) {
-		Personne personne = new Personne();
-
-		personne.setPrenom(model.getPrenom());
-		personne.setPrenom(model.getNom());
-		personne.setCoordonnee(model.getCoordonnee());
-		personne.setRole(model.getRole());
-		personne.setType(model.getType());
-
-		return dao.save(model);
-	}
-	
+//	public Personne ajouterPersonne(Personne model) {
+//		Personne personne = new Personne();
+//
+//		personne.setPrenom(model.getPrenom());
+//		personne.setPrenom(model.getNom());
+//		personne.setCoordonnee(model.getCoordonnee());
+//		personne.setRole(model.getRole());
+//
+//		return dao.save(model);
+//	}
+//	
 	public void modifierPersonne(Personne personne) {
 //		Personne personne = dao.findOne(p.getId());
 //		personne.setNom(p.getNom());

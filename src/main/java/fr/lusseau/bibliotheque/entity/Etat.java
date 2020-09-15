@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class Etat implements Serializable {
 	@Pattern(regexp = "^[a-zA-Z ]{3,20}$")
 	private String libelle;
 	
-	@OneToMany(targetEntity = Livre.class, mappedBy = "etat")
+	@OneToMany(targetEntity = Livre.class, mappedBy = "etat", fetch = FetchType.LAZY)
 	private List<Livre> livres;
 	
 	/**

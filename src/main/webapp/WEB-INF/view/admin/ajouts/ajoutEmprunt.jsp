@@ -55,7 +55,7 @@
 									<div class="col-sm-6 mb-3 mb-sm-0">
 										<form:label path="dateRetour"> Date Retour : </form:label>
 										<form:input path="dateRetour" type="date"
-											class="form-control form-control-user" placeholder="Nom"
+											class="form-control form-control-user" placeholder="Date Retour"
 											required="required"></form:input>
 										<form:errors path="dateRetour" cssClass="erreur"></form:errors>
 									</div>

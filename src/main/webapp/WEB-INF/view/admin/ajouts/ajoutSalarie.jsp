@@ -64,7 +64,6 @@
 									</div>
 								</div>
 
-
 								<form:hidden path="username" />
 
 								<div class="form-group row">

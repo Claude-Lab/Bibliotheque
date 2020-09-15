@@ -29,7 +29,6 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -60,7 +59,7 @@ public class Personne implements Serializable {
 	@NotBlank
 //	@Pattern(regexp = "[a-zA-Z- ]")
 	private String prenom;
-	
+
 	@Transient
 	private String fullName = prenom + " " + nom;
 
@@ -73,38 +72,30 @@ public class Personne implements Serializable {
 	@NotBlank
 	private String confirmPassword;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idCoordonnee", nullable = false)
 	private Coordonnee coordonnee;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idCaution", nullable = false)
 	private Caution caution;
 
-	@OneToMany(targetEntity = Emprunt.class, mappedBy = "personne", fetch = FetchType.EAGER)
+	@OneToMany(targetEntity = Emprunt.class, mappedBy = "personne", fetch = FetchType.LAZY)
 	private List<Emprunt> emprunts;
 
-	@JsonFormat(pattern = "dd-MM-yyy HH:mm", timezone = "UTC")
-	@Column(columnDefinition = "DATETIME")
+	@Column(columnDefinition = "TIMESTAMP")
 	@NotNull
 	private LocalDateTime dateInscription;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "idType", nullable = false)
-	private Type type;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "idRole", nullable = false)
-	private Role role;
-
 	private boolean enabled;
+
 
 	/**
 	 * Constructeur.
 	 */
 	public Personne() {
 		this(0, "", "", "", "", "", new Coordonnee(), new Caution(), new ArrayList<Emprunt>(),
-				LocalDateTime.now(ZoneId.of("Europe/Paris")), new Type(), new Role(), false);
+				LocalDateTime.now(ZoneId.of("Europe/Paris")), false);
 
 	}
 
@@ -120,14 +111,11 @@ public class Personne implements Serializable {
 	 * @param caution
 	 * @param emprunts
 	 * @param dateInscription
-	 * @param type
-	 * @param role
 	 * @param enabled
 	 */
 	public Personne(@NotBlank String nom, @NotBlank String prenom, String username, @NotBlank String password,
 			@NotBlank String confirmPassword, Coordonnee coordonnee, Caution caution, List<Emprunt> emprunts,
-			@NotNull LocalDateTime dateInscription, Type type, Role role, boolean enabled) {
-		super();
+			@NotNull LocalDateTime dateInscription, boolean enabled) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.username = username;
@@ -137,8 +125,6 @@ public class Personne implements Serializable {
 		this.caution = caution;
 		this.emprunts = emprunts;
 		this.dateInscription = dateInscription;
-		this.type = type;
-		this.role = role;
 		this.enabled = enabled;
 	}
 
@@ -155,14 +141,11 @@ public class Personne implements Serializable {
 	 * @param caution
 	 * @param emprunts
 	 * @param dateInscription
-	 * @param type
-	 * @param role
 	 * @param enabled
 	 */
 	public Personne(int idPersonne, @NotBlank String nom, @NotBlank String prenom, String username,
 			@NotBlank String password, @NotBlank String confirmPassword, Coordonnee coordonnee, Caution caution,
-			List<Emprunt> emprunts, @NotNull LocalDateTime dateInscription, Type type, Role role, boolean enabled) {
-		super();
+			List<Emprunt> emprunts, @NotNull LocalDateTime dateInscription, boolean enabled) {
 		this.idPersonne = idPersonne;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -173,8 +156,6 @@ public class Personne implements Serializable {
 		this.caution = caution;
 		this.emprunts = emprunts;
 		this.dateInscription = dateInscription;
-		this.type = type;
-		this.role = role;
 		this.enabled = enabled;
 	}
 
@@ -195,11 +176,10 @@ public class Personne implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
-	
 
 	/**
 	 * Méthode en charge de récupérer la valeur de fullName.
+	 * 
 	 * @return the fullName
 	 */
 	public String getFullName() {
@@ -208,6 +188,7 @@ public class Personne implements Serializable {
 
 	/**
 	 * Méthode en charge de définir la valeur de fullName.
+	 * 
 	 * @param fullName the fullName to set
 	 */
 	public void setFullName(String fullName) {
@@ -377,42 +358,6 @@ public class Personne implements Serializable {
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de type.
-	 * 
-	 * @return the type
-	 */
-	public Type getType() {
-		return type;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de type.
-	 * 
-	 * @param type the type to set
-	 */
-	public void setType(Type type) {
-		this.type = type;
-	}
-
-	/**
-	 * Méthode en charge de récupérer la valeur de role.
-	 * 
-	 * @return the role
-	 */
-	public Role getRole() {
-		return role;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de role.
-	 * 
-	 * @param role the role to set
-	 */
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	/**
 	 * Méthode en charge de récupérer la valeur de enabled.
 	 * 
 	 * @return the enabled
@@ -452,12 +397,11 @@ public class Personne implements Serializable {
 		result = prime * result + ((dateInscription == null) ? 0 : dateInscription.hashCode());
 		result = prime * result + ((emprunts == null) ? 0 : emprunts.hashCode());
 		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + idPersonne;
 		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((prenom == null) ? 0 : prenom.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -467,72 +411,89 @@ public class Personne implements Serializable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof Personne)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Personne other = (Personne) obj;
 		if (caution == null) {
-			if (other.caution != null)
+			if (other.caution != null) {
 				return false;
-		} else if (!caution.equals(other.caution))
+			}
+		} else if (!caution.equals(other.caution)) {
 			return false;
+		}
 		if (confirmPassword == null) {
-			if (other.confirmPassword != null)
+			if (other.confirmPassword != null) {
 				return false;
-		} else if (!confirmPassword.equals(other.confirmPassword))
+			}
+		} else if (!confirmPassword.equals(other.confirmPassword)) {
 			return false;
+		}
 		if (coordonnee == null) {
-			if (other.coordonnee != null)
+			if (other.coordonnee != null) {
 				return false;
-		} else if (!coordonnee.equals(other.coordonnee))
+			}
+		} else if (!coordonnee.equals(other.coordonnee)) {
 			return false;
+		}
 		if (dateInscription == null) {
-			if (other.dateInscription != null)
+			if (other.dateInscription != null) {
 				return false;
-		} else if (!dateInscription.equals(other.dateInscription))
+			}
+		} else if (!dateInscription.equals(other.dateInscription)) {
 			return false;
+		}
 		if (emprunts == null) {
-			if (other.emprunts != null)
+			if (other.emprunts != null) {
 				return false;
-		} else if (!emprunts.equals(other.emprunts))
+			}
+		} else if (!emprunts.equals(other.emprunts)) {
 			return false;
-		if (enabled != other.enabled)
+		}
+		if (enabled != other.enabled) {
 			return false;
-		if (idPersonne != other.idPersonne)
+		}
+		if (fullName == null) {
+			if (other.fullName != null) {
+				return false;
+			}
+		} else if (!fullName.equals(other.fullName)) {
 			return false;
+		}
+		if (idPersonne != other.idPersonne) {
+			return false;
+		}
 		if (nom == null) {
-			if (other.nom != null)
+			if (other.nom != null) {
 				return false;
-		} else if (!nom.equals(other.nom))
+			}
+		} else if (!nom.equals(other.nom)) {
 			return false;
+		}
 		if (password == null) {
-			if (other.password != null)
+			if (other.password != null) {
 				return false;
-		} else if (!password.equals(other.password))
+			}
+		} else if (!password.equals(other.password)) {
 			return false;
+		}
 		if (prenom == null) {
-			if (other.prenom != null)
+			if (other.prenom != null) {
 				return false;
-		} else if (!prenom.equals(other.prenom))
+			}
+		} else if (!prenom.equals(other.prenom)) {
 			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
+		}
 		if (username == null) {
-			if (other.username != null)
+			if (other.username != null) {
 				return false;
-		} else if (!username.equals(other.username))
+			}
+		} else if (!username.equals(other.username)) {
 			return false;
+		}
 		return true;
 	}
 

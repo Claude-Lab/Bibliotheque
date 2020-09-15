@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,11 +37,11 @@ public class Bibliotheque implements Serializable {
 	@Column(unique = true)
 	private String nom;
 	
-	@OneToOne( cascade = CascadeType.ALL )
+	@OneToOne( cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	@JoinColumn( name="idCoordonnee", nullable=false )
 	private Coordonnee coordonnee;
 	
-	@OneToMany( targetEntity=Livre.class, mappedBy="bibliotheque" )
+	@OneToMany( targetEntity=Livre.class, mappedBy="bibliotheque", fetch = FetchType.LAZY)
 	private List<Livre> livres;
 	
 	/**

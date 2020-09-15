@@ -37,11 +37,13 @@ public class GestionEmprunt {
 	}
 	
 	public void modifierEmprunt(Emprunt e) {
-//		Personne personne = dao.findOne(p.getId());
-//		personne.setNom(p.getNom());
-//		personne.setPrenom(p.getPrenom());
-//		personne.setMotDePasse(p.getMotDePasse());
-//		dao.save(personne);
+//		Emprunt emprunt = dao.findOne(e.getId());
+//		emprunt.setNom(p.getNom());
+//		emprunt.setDateRetrait(p.getDateRetrait());
+//		emprunt.setDateRetour(p.getDateRetour());
+//		emprunt.setLivre(e.getLivre());
+//		emprunt.setPersonne(e.getPersonne());
+//		dao.save(emprunt);
 		dao.save(e);
 	}
 	
@@ -81,4 +83,13 @@ public class GestionEmprunt {
 		return dao.findAllWithEmpruntNow();
 		
 	}
+	
+	public List<Emprunt> listEmpruntLivreenCoursEtAVenir(int i) {
+		return dao.findAllEmpruntByLivre(i);
+	}
+	
+public List<Emprunt> listEmpruntPersonneEnCoursEtAVenir(int i) {
+		return dao.findAllEmpruntByPersonne(i);
+	}
+
 }
