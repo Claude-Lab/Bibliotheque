@@ -3,47 +3,36 @@
  */
 package fr.lusseau.bibliotheque.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import fr.lusseau.bibliotheque.entity.Emprunt;
 
 /**
  * Classe en charge de
+ * 
  * @Version Bibliotheque -v1,0
- * @date  14 août 2020 - 11:12:29
+ * @date 14 août 2020 - 11:12:29
  * @author Claude LUSSEAU
  *
  */
-public interface EmpruntDAO extends JpaRepository<Emprunt, Integer>{
+@Repository
+public interface EmpruntDAO extends JpaRepository<Emprunt, Integer> {
 
-	Iterable<Emprunt> findByOrderByDateRetraitAsc();
-	Iterable<Emprunt> findByOrderByDateRetraitDesc();
-	Iterable<Emprunt> findByOrderByDateRetourAsc();
-	Iterable<Emprunt> findByOrderByDateRetourDesc();
+	public List<Emprunt> findByEndDateBefore(LocalDate maxEndDate);
+
+//	@Query("SELECT e from EMPRUNT e JOIN PERSONNE p ON e.pk.personne = p.ID_PERSONNE LEFT JOIN COORDONNEE c ON p.ID_COORDONNEE = c.ID_COORDONNEE WHERE c.EMAIL = ?1 AND e.STATUS = ?2")
+//	@Query("SELECT e from EMPRUNT e INNER JOIN e.pk.personne p WHERE p.ID_PERSONNE = ?1 AND e.STATUS = ?2")
+//	public List<Emprunt> getAllOpenEmpruntsOfThisPersonne(String email, EmpruntStatus status);
+
+//	@Query("SELECT e FROM emprunt e INNER JOIN livre l ON l.id_livre = e.id_livre INNER JOIN personne p ON p.id_personne = e.id_personne "
+//			+ "WHERE e.id_livre = ?1 AND e.id_personne = ?2  AND e.status = ?3 ")
+//	public Emprunt getEmpruntByCriteria(Integer idLivre, Integer idPersonne, EmpruntStatus status);
+
 	
-	@Query("select e from Emprunt e where e.dateRetour < NOW()")
-    List<Emprunt> findAllWithDateRetourBefore();
-	
-	@Query("select e from Emprunt e where e.dateRetrait > NOW()")
-    List<Emprunt> findAllWithDateRetraitAfter();
-	
-	@Query("select e from Emprunt e where e.dateRetrait < NOW() AND e.dateRetour > NOW()")
-    List<Emprunt> findAllWithEmpruntNow();
-	
-	@Query(value = "select * from Emprunt e where e.id_livre = :id_livre order by e.date_retrait desc", nativeQuery = true )
-	List<Emprunt> findAllEmpruntByLivre(@Param("id_livre") int id);
-	
-	@Query(value = "select * from Emprunt e where e.id_personne = :id_personne order by e.date_retrait desc", nativeQuery = true )
-	List<Emprunt> findAllEmpruntByPersonne(@Param("id_personne") int id);
-	
-	
-	Emprunt findByPersonne(int id);
-	
-	Emprunt findByLivre(int id);
 	
 	long count();
 }

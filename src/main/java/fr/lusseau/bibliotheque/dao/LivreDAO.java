@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import fr.lusseau.bibliotheque.entity.Livre;
 
@@ -14,16 +15,10 @@ import fr.lusseau.bibliotheque.entity.Livre;
  * @author Claude LUSSEAU
  *
  */
+@Repository
 public interface LivreDAO extends JpaRepository<Livre, Integer> {
 
-	Iterable<Livre> findByOrderByTitreAsc();
-	Iterable<Livre> findByOrderByTitreDesc();
-//	Iterable<Livre> findByOrderByAuteursAsc();
-//	Iterable<Livre> findByOrderByAuteursDesc();
-//	Iterable<Livre> findByOrderByEditeurAsc();
-//	Iterable<Livre> findByOrderByEditeurDesc();
-	Iterable<Livre> findByOrderByIsbnAsc();
-	Iterable<Livre> findByOrderByIsbnDesc();
+
 	Livre findByTitre(String titre);
 	
 	long count();

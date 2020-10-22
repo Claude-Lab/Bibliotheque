@@ -3,7 +3,6 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -25,21 +25,23 @@ import javax.validation.constraints.NotNull;
  *
  */
 @Entity
-public class Caution implements Serializable {
+@Table(name = "Caution")
+public class Caution {
 
-	private static final long serialVersionUID = 8461939623329542423L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idCaution")
 	private int idCaution;
 	
 	@NotNull
 	@Min(value=0)
-	@Column(unique = true)
+	@Column(unique = true, name = "valeur")
 	private double valeur;
 	
 	@NotNull
 	@Min(value=0)
+	@Column(name = "nbLivres")
 	private int nbLivres;
 	
 	@OneToMany( targetEntity=Personne.class, mappedBy="caution", fetch = FetchType.LAZY )
@@ -144,70 +146,5 @@ public class Caution implements Serializable {
 		this.personnes = personnes;
 	}
 
-	/**
-	 * Méthode en charge de récupérer la valeur de serialversionuid.
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + idCaution;
-		result = prime * result + nbLivres;
-		result = prime * result + ((personnes == null) ? 0 : personnes.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(valeur);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Caution other = (Caution) obj;
-		if (idCaution != other.idCaution)
-			return false;
-		if (nbLivres != other.nbLivres)
-			return false;
-		if (personnes == null) {
-			if (other.personnes != null)
-				return false;
-		} else if (!personnes.equals(other.personnes))
-			return false;
-		if (Double.doubleToLongBits(valeur) != Double.doubleToLongBits(other.valeur))
-			return false;
-		return true;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Caution [idCaution=");
-		builder.append(idCaution);
-		builder.append(", valeur=");
-		builder.append(valeur);
-		builder.append(", nbLivres=");
-		builder.append(nbLivres);
-		builder.append("]");
-		return builder.toString();
-	}
 
 }

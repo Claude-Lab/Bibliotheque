@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import fr.lusseau.bibliotheque.entity.Coordonnee;
 
@@ -14,9 +15,11 @@ import fr.lusseau.bibliotheque.entity.Coordonnee;
  * @author Claude LUSSEAU
  *
  */
+@Repository
 public interface CoordonneeDAO extends JpaRepository<Coordonnee, Integer> {
 	
-//	Coordonnee findByEmail();
+	public Coordonnee findByEmail(String email);
+	
 	
 
 }

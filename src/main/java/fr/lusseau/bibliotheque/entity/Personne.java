@@ -3,12 +3,9 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.io.Serializable;
-import java.text.Normalizer;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,20 +14,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import javax.persistence.Table;
 
 /**
  * Classe en charge de definir le bean Personne.
@@ -41,36 +29,29 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  *
  */
 @Entity
-@Component
-@Inheritance(strategy = InheritanceType.JOINED)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idPersonne")
-public class Personne implements Serializable {
-
-	private static final long serialVersionUID = 5259404382419783534L;
+@Table(name = "Personne")
+public class Personne {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idPersonne")
 	private int idPersonne;
 
-	@NotBlank
-//	@Pattern(regexp = "[a-zA-Z- ]")
+	@Column(name = "nom", nullable = false)
 	private String nom;
 
-	@NotBlank
-//	@Pattern(regexp = "[a-zA-Z- ]")
+	@Column(name = "prenom", nullable = false)
 	private String prenom;
 
-	@Transient
+	@Column(name = "fullName", nullable = false)
 	private String fullName = prenom + " " + nom;
 
-	@Column(name = "username")
-	private String username;
-
-	@NotBlank
+	@Column(name = "password", nullable = false)
 	private String password;
 
-	@NotBlank
-	private String confirmPassword;
+	@ManyToOne(fetch = FetchType.LAZY )
+	@JoinColumn(name = "idRole", nullable = false)
+	private Role role;
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idCoordonnee", nullable = false)
@@ -80,319 +61,228 @@ public class Personne implements Serializable {
 	@JoinColumn(name = "idCaution", nullable = false)
 	private Caution caution;
 
-	@OneToMany(targetEntity = Emprunt.class, mappedBy = "personne", fetch = FetchType.LAZY)
-	private List<Emprunt> emprunts;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "personne", cascade = CascadeType.ALL)
+	private Set<Emprunt> emprunts = new HashSet<Emprunt>();
 
-	@Column(columnDefinition = "TIMESTAMP")
-	@NotNull
-	private LocalDateTime dateInscription;
+	@Column(name = "dateInscription", nullable = false)
+	private LocalDate dateInscription;
 
+	@Column(name = "enable", nullable = false)
 	private boolean enabled;
-
 
 	/**
 	 * Constructeur.
 	 */
 	public Personne() {
-		this(0, "", "", "", "", "", new Coordonnee(), new Caution(), new ArrayList<Emprunt>(),
-				LocalDateTime.now(ZoneId.of("Europe/Paris")), false);
-
 	}
 
-	/**
-	 * Constructeur.
-	 * 
-	 * @param nom
-	 * @param prenom
-	 * @param username
-	 * @param password
-	 * @param confirmPassword
-	 * @param coordonnee
-	 * @param caution
-	 * @param emprunts
-	 * @param dateInscription
-	 * @param enabled
-	 */
-	public Personne(@NotBlank String nom, @NotBlank String prenom, String username, @NotBlank String password,
-			@NotBlank String confirmPassword, Coordonnee coordonnee, Caution caution, List<Emprunt> emprunts,
-			@NotNull LocalDateTime dateInscription, boolean enabled) {
-		this.nom = nom;
-		this.prenom = prenom;
-		this.username = username;
-		this.password = password;
-		this.confirmPassword = confirmPassword;
-		this.coordonnee = coordonnee;
-		this.caution = caution;
-		this.emprunts = emprunts;
-		this.dateInscription = dateInscription;
-		this.enabled = enabled;
-	}
-
-	/**
-	 * Constructeur.
-	 * 
-	 * @param idPersonne
-	 * @param nom
-	 * @param prenom
-	 * @param username
-	 * @param password
-	 * @param confirmPassword
-	 * @param coordonnee
-	 * @param caution
-	 * @param emprunts
-	 * @param dateInscription
-	 * @param enabled
-	 */
-	public Personne(int idPersonne, @NotBlank String nom, @NotBlank String prenom, String username,
-			@NotBlank String password, @NotBlank String confirmPassword, Coordonnee coordonnee, Caution caution,
-			List<Emprunt> emprunts, @NotNull LocalDateTime dateInscription, boolean enabled) {
-		this.idPersonne = idPersonne;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.username = username;
-		this.password = password;
-		this.confirmPassword = confirmPassword;
-		this.coordonnee = coordonnee;
-		this.caution = caution;
-		this.emprunts = emprunts;
-		this.dateInscription = dateInscription;
-		this.enabled = enabled;
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	public String getUsername() {
-		String strTemp = Normalizer.normalize(this.prenom + "." + this.nom, Normalizer.Form.NFD);
-		username = strTemp.replaceAll("\\s", "").replaceAll("[^\\p{ASCII}]", "").toLowerCase();
-		return username;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de username.
-	 * 
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * Méthode en charge de récupérer la valeur de fullName.
-	 * 
-	 * @return the fullName
-	 */
-	public String getFullName() {
-		return prenom + " " + nom;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de fullName.
-	 * 
-	 * @param fullName the fullName to set
-	 */
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
 
 	/**
 	 * Méthode en charge de récupérer la valeur de idPersonne.
-	 * 
 	 * @return the idPersonne
 	 */
 	public int getIdPersonne() {
 		return idPersonne;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de idPersonne.
-	 * 
 	 * @param idPersonne the idPersonne to set
 	 */
 	public void setIdPersonne(int idPersonne) {
 		this.idPersonne = idPersonne;
 	}
 
+
 	/**
 	 * Méthode en charge de récupérer la valeur de nom.
-	 * 
 	 * @return the nom
 	 */
 	public String getNom() {
 		return nom;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de nom.
-	 * 
 	 * @param nom the nom to set
 	 */
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
+
 	/**
 	 * Méthode en charge de récupérer la valeur de prenom.
-	 * 
 	 * @return the prenom
 	 */
 	public String getPrenom() {
 		return prenom;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de prenom.
-	 * 
 	 * @param prenom the prenom to set
 	 */
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
 
+
+	/**
+	 * Méthode en charge de récupérer la valeur de fullName.
+	 * @return the fullName
+	 */
+	public String getFullName() {
+		return fullName;
+	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de fullName.
+	 * @param fullName the fullName to set
+	 */
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+
 	/**
 	 * Méthode en charge de récupérer la valeur de password.
-	 * 
 	 * @return the password
 	 */
 	public String getPassword() {
 		return password;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de password.
-	 * 
 	 * @param password the password to set
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-	/**
-	 * Méthode en charge de récupérer la valeur de confirmPassword.
-	 * 
-	 * @return the confirmPassword
-	 */
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
 
 	/**
-	 * Méthode en charge de définir la valeur de confirmPassword.
-	 * 
-	 * @param confirmPassword the confirmPassword to set
+	 * Méthode en charge de récupérer la valeur de role.
+	 * @return the role
 	 */
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
+	public Role getRole() {
+		return role;
 	}
+
+
+	/**
+	 * Méthode en charge de définir la valeur de role.
+	 * @param role the role to set
+	 */
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 
 	/**
 	 * Méthode en charge de récupérer la valeur de coordonnee.
-	 * 
 	 * @return the coordonnee
 	 */
 	public Coordonnee getCoordonnee() {
 		return coordonnee;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de coordonnee.
-	 * 
 	 * @param coordonnee the coordonnee to set
 	 */
 	public void setCoordonnee(Coordonnee coordonnee) {
 		this.coordonnee = coordonnee;
 	}
 
+
 	/**
 	 * Méthode en charge de récupérer la valeur de caution.
-	 * 
 	 * @return the caution
 	 */
 	public Caution getCaution() {
 		return caution;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de caution.
-	 * 
 	 * @param caution the caution to set
 	 */
 	public void setCaution(Caution caution) {
 		this.caution = caution;
 	}
 
+
 	/**
 	 * Méthode en charge de récupérer la valeur de emprunts.
-	 * 
 	 * @return the emprunts
 	 */
-	public List<Emprunt> getEmprunts() {
+	public Set<Emprunt> getEmprunts() {
 		return emprunts;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de emprunts.
-	 * 
 	 * @param emprunts the emprunts to set
 	 */
-	public void setEmprunts(List<Emprunt> emprunts) {
+	public void setEmprunts(Set<Emprunt> emprunts) {
 		this.emprunts = emprunts;
 	}
 
+
 	/**
 	 * Méthode en charge de récupérer la valeur de dateInscription.
-	 * 
 	 * @return the dateInscription
 	 */
-	public LocalDateTime getDateInscription() {
+	public LocalDate getDateInscription() {
 		return dateInscription;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de dateInscription.
-	 * 
 	 * @param dateInscription the dateInscription to set
 	 */
-	public void setDateInscription(LocalDateTime dateInscription) {
+	public void setDateInscription(LocalDate dateInscription) {
 		this.dateInscription = dateInscription;
 	}
 
+
 	/**
 	 * Méthode en charge de récupérer la valeur de enabled.
-	 * 
 	 * @return the enabled
 	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+
 	/**
 	 * Méthode en charge de définir la valeur de enabled.
-	 * 
 	 * @param enabled the enabled to set
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
-	/**
-	 * Méthode en charge de récupérer la valeur de serialversionuid.
-	 * 
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 	/**
 	 * @{inheritDoc}
-	 */
+	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((caution == null) ? 0 : caution.hashCode());
-		result = prime * result + ((confirmPassword == null) ? 0 : confirmPassword.hashCode());
 		result = prime * result + ((coordonnee == null) ? 0 : coordonnee.hashCode());
 		result = prime * result + ((dateInscription == null) ? 0 : dateInscription.hashCode());
 		result = prime * result + ((emprunts == null) ? 0 : emprunts.hashCode());
@@ -402,13 +292,14 @@ public class Personne implements Serializable {
 		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((prenom == null) ? 0 : prenom.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		return result;
 	}
 
+
 	/**
 	 * @{inheritDoc}
-	 */
+	*/
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -423,13 +314,6 @@ public class Personne implements Serializable {
 				return false;
 			}
 		} else if (!caution.equals(other.caution)) {
-			return false;
-		}
-		if (confirmPassword == null) {
-			if (other.confirmPassword != null) {
-				return false;
-			}
-		} else if (!confirmPassword.equals(other.confirmPassword)) {
 			return false;
 		}
 		if (coordonnee == null) {
@@ -487,40 +371,15 @@ public class Personne implements Serializable {
 		} else if (!prenom.equals(other.prenom)) {
 			return false;
 		}
-		if (username == null) {
-			if (other.username != null) {
+		if (role == null) {
+			if (other.role != null) {
 				return false;
 			}
-		} else if (!username.equals(other.username)) {
+		} else if (!role.equals(other.role)) {
 			return false;
 		}
 		return true;
 	}
 
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Personne [idPersonne=");
-		builder.append(idPersonne);
-		builder.append(", nom=");
-		builder.append(nom);
-		builder.append(", prenom=");
-		builder.append(prenom);
-		builder.append(", username=");
-		builder.append(username);
-		builder.append(", password=");
-		builder.append(password);
-		builder.append(", confirmPassword=");
-		builder.append(confirmPassword);
-		builder.append(", dateInscription=");
-		builder.append(dateInscription);
-		builder.append(", enabled=");
-		builder.append(enabled);
-		builder.append("]");
-		return builder.toString();
-	}
-
+	
 }

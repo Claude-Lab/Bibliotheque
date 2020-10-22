@@ -3,21 +3,13 @@
  */
 package fr.lusseau.bibliotheque.controller;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import fr.lusseau.bibliotheque.entity.Role;
-import fr.lusseau.bibliotheque.service.GestionRole;
+import fr.lusseau.bibliotheque.dao.RoleDAO;
 
 /**
  * 
@@ -29,69 +21,15 @@ import fr.lusseau.bibliotheque.service.GestionRole;
  */
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class RoleController {
 	
 	@Autowired
-	GestionRole gr;
+	RoleDAO dao;
 	
 	@PostConstruct
 	private void init() {
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/listeRoles")
-	public ModelAndView listerRoles() {
-		List<Role> listeR = gr.listeRoles();
-		return new ModelAndView("/admin/listes/listeRoles", "listeR", listeR);
-	}
 	
-	@RequestMapping(value = "/gestionRoles", method = RequestMethod.GET)
-	public ModelAndView gererRoles() {
-		List<Role> listeR = gr.listeRoles();
-		Role role = new Role();
-		ModelAndView mav = new ModelAndView("/admin/gestion/gestionRoles", "listeR", listeR);
-		mav.getModelMap().addAttribute("role", role);
-		return mav;
-	}
-	@RequestMapping( value = "/ajouterRoles", method = RequestMethod.GET)
-	public ModelAndView ajoutRole() {
-		Role role = new Role();
-		ModelAndView mav = new ModelAndView("/admin/ajouts/ajoutRole", "role", role);
-		mav.getModelMap().addAttribute("role", role);
-		return mav;
-	}
-
-	@RequestMapping( value = "/validRole", method = RequestMethod.POST)
-	public ModelAndView ajoutRoleValid(@ModelAttribute("role") @Valid Role role, BindingResult result) {
-		if (result.hasErrors()) 
-			return new ModelAndView("/admin/ajouts/ajoutRole");
-		 else
-			gr.ajouterRole(role);
-			return new ModelAndView("redirect:/gestionRoles");
-	}
-	
-	
-	@RequestMapping(value="/modifierRole", method=RequestMethod.GET)
-	public ModelAndView modifRole(String index){
-		int i = Integer.parseInt(index.substring(1));
-		return new ModelAndView("/admin/modifs/modifRole", "role", gr.trouverRole(i));
-	}
-	
-	@RequestMapping(value="/modifierRoleValid", method=RequestMethod.POST)
-	public ModelAndView listeRoleValid(Role role){	
-		gr.modifierRole(role);
-		return gererRoles();
-	}
-	
-	@RequestMapping(value="/supprimerRole", method=RequestMethod.GET)
-	public ModelAndView supprimerRole(String index){
-		int i = Integer.parseInt(index.substring(1));
-		Role role = gr.trouverRole(i);
-		try {
-			gr.supprimerRole(role);
-		} catch (Exception e) {			
-		}
-		
-		return gererRoles();
-	}
-
 }

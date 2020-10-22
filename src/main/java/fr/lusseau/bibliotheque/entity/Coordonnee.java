@@ -3,14 +3,12 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.io.Serializable;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Table;
 
 /**
  * Classe en charge de definir le bean Coordonnee.
@@ -20,90 +18,41 @@ import javax.validation.constraints.NotBlank;
  *
  */
 @Entity
-public class Coordonnee implements Serializable{
+@Table(name = "Coordonnee")
+public class Coordonnee {
 
-	private static final long serialVersionUID = 1247279989921730214L;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idCoordonnee")
 	private int idCoordonnee;
 	
-	@NotBlank
-//	@Pattern(regexp = "[0-9a-zA-Z-\\s]")
+	@Column(name = "rue", nullable = false)
 	private String rue;
 	
-	@NotBlank
-//	@Pattern(regexp = "[0-9]{5}")
+	@Column(name = "cp", nullable = false)
 	private String cp;
 	
-	@NotBlank
-//	@Pattern(regexp = "[a-zA-Z-\\s]")
+	@Column(name = "ville", nullable = false)
 	private String ville;
 	
-	
-//	@Pattern(regexp = "[a-zA-Z ]")
+	@Column(name = "pays", nullable = false)
 	private String pays;
 	
-//	@Pattern(regexp = "[0-9]{10}")
+	@Column(name = "mobile")
 	private String mobile;
 	
-//	@Pattern(regexp = "[0-9]{10}")
+	@Column(name = "fixe")
 	private String fixe;
 	
-	@NotBlank
-	@Email
+	@Column(name = "email", nullable = false)
 	private String email;
 	
 	/**
-	 * Constructeur.
+	 * Constructeur sans argument.
 	 */
 	public Coordonnee() {
-		this(0, "", "", "", "", "", "", "");
 	}
 
-	/**
-	 * Constructeur.
-	 * @param rue
-	 * @param cp
-	 * @param ville
-	 * @param pays
-	 * @param mobile
-	 * @param fixe
-	 * @param email
-	 */
-	public Coordonnee(String rue, String cp, String ville, String pays, String mobile, String fixe, String email) {
-		super();
-		this.rue = rue;
-		this.cp = cp;
-		this.ville = ville;
-		this.pays = pays;
-		this.mobile = mobile;
-		this.fixe = fixe;
-		this.email = email;
-	}
-
-	/**
-	 * Constructeur.
-	 * @param idCoordonnee
-	 * @param rue
-	 * @param cp
-	 * @param ville
-	 * @param pays
-	 * @param mobile
-	 * @param fixe
-	 * @param email
-	 */
-	public Coordonnee(int idCoordonnee, String rue, String cp, String ville, String pays, String mobile, String fixe, String email) {
-		super();
-		this.idCoordonnee = idCoordonnee;
-		this.rue = rue;
-		this.cp = cp;
-		this.ville = ville;
-		this.pays = pays;
-		this.mobile = mobile;
-		this.fixe = fixe;
-		this.email = email;
-	}
 
 	/**
 	 * Méthode en charge de récupérer la valeur de idCoordonnee.
@@ -228,18 +177,12 @@ public class Coordonnee implements Serializable{
 	/**
 	 * Méthode en charge de définir la valeur de email.
 	 * @param email the email to set
+	 * @return 
 	 */
-	public void setEmail(String email) {
-		this.email = email;
+	public String setEmail(String email) {
+		return this.email = email;
 	}
 
-	/**
-	 * Méthode en charge de récupérer la valeur de serialversionuid.
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 	/**
 	 * @{inheritDoc}
@@ -259,84 +202,73 @@ public class Coordonnee implements Serializable{
 		return result;
 	}
 
+
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof Coordonnee)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Coordonnee other = (Coordonnee) obj;
 		if (cp == null) {
-			if (other.cp != null)
+			if (other.cp != null) {
 				return false;
-		} else if (!cp.equals(other.cp))
+			}
+		} else if (!cp.equals(other.cp)) {
 			return false;
+		}
 		if (email == null) {
-			if (other.email != null)
+			if (other.email != null) {
 				return false;
-		} else if (!email.equals(other.email))
+			}
+		} else if (!email.equals(other.email)) {
 			return false;
+		}
 		if (fixe == null) {
-			if (other.fixe != null)
+			if (other.fixe != null) {
 				return false;
-		} else if (!fixe.equals(other.fixe))
+			}
+		} else if (!fixe.equals(other.fixe)) {
 			return false;
-		if (idCoordonnee != other.idCoordonnee)
+		}
+		if (idCoordonnee != other.idCoordonnee) {
 			return false;
+		}
 		if (mobile == null) {
-			if (other.mobile != null)
+			if (other.mobile != null) {
 				return false;
-		} else if (!mobile.equals(other.mobile))
+			}
+		} else if (!mobile.equals(other.mobile)) {
 			return false;
+		}
 		if (pays == null) {
-			if (other.pays != null)
+			if (other.pays != null) {
 				return false;
-		} else if (!pays.equals(other.pays))
+			}
+		} else if (!pays.equals(other.pays)) {
 			return false;
+		}
 		if (rue == null) {
-			if (other.rue != null)
+			if (other.rue != null) {
 				return false;
-		} else if (!rue.equals(other.rue))
+			}
+		} else if (!rue.equals(other.rue)) {
 			return false;
+		}
 		if (ville == null) {
-			if (other.ville != null)
+			if (other.ville != null) {
 				return false;
-		} else if (!ville.equals(other.ville))
+			}
+		} else if (!ville.equals(other.ville)) {
 			return false;
+		}
 		return true;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Coordonnee [idCoordonnee=");
-		builder.append(idCoordonnee);
-		builder.append(", rue=");
-		builder.append(rue);
-		builder.append(", cp=");
-		builder.append(cp);
-		builder.append(", ville=");
-		builder.append(ville);
-		builder.append(", pays=");
-		builder.append(pays);
-		builder.append(", mobile=");
-		builder.append(mobile);
-		builder.append(", fixe=");
-		builder.append(fixe);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append("]");
-		return builder.toString();
-	}
-
-	
 	
 }

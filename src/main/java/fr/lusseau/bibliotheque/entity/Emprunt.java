@@ -3,20 +3,19 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import javax.persistence.Table;
 
 /**
  * Classe en charge de
@@ -26,31 +25,28 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  */
 @Entity
-public class Emprunt implements Serializable {
+@Table(name = "Emprunt")
+//@AssociationOverrides({
+//@AssociationOverride(name = "pk.livre", joinColumns = @JoinColumn(name = "idLivre")),
+//@AssociationOverride(name = "pk.personne", joinColumns = @JoinColumn(name = "idPersonne"))
+//})
+public class Emprunt {
 
-	private static final long serialVersionUID = 2325950927440932474L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idEmprunt;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Column(columnDefinition = "DATE")
-	@NotNull
-	private LocalDate dateRetrait;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Column(columnDefinition = "DATE")
-	@NotNull
-	private LocalDate dateRetour;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Column(columnDefinition = "DATE")
-	private LocalDate retraitClientOk;
-	
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@Column(columnDefinition = "DATE")
-	private LocalDate retourClientOk;
+	@Column(name = "idEmprunt")
+	private Integer idEmprunt;
+    
+	@Column(name = "beginDate", nullable = false)
+    private LocalDate beginDate;
+    
+	@Column(name = "endDate", nullable = false)
+    private LocalDate endDate;
+    
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+    private EmpruntStatus status;
 	
 	@ManyToOne(targetEntity = Livre.class, fetch = FetchType.LAZY )
 	@JoinColumn(name="idLivre", nullable=false)
@@ -59,62 +55,14 @@ public class Emprunt implements Serializable {
 	@ManyToOne(targetEntity = Personne.class, fetch = FetchType.LAZY )
 	@JoinColumn(name="idPersonne", nullable=false)
 	private Personne personne;
-	
-	/**
-	 * Constructeur.
-	 */
-	public Emprunt() {
-	}
 
 	
-
-	/**
-	 * Constructeur.
-	 * @param dateRetrait
-	 * @param dateRetour
-	 * @param retraitClientOk
-	 * @param retourClientOk
-	 * @param livre
-	 * @param personne
-	 */
-	public Emprunt(@NotNull LocalDate dateRetrait, @NotNull LocalDate dateRetour, LocalDate retraitClientOk,
-			LocalDate retourClientOk, Livre livre, Personne personne) {
-		this.dateRetrait = dateRetrait;
-		this.dateRetour = dateRetour;
-		this.retraitClientOk = retraitClientOk;
-		this.retourClientOk = retourClientOk;
-		this.livre = livre;
-		this.personne = personne;
-	}
-
-	/**
-	 * Constructeur.
-	 * @param idEmprunt
-	 * @param dateRetrait
-	 * @param dateRetour
-	 * @param retraitClientOk
-	 * @param retourClientOk
-	 * @param livre
-	 * @param personne
-	 */
-	public Emprunt(int idEmprunt, @NotNull LocalDate dateRetrait, @NotNull LocalDate dateRetour,
-			LocalDate retraitClientOk, LocalDate retourClientOk, Livre livre, Personne personne) {
-		this.idEmprunt = idEmprunt;
-		this.dateRetrait = dateRetrait;
-		this.dateRetour = dateRetour;
-		this.retraitClientOk = retraitClientOk;
-		this.retourClientOk = retourClientOk;
-		this.livre = livre;
-		this.personne = personne;
-	}
-
-
 
 	/**
 	 * Méthode en charge de récupérer la valeur de idEmprunt.
 	 * @return the idEmprunt
 	 */
-	public int getIdEmprunt() {
+	public Integer getIdEmprunt() {
 		return idEmprunt;
 	}
 
@@ -122,106 +70,59 @@ public class Emprunt implements Serializable {
 	 * Méthode en charge de définir la valeur de idEmprunt.
 	 * @param idEmprunt the idEmprunt to set
 	 */
-	public void setIdEmprunt(int idEmprunt) {
+	public void setIdEmprunt(Integer idEmprunt) {
 		this.idEmprunt = idEmprunt;
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de dateRetrait.
-	 * @return the dateRetrait
+	 * Méthode en charge de récupérer la valeur de beginDate.
+	 * @return the beginDate
 	 */
-	public LocalDate getDateRetrait() {
-		return dateRetrait;
+	public LocalDate getBeginDate() {
+		return beginDate;
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de dateRetrait.
-	 * @param dateRetrait the dateRetrait to set
+	 * Méthode en charge de définir la valeur de beginDate.
+	 * @param beginDate the beginDate to set
 	 */
-	public void setDateRetrait(LocalDate dateRetrait) {
-		this.dateRetrait = dateRetrait;
+	public void setBeginDate(LocalDate beginDate) {
+		this.beginDate = beginDate;
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de dateRetour.
-	 * @return the dateRetour
+	 * Méthode en charge de récupérer la valeur de endDate.
+	 * @return the endDate
 	 */
-	public LocalDate getDateRetour() {
-		return dateRetour;
+	public LocalDate getEndDate() {
+		return endDate;
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de dateRetour.
-	 * @param dateRetour the dateRetour to set
+	 * Méthode en charge de définir la valeur de endDate.
+	 * @param endDate the endDate to set
 	 */
-	public void setDateRetour(LocalDate dateRetour) {
-		this.dateRetour = dateRetour;
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de livres.
-	 * @return the livres
+	 * Méthode en charge de récupérer la valeur de status.
+	 * @return the status
 	 */
-	public Livre getLivres() {
-		return livre;
+	public EmpruntStatus getStatus() {
+		return status;
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de livres.
-	 * @param livres the livres to set
+	 * Méthode en charge de définir la valeur de status.
+	 * @param status the status to set
 	 */
-	public void setLivres(Livre livre) {
-		this.livre = livre;
-	}
-
-	/**
-	 * Méthode en charge de récupérer la valeur de personne.
-	 * @return the personne
-	 */
-	public Personne getPersonne() {
-		return personne;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de personne.
-	 * @param personne the personne to set
-	 */
-	public void setPersonne(Personne personne) {
-		this.personne = personne;
+	public void setStatus(EmpruntStatus status) {
+		this.status = status;
 	}
 	
-
-	/**
-	 * Méthode en charge de récupérer la valeur de retraitClientOk.
-	 * @return the retraitClientOk
-	 */
-	public LocalDate getRetraitClientOk() {
-		return retraitClientOk;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de retraitClientOk.
-	 * @param retraitClientOk the retraitClientOk to set
-	 */
-	public void setRetraitClientOk(LocalDate retraitClientOk) {
-		this.retraitClientOk = retraitClientOk;
-	}
-
-	/**
-	 * Méthode en charge de récupérer la valeur de retourClientOk.
-	 * @return the retourClientOk
-	 */
-	public LocalDate getRetourClientOk() {
-		return retourClientOk;
-	}
-
-	/**
-	 * Méthode en charge de définir la valeur de retourClientOk.
-	 * @param retourClientOk the retourClientOk to set
-	 */
-	public void setRetourClientOk(LocalDate retourClientOk) {
-		this.retourClientOk = retourClientOk;
-	}
+	
 
 	/**
 	 * Méthode en charge de récupérer la valeur de livre.
@@ -238,13 +139,23 @@ public class Emprunt implements Serializable {
 	public void setLivre(Livre livre) {
 		this.livre = livre;
 	}
+	
+	
 
 	/**
-	 * Méthode en charge de récupérer la valeur de serialversionuid.
-	 * @return the serialversionuid
+	 * Méthode en charge de récupérer la valeur de personne.
+	 * @return the personne
 	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Personne getPersonne() {
+		return personne;
+	}
+
+	/**
+	 * Méthode en charge de définir la valeur de personne.
+	 * @param personne the personne to set
+	 */
+	public void setPersonne(Personne personne) {
+		this.personne = personne;
 	}
 
 	/**
@@ -254,13 +165,12 @@ public class Emprunt implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dateRetour == null) ? 0 : dateRetour.hashCode());
-		result = prime * result + ((dateRetrait == null) ? 0 : dateRetrait.hashCode());
-		result = prime * result + idEmprunt;
+		result = prime * result + ((beginDate == null) ? 0 : beginDate.hashCode());
+		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		result = prime * result + ((idEmprunt == null) ? 0 : idEmprunt.hashCode());
 		result = prime * result + ((livre == null) ? 0 : livre.hashCode());
 		result = prime * result + ((personne == null) ? 0 : personne.hashCode());
-		result = prime * result + ((retourClientOk == null) ? 0 : retourClientOk.hashCode());
-		result = prime * result + ((retraitClientOk == null) ? 0 : retraitClientOk.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 
@@ -269,69 +179,53 @@ public class Emprunt implements Serializable {
 	*/
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof Emprunt)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Emprunt other = (Emprunt) obj;
-		if (dateRetour == null) {
-			if (other.dateRetour != null)
+		if (beginDate == null) {
+			if (other.beginDate != null) {
 				return false;
-		} else if (!dateRetour.equals(other.dateRetour))
+			}
+		} else if (!beginDate.equals(other.beginDate)) {
 			return false;
-		if (dateRetrait == null) {
-			if (other.dateRetrait != null)
+		}
+		if (endDate == null) {
+			if (other.endDate != null) {
 				return false;
-		} else if (!dateRetrait.equals(other.dateRetrait))
+			}
+		} else if (!endDate.equals(other.endDate)) {
 			return false;
-		if (idEmprunt != other.idEmprunt)
+		}
+		if (idEmprunt == null) {
+			if (other.idEmprunt != null) {
+				return false;
+			}
+		} else if (!idEmprunt.equals(other.idEmprunt)) {
 			return false;
+		}
 		if (livre == null) {
-			if (other.livre != null)
+			if (other.livre != null) {
 				return false;
-		} else if (!livre.equals(other.livre))
+			}
+		} else if (!livre.equals(other.livre)) {
 			return false;
+		}
 		if (personne == null) {
-			if (other.personne != null)
+			if (other.personne != null) {
 				return false;
-		} else if (!personne.equals(other.personne))
+			}
+		} else if (!personne.equals(other.personne)) {
 			return false;
-		if (retourClientOk == null) {
-			if (other.retourClientOk != null)
-				return false;
-		} else if (!retourClientOk.equals(other.retourClientOk))
+		}
+		if (status != other.status) {
 			return false;
-		if (retraitClientOk == null) {
-			if (other.retraitClientOk != null)
-				return false;
-		} else if (!retraitClientOk.equals(other.retraitClientOk))
-			return false;
+		}
 		return true;
 	}
-
-
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Emprunt [idEmprunt=");
-		builder.append(idEmprunt);
-		builder.append(", dateRetrait=");
-		builder.append(dateRetrait);
-		builder.append(", dateRetour=");
-		builder.append(dateRetour);
-		builder.append(", retraitClientOk=");
-		builder.append(retraitClientOk);
-		builder.append(", retourClientOk=");
-		return builder.toString();
-	}
-	
-	
 
 	
 }

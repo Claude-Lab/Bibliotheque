@@ -3,7 +3,10 @@
  */
 package fr.lusseau.bibliotheque.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import fr.lusseau.bibliotheque.entity.Editeur;
 
@@ -14,13 +17,9 @@ import fr.lusseau.bibliotheque.entity.Editeur;
  * @author Claude LUSSEAU
  *
  */
+@Repository
 public interface EditeurDAO extends JpaRepository<Editeur, Integer> {
 	
-	Iterable<Editeur> findByOrderByNomAsc();
-	Iterable<Editeur> findByOrderByNomDesc();
-//	Iterable<Editeur> findByOrderByPaysAsc();
-//	Iterable<Editeur> findByOrderByPaysDesc();
-//	Iterable<Editeur> findByOrderByVilleAsc();
-//	Iterable<Editeur> findByOrderByVilleDesc();
+	List<Editeur> findByNomContaining(String nom);
 
 }

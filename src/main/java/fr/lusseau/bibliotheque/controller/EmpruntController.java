@@ -3,29 +3,27 @@
  */
 package fr.lusseau.bibliotheque.controller;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import fr.lusseau.bibliotheque.entity.Client;
 import fr.lusseau.bibliotheque.entity.Emprunt;
-import fr.lusseau.bibliotheque.entity.Livre;
-import fr.lusseau.bibliotheque.entity.Personne;
-import fr.lusseau.bibliotheque.entity.Salarie;
-import fr.lusseau.bibliotheque.service.GestionAuteur;
-import fr.lusseau.bibliotheque.service.GestionEmprunt;
-import fr.lusseau.bibliotheque.service.GestionLivre;
-import fr.lusseau.bibliotheque.service.GestionPersonne;
-import fr.lusseau.bibliotheque.service.GestionStyle;
+import fr.lusseau.bibliotheque.entity.EmpruntStatus;
+import fr.lusseau.bibliotheque.service.impl.EmpruntServiceImpl;
+import io.swagger.annotations.Api;
 
 /**
  * Classe en charge de
@@ -36,147 +34,82 @@ import fr.lusseau.bibliotheque.service.GestionStyle;
  *
  */
 @RestController
+@Api(value = "Emprunt Rest Controller: Contient toute les opération pour la gestion des emprunts")
+@RequestMapping("/rest/api/v1")
 public class EmpruntController {
 
+	public static final Logger LOGGER = LoggerFactory.getLogger(EmpruntController.class);
+	
 	@Autowired
-	GestionEmprunt gm;
-	@Autowired
-	GestionLivre gl;
-	@Autowired
-	GestionPersonne gp;
-	@Autowired
-	GestionAuteur ga;
-	@Autowired
-	GestionStyle gs;
-
-	@PostConstruct
-	private void init() {
-	}
+	EmpruntServiceImpl empruntService;
 
 	/**
-	 * Methode en charge de lister tout les emprunts.
-	 * 
-	 * @return
-	 */
-	@RequestMapping(path = "/listeEmprunts", method = RequestMethod.GET)
-	public ModelAndView listerEmprunts() {
-		List<Emprunt> liste = gm.listeEmprunts();
-		ModelAndView mav = new ModelAndView("/admin/listes/listeEmprunts", "liste", liste);
-		infosEmpruntLivrePersonne(mav);
-		return mav;
-	}
+     * Retourne l'historique des prêts en cours dans la bibliothèque jusqu'à une certaine date maximale. 
+     * @param maxEndDateStr
+     * @return
+     */
+    @GetMapping("/maxEndDate")
+    public ResponseEntity<List<Emprunt>> searchAllBooksLoanBeforeThisDate(@RequestParam("date") String  maxEndDateStr) {
+        List<Emprunt> emprunts = empruntService.findAllEmpruntsByEndDateBefore(LocalDate.parse(maxEndDateStr));
+        // on retire tous les élts null que peut contenir cette liste => pour éviter les NPE par la suite
+        emprunts.removeAll(Collections.singleton(null));
+        return new ResponseEntity<List<Emprunt>>(emprunts, HttpStatus.OK);
+    }
+    
+    /**
+     * Retourne la liste des prêts en cours d'un client. 
+     * @param email
+     * @return
+     */
+    @GetMapping("/customerLoans")
+    public ResponseEntity<List<Emprunt>> searchAllOpenedEmpruntsOfThisPersonne(@RequestParam("email") String email) {
+        List<Emprunt> emprunts = empruntService.getAllOpenEmpruntsOfThisPersonne(email, EmpruntStatus.OPEN);
+        // on retire tous les élts null que peut contenir cette liste => pour éviter les NPE par la suite
+        emprunts.removeAll(Collections.singleton(null));
+        return new ResponseEntity<List<Emprunt>>(emprunts, HttpStatus.OK);
+    }
+    
+    /**
+     * Ajoute un nouveau prêt dans la base de données H2.
+     * @param simpleLoanDTORequest
+     * @param uriComponentBuilder
+     * @return
+     */
+    @PostMapping("/addEmprunt")
+    public ResponseEntity<Boolean> createNewEmprunt(@RequestBody Emprunt emprunt,
+            UriComponentsBuilder uriComponentBuilder) {
+        boolean isEmpruntExists = empruntService.checkIfEmpruntExists(emprunt);
+        if (isEmpruntExists) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.CONFLICT);
+        }
+       
+        emprunt = empruntService.saveEmprunt(emprunt);
+        if (emprunt != null) {
+            return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<Boolean>(false, HttpStatus.NOT_MODIFIED);
+    }
+    
+    /**
+     * Clôture le prêt de livre d'un client.
+     * @param simpleLoanDTORequest
+     * @param uriComponentBuilder
+     * @return
+     */
+    @PostMapping("/closeEmprunt")
+    public ResponseEntity<Boolean> closeLoan(@RequestBody Emprunt emprunt,
+            UriComponentsBuilder uriComponentBuilder) {
+    	Emprunt existingEmprunt = empruntService.getOpenedEmprunt(emprunt);
+        if (existingEmprunt == null) {
+            return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
+        }
+        existingEmprunt.setStatus(EmpruntStatus.CLOSE);
+        emprunt = empruntService.saveEmprunt(existingEmprunt);
+        if (emprunt != null) {
+            return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<Boolean>(HttpStatus.NOT_MODIFIED);
+    }
 
-	/**
-	 * Methode en charge de lister les emprunts passés.
-	 * 
-	 * @return
-	 */
-	@RequestMapping(path = "/listeEmpruntsPasses", method = RequestMethod.GET)
-	public ModelAndView listerEmpruntsPasses() {
-		Emprunt emprunt = new Emprunt();
-		List<Emprunt> liste = gm.listeEmpruntsPasses();
-		ModelAndView mav = new ModelAndView("/admin/listes/listeEmpruntsPasses", "liste", liste);
-		infosEmpruntLivrePersonne(mav);
-		mav.addObject("localDateTimeFormat", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		mav.getModelMap().addAttribute("emprunt", emprunt);
-		return mav;
-	}
-
-	/**
-	 * Methode en charge de lister les emprunts futurs.
-	 * 
-	 * @return
-	 */
-	@RequestMapping(path = "/listeEmpruntsAVenir", method = RequestMethod.GET)
-	public ModelAndView listerEmpruntsFuturs() {
-		Emprunt emprunt = new Emprunt();
-		List<Emprunt> liste = gm.listeEmpruntsFuturs();
-		ModelAndView mav = new ModelAndView("/admin/listes/listeEmpruntsAVenir", "liste", liste);
-		infosEmpruntLivrePersonne(mav);
-		mav.addObject("localDateTimeFormat", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		mav.getModelMap().addAttribute("emprunt", emprunt);
-		return mav;
-	}
-
-	/**
-	 * Methode en charge de de lister les emprunts en cours.
-	 * 
-	 * @return
-	 */
-	@RequestMapping(path = "/listeEmpruntsEnCours", method = RequestMethod.GET)
-	public ModelAndView listerEmpruntsEnCours() {
-		Emprunt emprunt = new Emprunt();
-		List<Emprunt> liste = gm.listeEmpruntsEnCours();
-		ModelAndView mav = new ModelAndView("/admin/listes/listeEmpruntsEnCours", "liste", liste);
-		infosEmpruntLivrePersonne(mav);
-		mav.addObject("localDateTimeFormat", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		mav.getModelMap().addAttribute("emprunt", emprunt);
-		return mav;
-	}
-
-	@RequestMapping(value = "/gestionEmprunts", method = RequestMethod.GET)
-	public ModelAndView gererEmprunts() {
-		List<Emprunt> liste = gm.listeEmprunts();
-		Emprunt emprunt = new Emprunt();
-		ModelAndView mav = new ModelAndView("/admin/gestion/gestionEmprunts", "liste", liste);
-		infosEmpruntLivrePersonne(mav);
-		mav.addObject("localDateTimeFormat", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		mav.getModelMap().addAttribute("emprunt", emprunt);
-
-		return mav;
-	}
-
-	@RequestMapping(value = "/ajoutEmprunt", method = RequestMethod.GET)
-	public ModelAndView ajouterEmprunt() {
-		Emprunt emprunt = new Emprunt();
-		List<Livre> listeLivres = gl.listeLivres();
-		List<Personne> listePersonnes = gp.listePersonnes();
-		ModelAndView mav = new ModelAndView("/admin/ajouts/ajoutEmprunt", "emprunt", emprunt);
-		mav.getModelMap().addAttribute("listeLivres", listeLivres);
-		mav.getModelMap().addAttribute("listePersonnes", listePersonnes);
-		return mav;
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/validEmprunt")
-	public ModelAndView ajoutEmpruntValid(@ModelAttribute("emprunt") Emprunt emprunt, BindingResult result) {
-		if (result.hasErrors()) {
-			return new ModelAndView("/admin/ajouts/ajoutEmprunt");
-		} else {
-			gm.ajouterEmprunt(emprunt);
-			return new ModelAndView("redirect:/gestionEmprunts");
-		}
-	}
-
-	@RequestMapping(value = "/supprimerEmprunt", method = RequestMethod.GET)
-	public ModelAndView supprimerEmprunt(String index) {
-		int i = Integer.parseInt(index.substring(1));
-		Emprunt emprunt = gm.trouverEmprunt(i);
-		try {
-			gm.supprimerEmprunt(emprunt);
-		} catch (Exception e) {
-		}
-
-		return gererEmprunts();
-	}
-
-	/**
-	 * Methode en charge d'ajouter les classes Livre et Personne à la liste
-	 * d'emprunts.
-	 * 
-	 * @param mav
-	 */
-	private void infosEmpruntLivrePersonne(ModelAndView mav) {
-		Personne personne = null;
-		if (personne instanceof Client) {
-			Livre livre = new Livre();
-			personne = new Client();
-			mav.addObject("livre", livre);
-			mav.addObject("personne", personne);
-		} else if (personne instanceof Salarie) {
-			Livre livre = new Livre();
-			personne = new Salarie();
-			mav.addObject("livre", livre);
-			mav.addObject("personne", personne);
-		}
-	}
+    
 }

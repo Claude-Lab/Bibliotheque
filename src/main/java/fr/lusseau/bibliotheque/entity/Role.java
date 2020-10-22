@@ -3,9 +3,8 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.persistence.Table;
 
 /**
  * Classe en charge de definir le bean Role.
@@ -25,51 +23,24 @@ import javax.validation.constraints.Pattern;
  *
  */
 @Entity
-public class Role implements Serializable {
+@Table(name = "Role")
+public class Role {
 
-	private static final long serialVersionUID = -1206324468919735945L;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "idRole")
 	private int idRole;
 	
-	@NotBlank
-	@Pattern(regexp = "^[a-zA-Z]{3,15}$")
-	@Column(unique = true)
+	@Column(name = "libelle", unique = true)
 	private String libelle;
 	
-	@OneToMany(targetEntity = Salarie.class, mappedBy = "role", fetch = FetchType.LAZY)
-	private List<Salarie> personnes;
+	@OneToMany(targetEntity = Personne.class, mappedBy = "role", fetch = FetchType.LAZY)
+	private Set<Personne> personnes = new HashSet<Personne>();
 	
 	/**
 	 * Constructeur.
 	 */
 	public Role() {
-		this(0, "", new ArrayList<>());
-	}
-
-	/**
-	 * Constructeur.
-	 * @param libelle
-	 * @param personnes
-	 */
-	public Role(@NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Salarie> personnes) {
-		super();
-		this.libelle = libelle;
-		this.personnes = personnes;
-	}
-
-	/**
-	 * Constructeur.
-	 * @param idRole
-	 * @param libelle
-	 * @param personnes
-	 */
-	public Role(int idRole, @NotBlank @Pattern(regexp = "^[a-zA-Z]{3,15}$") String libelle, List<Salarie> personnes) {
-		super();
-		this.idRole = idRole;
-		this.libelle = libelle;
-		this.personnes = personnes;
 	}
 
 	/**
@@ -108,7 +79,7 @@ public class Role implements Serializable {
 	 * Méthode en charge de récupérer la valeur de personnes.
 	 * @return the personnes
 	 */
-	public List<Salarie> getPersonnes() {
+	public Set<Personne> getPersonnes() {
 		return personnes;
 	}
 
@@ -116,16 +87,8 @@ public class Role implements Serializable {
 	 * Méthode en charge de définir la valeur de personnes.
 	 * @param personnes the personnes to set
 	 */
-	public void setPersonnes(List<Salarie> personnes) {
+	public void setPersonnes(Set<Personne> personnes) {
 		this.personnes = personnes;
-	}
-
-	/**
-	 * Méthode en charge de récupérer la valeur de serialversionuid.
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	/**
@@ -146,41 +109,33 @@ public class Role implements Serializable {
 	*/
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof Role)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Role other = (Role) obj;
-		if (idRole != other.idRole)
+		if (idRole != other.idRole) {
 			return false;
+		}
 		if (libelle == null) {
-			if (other.libelle != null)
+			if (other.libelle != null) {
 				return false;
-		} else if (!libelle.equals(other.libelle))
+			}
+		} else if (!libelle.equals(other.libelle)) {
 			return false;
+		}
 		if (personnes == null) {
-			if (other.personnes != null)
+			if (other.personnes != null) {
 				return false;
-		} else if (!personnes.equals(other.personnes))
+			}
+		} else if (!personnes.equals(other.personnes)) {
 			return false;
+		}
 		return true;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Role [idRole=");
-		builder.append(idRole);
-		builder.append(", libelle=");
-		builder.append(libelle);
-		return builder.toString();
-	}
+	
 
-	
-	
 }

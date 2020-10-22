@@ -3,7 +3,6 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,11 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import javax.persistence.Table;
 
 /**
  * Classe en charge de definir le bean Auteur.
@@ -29,69 +24,38 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  *
  */
 @Entity
-@JsonIdentityInfo(  generator = ObjectIdGenerators.PropertyGenerator.class, property = "idAuteur")
-public class Auteur implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+@Table(name = "Auteur")
+public class Auteur {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(updatable = false, nullable = false)
-	private int idAuteur;
+	@Column(updatable = false, nullable = false, name = "idAuteur")
+	private Integer idAuteur;
 	
+	@Column(nullable = false, name = "prenom")
 	private String prenom;
+	
+	@Column(nullable = false, name = "nom")
 	private String nom;
 	
-	@Transient
-	@JsonIgnore
+	@Column(nullable = false, name = "prenomNom")
 	private String prenomNom = prenom + " " + nom;
-	
-	@JsonIgnore 
-	@ManyToMany(cascade = {CascadeType.REFRESH}, mappedBy = "auteurs",targetEntity = Livre.class, fetch = FetchType.LAZY)
+
+	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "auteurs", fetch = FetchType.LAZY)
 	private Set<Livre> livres = new HashSet<Livre>();
 	
 	/**
 	 * Constructeur.
 	 */
 	public Auteur() {
-		this("", "", new HashSet<Livre>());
-	}
-
-	/**
-	 * Constructeur.
-	 * @param prenom
-	 * @param nom
-	 * @param prenomNom
-	 * @param livres
-	 */
-	public Auteur(String prenom, String nom, Set<Livre> livres) {
-		super();
-		this.prenom = prenom;
-		this.nom = nom;
-		this.livres = livres;
-	}
-
-	/**
-	 * Constructeur.
-	 * @param idAuteur
-	 * @param prenom
-	 * @param nom
-	 * @param prenomNom
-	 * @param livres
-	 */
-	public Auteur(int idAuteur, String prenom, String nom, Set<Livre> livres) {
-		super();
-		this.idAuteur = idAuteur;
-		this.prenom = prenom;
-		this.nom = nom;
-		this.livres = livres;
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * Méthode en charge de récupérer la valeur de idAuteur.
 	 * @return the idAuteur
 	 */
-	public int getIdAuteur() {
+	public Integer getIdAuteur() {
 		return idAuteur;
 	}
 
@@ -99,7 +63,7 @@ public class Auteur implements Serializable {
 	 * Méthode en charge de définir la valeur de idAuteur.
 	 * @param idAuteur the idAuteur to set
 	 */
-	public void setIdAuteur(int idAuteur) {
+	public void setIdAuteur(Integer idAuteur) {
 		this.idAuteur = idAuteur;
 	}
 
@@ -149,6 +113,7 @@ public class Auteur implements Serializable {
 	 * @param prenomNom the prenomNom to set
 	 */
 	public void setPrenomNom(String prenomNom) {
+		prenomNom = this.prenom + " " + this.nom;
 		this.prenomNom = prenomNom;
 	}
 
@@ -169,16 +134,6 @@ public class Auteur implements Serializable {
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de serialversionuid.
-	 * @return the serialversionuid
-	 */
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-
-
-	/**
 	 * @{inheritDoc}
 	*/
 	@Override
@@ -186,6 +141,7 @@ public class Auteur implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + idAuteur;
+		result = prime * result + ((livres == null) ? 0 : livres.hashCode());
 		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
 		result = prime * result + ((prenom == null) ? 0 : prenom.hashCode());
 		result = prime * result + ((prenomNom == null) ? 0 : prenomNom.hashCode());
@@ -197,54 +153,46 @@ public class Auteur implements Serializable {
 	*/
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof Auteur)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Auteur other = (Auteur) obj;
-		if (idAuteur != other.idAuteur)
+		if (idAuteur != other.idAuteur) {
 			return false;
+		}
 		if (livres == null) {
-			if (other.livres != null)
+			if (other.livres != null) {
 				return false;
-		} else if (!livres.equals(other.livres))
+			}
+		} else if (!livres.equals(other.livres)) {
 			return false;
+		}
 		if (nom == null) {
-			if (other.nom != null)
+			if (other.nom != null) {
 				return false;
-		} else if (!nom.equals(other.nom))
+			}
+		} else if (!nom.equals(other.nom)) {
 			return false;
+		}
 		if (prenom == null) {
-			if (other.prenom != null)
+			if (other.prenom != null) {
 				return false;
-		} else if (!prenom.equals(other.prenom))
+			}
+		} else if (!prenom.equals(other.prenom)) {
 			return false;
+		}
 		if (prenomNom == null) {
-			if (other.prenomNom != null)
+			if (other.prenomNom != null) {
 				return false;
-		} else if (!prenomNom.equals(other.prenomNom))
+			}
+		} else if (!prenomNom.equals(other.prenomNom)) {
 			return false;
+		}
 		return true;
 	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Auteur [idAuteur=");
-		builder.append(idAuteur);
-		builder.append(", prenom=");
-		builder.append(prenom);
-		builder.append(", nom=");
-		builder.append(nom);
-		builder.append(", prenomNom=");
-		builder.append(prenomNom);
-		builder.append("]");
-		return builder.toString();
-	}
-
+	
+	
 }

@@ -3,37 +3,37 @@
  */
 package fr.lusseau.bibliotheque.controller;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
+import fr.lusseau.bibliotheque.dao.AuteurDAO;
+import fr.lusseau.bibliotheque.dao.BibliothequeDAO;
+import fr.lusseau.bibliotheque.dao.EditeurDAO;
+import fr.lusseau.bibliotheque.dao.EtatDAO;
+import fr.lusseau.bibliotheque.dao.LivreDAO;
+import fr.lusseau.bibliotheque.dao.StyleDAO;
 import fr.lusseau.bibliotheque.entity.Auteur;
 import fr.lusseau.bibliotheque.entity.Bibliotheque;
 import fr.lusseau.bibliotheque.entity.Editeur;
-import fr.lusseau.bibliotheque.entity.Emprunt;
 import fr.lusseau.bibliotheque.entity.Etat;
 import fr.lusseau.bibliotheque.entity.Livre;
-import fr.lusseau.bibliotheque.entity.Style;
-import fr.lusseau.bibliotheque.service.GestionAuteur;
-import fr.lusseau.bibliotheque.service.GestionBibliotheque;
-import fr.lusseau.bibliotheque.service.GestionEditeur;
-import fr.lusseau.bibliotheque.service.GestionEmprunt;
-import fr.lusseau.bibliotheque.service.GestionEtat;
-import fr.lusseau.bibliotheque.service.GestionLivre;
-import fr.lusseau.bibliotheque.service.GestionStyle;
+import fr.lusseau.bibliotheque.entity.Categorie;
+import fr.lusseau.bibliotheque.exception.ResourceNotFoundException;
+import io.swagger.annotations.ApiOperation;
 
 /**
- * Classe en charge de la gestion et de la synchronisation des événements liés à
- * la classe Personne.
+ * Classe en charge du controle DAO RESTFULL.
  * 
  * @Version Bibliotheque -v1,0
  * @date 14 août 2020 - 14:50:43
@@ -41,140 +41,54 @@ import fr.lusseau.bibliotheque.service.GestionStyle;
  *
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/api/v1")
 public class LivreController {
 
 	@Autowired
-	GestionLivre gl;
+	private LivreDAO livreDAO;
 	@Autowired
-	GestionAuteur ga;
+	private AuteurDAO auteurDAO;
 	@Autowired
-	GestionEditeur ge;
+	private EditeurDAO editeurDAO;
 	@Autowired
-	GestionBibliotheque gb;
+	private BibliothequeDAO biblioDAO;
 	@Autowired
-	GestionEmprunt gd;
+	private StyleDAO styleDAO;
 	@Autowired
-	GestionStyle gs;
-	@Autowired
-	GestionEtat gt;
-
-	/**
-	 * Constructeur.
-	 * 
-	 * @param gl
-	 * @param ga
-	 * @param ge
-	 * @param gb
-	 * @param gd
-	 * @param gs
-	 * @param gt
-	 */
-	public LivreController(GestionLivre gl, GestionAuteur ga, GestionEditeur ge, GestionBibliotheque gb,
-			GestionEmprunt gd, GestionStyle gs, GestionEtat gt) {
-		this.gl = gl;
-		this.ga = ga;
-		this.ge = ge;
-		this.gb = gb;
-		this.gd = gd;
-		this.gs = gs;
-		this.gt = gt;
-	}
+	private EtatDAO etatDAO;
 
 	@PostConstruct
 	private void init() {
 	}
 
-	@RequestMapping(path = "/listeLivres", method = RequestMethod.GET)
-	public ModelAndView listerLivres() {
-		List<Livre> listeL = gl.listeLivres();
-		return new ModelAndView("/admin/listes/listeLivres", "listeL", listeL);
+	// get all livres
+	@ApiOperation(value = "Récupère la liste des livres")
+	@GetMapping(value = "livres")
+	public List<Livre> listLivres() {
+		return livreDAO.findAll();
 	}
 
-	@RequestMapping(path = "/gestionLivres", method = RequestMethod.GET)
-	public ModelAndView gererLivres() {
-		List<Livre> listeL = gl.listeLivres();
-		Livre livre = new Livre();
-		ModelAndView mav = new ModelAndView("/admin/gestion/gestionLivres", "listeL", listeL);
-		mav.getModelMap().addAttribute("livre", livre);
-		return mav;
+	// get a livre by id rest api
+	@ApiOperation(value = "Récupère un livre selon son ID")
+	@GetMapping(value = "livres/{idLivre}")
+	public ResponseEntity<Livre> getLivreById(@PathVariable int idLivre) {
+		Livre livre = livreDAO.findById(idLivre)
+				.orElseThrow(() -> new ResourceNotFoundException("Le livre avec l'id " + idLivre + " n'existe pas."));
+		return ResponseEntity.ok(livre);
 	}
 
-	@RequestMapping(value = "/ajoutLivre", method = RequestMethod.GET)
-	public ModelAndView ajouterLivre() {
-		Livre livre = new Livre();
-		List<Bibliotheque> listeBibliotheques = gb.listeBibliotheques();
-		List<Etat> listeEtats = gt.listeEtats();
-		List<Editeur> listeEditeurs = ge.listeEditeurs();
-		List<Auteur> listeAuteurs = ga.listeAuteurs();
-		List<Style> listeStyles = gs.listeStyles();
-		ModelAndView mav = new ModelAndView("/admin/ajouts/ajoutLivre", "livre", livre);
-		mav.addObject("listeStyles", listeStyles);
-		mav.addObject("listeAuteurs", listeAuteurs);
-		mav.getModelMap().addAttribute("listeBibliotheques", listeBibliotheques);
-		mav.getModelMap().addAttribute("listeEtats", listeEtats);
-		mav.getModelMap().addAttribute("listeEditeurs", listeEditeurs);
-		return mav;
-	}
-
-	@RequestMapping(method = RequestMethod.POST, value = "/validLivre")
-	public ModelAndView ajoutLivreValid(
-			@ModelAttribute Livre livre, BindingResult result) {
-		if (result.hasErrors()) {
-			return new ModelAndView("/admin/ajouts/ajoutLivre");
-		} else {
-
-			gl.saveLivre(livre);
-
-			return new ModelAndView("redirect:/gestionLivres");
-		}
-	}
-
-	@RequestMapping(value = "/detailsLivre", method = RequestMethod.GET)
-	public ModelAndView detailsLivre(String index) {
-		int i = Integer.parseInt(index.substring(1));
-		Livre livre= gl.trouverLivre(i);
-		List<Emprunt> listeEmprunt = gd.listEmpruntLivreenCoursEtAVenir(i);
-		ModelAndView mav = new ModelAndView("/admin/details/detailsLivre", "livre", livre);
-		mav.addObject("listeEmprunt",listeEmprunt);
-		mav.addObject("localDateTimeFormat", DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		return mav;
-
-	}
-
-	@RequestMapping(value = "/modifierLivre", method = RequestMethod.GET)
-	public ModelAndView modifLivre(String index) {
-		int i = Integer.parseInt(index.substring(1));
-		List<Bibliotheque> listeBibliotheques = gb.listeBibliotheques();
-		List<Etat> listeEtats = gt.listeEtats();
-		List<Editeur> listeEditeurs = ge.listeEditeurs();
-		List<Auteur> listeAuteurs = ga.listeAuteurs();
-		List<Style> listeStyles = gs.listeStyles();
-		ModelAndView mav = new ModelAndView("/admin/modifs/modifLivre", "livre", gl.trouverLivre(i));
-		mav.addObject("listeStyles", listeStyles);
-		mav.addObject("listeAuteurs", listeAuteurs);
-		mav.getModelMap().addAttribute("listeBibliotheques", listeBibliotheques);
-		mav.getModelMap().addAttribute("listeEtats", listeEtats);
-		mav.getModelMap().addAttribute("listeEditeurs", listeEditeurs);
-		return mav;
-	}
-
-	@RequestMapping(value = "/modifierLivreValid", method = RequestMethod.POST)
-	public ModelAndView listeLivreValid(Livre livre) {
-		gl.modifierLivre(livre);
-		;
-		return gererLivres();
-	}
-
-	@RequestMapping(value = "/supprimerLivre", method = RequestMethod.GET)
-	public ModelAndView supprimerLivre(String index) {
-		int i = Integer.parseInt(index.substring(1));
-		Livre livre = gl.trouverLivre(i);
-		try {
-			gl.supprimerLivre(livre);
-		} catch (Exception e) {
-		}
-
-		return gererLivres();
+	// create livre rest api
+	@PostMapping("livres")
+	public void createLivre(@RequestBody Livre livre, List<Bibliotheque> listeBibliotheques, List<Etat> listeEtats,
+			List<Editeur> listeEditeurs, List<Auteur> listeAuteurs, List<Categorie> listeStyles) {
+		livre = new Livre();
+		listeBibliotheques = biblioDAO.findAll();
+		listeEtats = etatDAO.findAll();
+		listeEditeurs = editeurDAO.findAll();
+		listeAuteurs = auteurDAO.findAll();
+		listeStyles = styleDAO.findAll();
+		livreDAO.save(livre);
 	}
 
 }

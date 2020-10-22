@@ -4,11 +4,11 @@
 package fr.lusseau.bibliotheque.dao;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import fr.lusseau.bibliotheque.entity.Personne;
 
@@ -19,24 +19,25 @@ import fr.lusseau.bibliotheque.entity.Personne;
  * @author Claude LUSSEAU
  *
  */
+@Repository
 public interface PersonneDAO extends JpaRepository<Personne, Integer> {
 	
-	@Query(value = "select id_personne, email from Personne p, join coordonnee c On c.id_personne = p.id_personne where c.email= :email", nativeQuery = true)
-	Optional<Personne> findByEmail(@Param("email") String email);
+	@Query(value = "select p.id_personne, p.id_coordonnee, c.email from PERSONNE p INNER JOIN COORDONNEE c ON p.id_coordonnee = c.id_coordonnee WHERE c.email = :email")
+	public Personne findPersonneByCoordonneeEmail(@Param("email") String email);
 	
-	@Query("select p from Personne p where p.username = :username")
-    Personne findByUsername(String username);
+//	@Query(value = "select p.id_personne, p.id_coordonnee, c.email from PERSONNE p INNER JOIN COORDONNEE c ON p.id_coordonnee = c.id_coordonnee WHERE p.id_personne = :id_personne")
+//	public String getEmail(@Param("idPersonne") Integer idPersonne);
+//	
+//	@Query(value = "select email from coordonnee c, join personne p On p.id_personne = c.id_personne where p.id_personne = :id_personne ")
+//	Personne findEmail(@Param("idPersonne") Personne personne);
+
+	List<Personne> findNomByNomIgnoreCase(String nom);
 	
+	List<Personne>  findByNomLikeIgnoreCase(String nom);
 	
-	List<Personne> findByOrderByNomAsc();
-	List<Personne> findByOrderByNomDesc();
-	List<Personne> findByOrderByPrenomAsc();
-	List<Personne> findByOrderByPrenomDesc();
-	List<Personne> findByOrderByDateInscriptionAsc();
-	List<Personne> findByOrderByDateInscriptionDesc();
-	
-	
+	List<Personne> findByNomContaining(String nom);
 	
 	long count();
+
 
 }

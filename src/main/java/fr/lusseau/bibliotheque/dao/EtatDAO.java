@@ -3,9 +3,8 @@
  */
 package fr.lusseau.bibliotheque.dao;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import fr.lusseau.bibliotheque.entity.Etat;
 
@@ -16,9 +15,8 @@ import fr.lusseau.bibliotheque.entity.Etat;
  * @author Claude LUSSEAU
  *
  */
+@Repository
 public interface EtatDAO extends JpaRepository<Etat, Integer> {
 
-	List<Etat> findByOrderByLibelleAsc();
-	List<Etat> findByOrderByLibelleDesc();
 	
 }
