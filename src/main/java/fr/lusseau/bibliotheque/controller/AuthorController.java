@@ -6,6 +6,7 @@ package fr.lusseau.bibliotheque.controller;
 import java.util.Collections;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.lusseau.bibliotheque.dto.request.CreateAuthorRequest;
+import fr.lusseau.bibliotheque.dto.response.AuthorResponse;
 import fr.lusseau.bibliotheque.entity.Author;
 import fr.lusseau.bibliotheque.service.impl.AuthorServiceImpl;
 import io.swagger.annotations.Api;
@@ -52,21 +55,22 @@ public class AuthorController {
 	 * @return
 	 */
 	@PostMapping("/author/addAuthor")
-	@ApiOperation(value = "Ajouter un.e nouvel.le auteur.trice", response = Author.class)
+	@ApiOperation(value = "Ajouter un.e nouvel.le auteur.trice", response = AuthorResponse.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : la auteur.trice existe déjà"),
 			@ApiResponse(code = 201, message = "Création : l'auteur.trice a été correctement créée"),
 			@ApiResponse(code = 304, message = "Non modifiée : l'auteur.trice n'a pas été créée") })
-	public ResponseEntity<Author> createNewAuthor(@RequestBody Author author) {
-		Author existingAuthor = authorService.findByFullName(author.getFullName());
+	public ResponseEntity<CreateAuthorRequest> createNewAuthor(@RequestBody CreateAuthorRequest authorDTORequest) {
+		Author existingAuthor = authorService.findByFullName(authorDTORequest.getFullName());
 		if (existingAuthor != null) {
-			return new ResponseEntity<Author>(HttpStatus.CONFLICT);
+			return new ResponseEntity<CreateAuthorRequest>(HttpStatus.CONFLICT);
 		}
-		Author authorResponse = authorService.saveAuthor(author);
+		Author authorRequest = mapAuthorDTOToAuthor(authorDTORequest);
+		Author authorResponse = authorService.saveAuthor(authorRequest);
 		if (authorResponse != null) {
-
-			return new ResponseEntity<Author>(authorResponse, HttpStatus.CREATED);
+			CreateAuthorRequest authorDTO = mapAuthorToAuthorDTO(authorResponse);
+			return new ResponseEntity<CreateAuthorRequest>(authorDTO, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<Author>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<CreateAuthorRequest>(HttpStatus.NOT_MODIFIED);
 	}
 
 	
@@ -74,19 +78,19 @@ public class AuthorController {
 	 * Methode en charge de lister tout.e.s les auteur.trice.s de la base de données.
 	 * @return
 	 */
-	@GetMapping("/author/AuthorsList")
-	@ApiOperation(value="Liste tout.e.s les auteur.trice.s", response = Author.class)
+	@GetMapping("/author/authors")
+	@ApiOperation(value="Liste tout.e.s les auteur.trice.s", response = AuthorResponse.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
 	})
-	public ResponseEntity<List<Author>> AuthorsList() {
-		List<Author> authors = authorService.findAllAuthor();
+	public ResponseEntity<List<AuthorResponse>> AuthorsList() {
+		List<Author> authors = authorService.findAll();
 		if (!CollectionUtils.isEmpty(authors)) {
 			authors.removeAll(Collections.singleton(null));
-			return new ResponseEntity<List<Author>>(authors, HttpStatus.OK);
+			return new ResponseEntity<List<AuthorResponse>>(HttpStatus.OK);
 		}
-		return new ResponseEntity<List<Author>>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<List<AuthorResponse>>(HttpStatus.NO_CONTENT);
 	}
 	
 	/**
@@ -126,6 +130,31 @@ public class AuthorController {
 		}
 		return new ResponseEntity<Author>(HttpStatus.NOT_MODIFIED);
 	}
+
+	/**
+	 * Transforme un entity Customer en un POJO CustomerDTO
+	 * 
+	 * @param customer
+	 * @return
+	 */
+	private CreateAuthorRequest mapAuthorToAuthorDTO(Author author) {
+		ModelMapper mapper = new ModelMapper();
+		CreateAuthorRequest authorDTO = mapper.map(author, CreateAuthorRequest.class);
+		return authorDTO;
+	}
+
+	/**
+	 * Transforme un POJO CustomerDTO en en entity Customer
+	 * 
+	 * @param customerDTO
+	 * @return
+	 */
+	private Author mapAuthorDTOToAuthor(CreateAuthorRequest authorDTO) {
+		ModelMapper mapper = new ModelMapper();
+		Author author = mapper.map(authorDTO, Author.class);
+		return author;
+	}
+
 
 
 

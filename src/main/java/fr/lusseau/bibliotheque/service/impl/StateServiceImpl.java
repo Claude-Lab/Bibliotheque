@@ -6,6 +6,8 @@ package fr.lusseau.bibliotheque.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import fr.lusseau.bibliotheque.dao.StateDAO;
 import fr.lusseau.bibliotheque.entity.State;
@@ -18,6 +20,8 @@ import fr.lusseau.bibliotheque.service.StateService;
  * @author Claude LUSSEAU
  *
  */
+@Service("StateService")
+@Transactional
 public class StateServiceImpl implements StateService {
 
 	
@@ -29,9 +33,8 @@ public class StateServiceImpl implements StateService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public State saveState(State sate) {
-		// TODO Auto-generated method stub
-		return dao.save(sate);
+	public State saveState(State state) {
+		return dao.save(state);
 	}
 
 	/**
@@ -39,7 +42,6 @@ public class StateServiceImpl implements StateService {
 	*/
 	@Override
 	public State updateState(State state) {
-		// TODO Auto-generated method stub
 		return dao.save(state);
 	}
 
@@ -56,7 +58,6 @@ public class StateServiceImpl implements StateService {
 	*/
 	@Override
 	public State findStateByLabel(String label) {
-		// TODO Auto-generated method stub
 		return dao.findByLabel(label);
 	}
 
@@ -65,7 +66,6 @@ public class StateServiceImpl implements StateService {
 	*/
 	@Override
 	public List<State> findByLabelContaining(String label) {
-		// TODO Auto-generated method stub
 		return dao.findByLabelContaining(label);
 	}
 
@@ -74,7 +74,6 @@ public class StateServiceImpl implements StateService {
 	*/
 	@Override
 	public boolean checkIfIdExists(Integer idState) {
-		// TODO Auto-generated method stub
 		return dao.existsById(idState);
 	}
 

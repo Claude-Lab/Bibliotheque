@@ -28,7 +28,7 @@ public class AuthorServiceImpl implements AuthorService {
 	private AuthorDAO dao;
 	
 	
-	public List<Author> findAllAuthor() {
+	public List<Author> findAll() {
 		return dao.findAll();
 	}
 	

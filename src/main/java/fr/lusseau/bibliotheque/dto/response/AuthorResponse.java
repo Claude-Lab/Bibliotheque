@@ -1,87 +1,57 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.entity;
+package fr.lusseau.bibliotheque.dto.response;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Class in charge of defining Author entity.
+ * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  23 oct. 2020 - 11:47:24
+ * @date  23 oct. 2020 - 19:41:59
  * @author Claude LUSSEAU
  *
  */
-@Entity
-@Table(name = "Author")
-public class Author {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(updatable = false, nullable = false, name = "idAuthor")
+@ApiModel(value = "Response Author list Model")
+public class AuthorResponse {
+	
+	@ApiModelProperty(value = "Author id")
 	private Integer idAuthor;
-	
-	@Column(nullable = false, name = "firstName")
+
+	@ApiModelProperty(value = "Author firstName")
 	private String firstName;
-	
-	@Column(nullable = false, name = "lastName")
+
+	@ApiModelProperty(value = "Author lastName")
 	private String lastName;
 	
-	@Column(nullable = false, name = "fullName")
+	@ApiModelProperty(value = "Author fullName")
 	private String fullName = (firstName + " " + lastName);
-
-	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "authors", fetch = FetchType.LAZY)
-	private Set<Book> books = new HashSet<Book>();
 	
 	/**
 	 * Constructor.
 	 */
-	public Author() {
+	public AuthorResponse() {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * Constructor.
-	 * @param firstName
-	 * @param lastName
-	 * @param firstLastName
-	 * @param books
-	 */
-	public Author(String firstName, String lastName, String fullName, Set<Book> books) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fullName = fullName;
-		this.books = books;
-	}
-
-	/**
-	 * Constructeur.
 	 * @param idAuthor
 	 * @param firstName
 	 * @param lastName
-	 * @param firstLastName
-	 * @param books
+	 * @param fullName
 	 */
-	public Author(Integer idAuthor, String firstName, String lastName, String fullName, Set<Book> books) {
+	public AuthorResponse(Integer idAuthor, String firstName, String lastName, String fullName) {
+		super();
 		this.idAuthor = idAuthor;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.fullName = fullName;
-		this.books = books;
 	}
 
 	/**
-	 * Method in charge of getting the value of idAuthor.
+	 * Method in charge of getting idAuthor's value .
 	 * @return the idAuthor
 	 */
 	public Integer getIdAuthor() {
@@ -89,7 +59,7 @@ public class Author {
 	}
 
 	/**
-	 * Method in charge of setting the value of idAuthor.
+	 * Method in charge of setting idAuthor's value.
 	 * @param idAuthor the idAuthor to set
 	 */
 	public void setIdAuthor(Integer idAuthor) {
@@ -97,7 +67,7 @@ public class Author {
 	}
 
 	/**
-	 * Method in charge of getting the value of firstName.
+	 * Method in charge of getting firstName's value .
 	 * @return the firstName
 	 */
 	public String getFirstName() {
@@ -105,7 +75,7 @@ public class Author {
 	}
 
 	/**
-	 * Method in charge of setting the value of firstName.
+	 * Method in charge of setting firstName's value.
 	 * @param firstName the firstName to set
 	 */
 	public void setFirstName(String firstName) {
@@ -113,7 +83,7 @@ public class Author {
 	}
 
 	/**
-	 * Method in charge of getting the value of lastName.
+	 * Method in charge of getting lastName's value .
 	 * @return the lastName
 	 */
 	public String getLastName() {
@@ -121,7 +91,7 @@ public class Author {
 	}
 
 	/**
-	 * Method in charge of setting the value of lastName.
+	 * Method in charge of setting lastName's value.
 	 * @param lastName the lastName to set
 	 */
 	public void setLastName(String lastName) {
@@ -129,7 +99,7 @@ public class Author {
 	}
 
 	/**
-	 * Method in charge of getting the value of fullName.
+	 * Method in charge of getting fullName's value .
 	 * @return the fullName
 	 */
 	public String getFullName() {
@@ -137,27 +107,11 @@ public class Author {
 	}
 
 	/**
-	 * Method in charge of setting the value of fullName.
+	 * Method in charge of setting fullName's value.
 	 * @param fullName the fullName to set
 	 */
 	public void setFullName(String fullName) {
 		this.fullName = (firstName + " " + lastName);
-	}
-
-	/**
-	 * Method in charge of getting the value of books.
-	 * @return the books
-	 */
-	public Set<Book> getBooks() {
-		return books;
-	}
-
-	/**
-	 * Method in charge of setting the value of books.
-	 * @param books the books to set
-	 */
-	public void setBooks(Set<Book> books) {
-		this.books = books;
 	}
 
 	/**
@@ -167,7 +121,6 @@ public class Author {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((books == null) ? 0 : books.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + ((idAuthor == null) ? 0 : idAuthor.hashCode());
@@ -183,17 +136,10 @@ public class Author {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof Author)) {
+		if (!(obj instanceof AuthorResponse)) {
 			return false;
 		}
-		Author other = (Author) obj;
-		if (books == null) {
-			if (other.books != null) {
-				return false;
-			}
-		} else if (!books.equals(other.books)) {
-			return false;
-		}
+		AuthorResponse other = (AuthorResponse) obj;
 		if (firstName == null) {
 			if (other.firstName != null) {
 				return false;
@@ -224,6 +170,9 @@ public class Author {
 		}
 		return true;
 	}
-
 	
+	
+	
+	
+
 }
