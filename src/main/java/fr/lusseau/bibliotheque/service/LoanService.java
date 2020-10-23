@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import fr.lusseau.bibliotheque.entity.Loan;
+import fr.lusseau.bibliotheque.entity.LoanStatus;
 
 /**
  * Classe en charge de
@@ -19,7 +20,7 @@ public interface LoanService {
 
 public List<Loan> findAllLoansByEndDateBefore(LocalDate maxEndDate);
     
-    public List<Loan> getAllOpenLoansOfThisPersonne(String email, LoanStatus status);
+    public List<Loan> getAllOpenLoansOfThisUser(String email, LoanStatus status);
     
     public Loan getOpenedLoan(Loan loan);
     

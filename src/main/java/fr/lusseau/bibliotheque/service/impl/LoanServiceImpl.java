@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.lusseau.bibliotheque.dao.LoanDAO;
 import fr.lusseau.bibliotheque.entity.Loan;
+import fr.lusseau.bibliotheque.entity.LoanStatus;
 import fr.lusseau.bibliotheque.service.LoanService;
 
 /**
@@ -41,7 +42,7 @@ public class LoanServiceImpl implements LoanService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public List<Loan> getAllOpenLoansOfThisPersonne(String email, LoanStatus status) {
+	public List<Loan> getAllOpenLoansOfThisUser(String email, LoanStatus status) {
 		// TODO Auto-generated method stub
 		return null;
 	}

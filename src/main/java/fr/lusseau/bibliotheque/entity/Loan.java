@@ -110,7 +110,7 @@ public class Loan {
 	 * Method in charge of getting status's value .
 	 * @return the status
 	 */
-	public EmpruntStatus getStatus() {
+	public LoanStatus getStatus() {
 		return status;
 	}
 
@@ -118,7 +118,7 @@ public class Loan {
 	 * Method in charge of setting status's value.
 	 * @param status the status to set
 	 */
-	public void setStatus(EmpruntStatus status) {
+	public void setStatus(LoanStatus status) {
 		this.status = status;
 	}
 

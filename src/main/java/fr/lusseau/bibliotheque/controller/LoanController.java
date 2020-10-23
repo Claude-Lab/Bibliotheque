@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import fr.lusseau.bibliotheque.entity.Emprunt;
-import fr.lusseau.bibliotheque.entity.EmpruntStatus;
+import fr.lusseau.bibliotheque.entity.Loan;
+import fr.lusseau.bibliotheque.entity.LoanStatus;
 import fr.lusseau.bibliotheque.service.impl.LoanServiceImpl;
 import io.swagger.annotations.Api;
 
@@ -41,19 +41,19 @@ public class LoanController {
 	public static final Logger LOGGER = LoggerFactory.getLogger(LoanController.class);
 	
 	@Autowired
-	LoanServiceImpl empruntService;
+	LoanServiceImpl loanService;
 
 	/**
      * Retourne l'historique des prêts en cours dans la bibliothèque jusqu'à une certaine date maximale. 
      * @param maxEndDateStr
      * @return
      */
-    @GetMapping("/maxEndDate")
-    public ResponseEntity<List<Emprunt>> searchAllBooksLoanBeforeThisDate(@RequestParam("date") String  maxEndDateStr) {
-        List<Emprunt> emprunts = empruntService.findAllEmpruntsByEndDateBefore(LocalDate.parse(maxEndDateStr));
+    @GetMapping("/loan/maxEndDate")
+    public ResponseEntity<List<Loan>> searchAllLoansBeforeThisDate(@RequestParam("date") String  maxEndDateStr) {
+        List<Loan> loans = loanService.findAllLoansByEndDateBefore(LocalDate.parse(maxEndDateStr));
         // on retire tous les élts null que peut contenir cette liste => pour éviter les NPE par la suite
-        emprunts.removeAll(Collections.singleton(null));
-        return new ResponseEntity<List<Emprunt>>(emprunts, HttpStatus.OK);
+        loans.removeAll(Collections.singleton(null));
+        return new ResponseEntity<List<Loan>>(loans, HttpStatus.OK);
     }
     
     /**
@@ -61,12 +61,12 @@ public class LoanController {
      * @param email
      * @return
      */
-    @GetMapping("/customerLoans")
-    public ResponseEntity<List<Emprunt>> searchAllOpenedEmpruntsOfThisPersonne(@RequestParam("email") String email) {
-        List<Emprunt> emprunts = empruntService.getAllOpenEmpruntsOfThisPersonne(email, EmpruntStatus.OPEN);
+    @GetMapping("/loan/userLoans")
+    public ResponseEntity<List<Loan>> searchAllOpenedLoansOfThisUser(@RequestParam("email") String email) {
+        List<Loan> loans = loanService.getAllOpenLoansOfThisUser(email, LoanStatus.OPEN);
         // on retire tous les élts null que peut contenir cette liste => pour éviter les NPE par la suite
-        emprunts.removeAll(Collections.singleton(null));
-        return new ResponseEntity<List<Emprunt>>(emprunts, HttpStatus.OK);
+        loans.removeAll(Collections.singleton(null));
+        return new ResponseEntity<List<Loan>>(loans, HttpStatus.OK);
     }
     
     /**
@@ -75,16 +75,16 @@ public class LoanController {
      * @param uriComponentBuilder
      * @return
      */
-    @PostMapping("/addEmprunt")
-    public ResponseEntity<Boolean> createNewEmprunt(@RequestBody Emprunt emprunt,
+    @PostMapping("/loan/addLoan")
+    public ResponseEntity<Boolean> createNewLoan(@RequestBody Loan loan,
             UriComponentsBuilder uriComponentBuilder) {
-        boolean isEmpruntExists = empruntService.checkIfEmpruntExists(emprunt);
-        if (isEmpruntExists) {
+        boolean isLoanExists = loanService.checkIfLoanExists(loan);
+        if (isLoanExists) {
             return new ResponseEntity<Boolean>(false, HttpStatus.CONFLICT);
         }
        
-        emprunt = empruntService.saveEmprunt(emprunt);
-        if (emprunt != null) {
+        loan = loanService.saveLoan(loan);
+        if (loan != null) {
             return new ResponseEntity<Boolean>(true, HttpStatus.CREATED);
         }
         return new ResponseEntity<Boolean>(false, HttpStatus.NOT_MODIFIED);
@@ -96,16 +96,16 @@ public class LoanController {
      * @param uriComponentBuilder
      * @return
      */
-    @PostMapping("/closeEmprunt")
-    public ResponseEntity<Boolean> closeLoan(@RequestBody Emprunt emprunt,
-            UriComponentsBuilder uriComponentBuilder) {
-    	Emprunt existingEmprunt = empruntService.getOpenedEmprunt(emprunt);
-        if (existingEmprunt == null) {
+    @PostMapping("/loan/closeLoan")
+    public ResponseEntity<Boolean> closeLoan(@RequestBody Loan loanRequest,
+            UriComponentsBuilder Loan) {
+    	Loan existingLoan = loanService.getOpenedLoan(loanRequest);
+        if (existingLoan == null) {
             return new ResponseEntity<Boolean>(false, HttpStatus.NO_CONTENT);
         }
-        existingEmprunt.setStatus(EmpruntStatus.CLOSE);
-        emprunt = empruntService.saveEmprunt(existingEmprunt);
-        if (emprunt != null) {
+        existingLoan.setStatus(LoanStatus.CLOSE);
+        Loan loan = loanService.saveLoan(existingLoan);
+        if (loan != null) {
             return new ResponseEntity<Boolean>(true, HttpStatus.OK);
         }
         return new ResponseEntity<Boolean>(HttpStatus.NOT_MODIFIED);
