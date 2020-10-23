@@ -3,25 +3,23 @@
  */
 package fr.lusseau.bibliotheque.dao;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import fr.lusseau.bibliotheque.entity.Role;
+import fr.lusseau.bibliotheque.entity.Contact;
 
 /**
  * Classe en charge de
  * @Version Bibliotheque -v1,0
- * @date  14 août 2020 - 11:09:42
+ * @date  19 août 2020 - 13:17:00
  * @author Claude LUSSEAU
  *
  */
 @Repository
-public interface RoleDAO extends JpaRepository<Role, Integer> {
+public interface ContactDAO extends JpaRepository<Contact, Integer> {
 	
-	Role findByLabel(String label);
+	public Contact findByEmail(String email);
 	
-	public List<Role> findByLabelContaining(String label);
+	
 
 }

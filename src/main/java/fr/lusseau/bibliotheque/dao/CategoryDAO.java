@@ -8,20 +8,19 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import fr.lusseau.bibliotheque.entity.Role;
+import fr.lusseau.bibliotheque.entity.Category;
 
 /**
  * Classe en charge de
  * @Version Bibliotheque -v1,0
- * @date  14 août 2020 - 11:09:42
+ * @date  19 oct. 2020 - 17:28:49
  * @author Claude LUSSEAU
  *
  */
 @Repository
-public interface RoleDAO extends JpaRepository<Role, Integer> {
-	
-	Role findByLabel(String label);
-	
-	public List<Role> findByLabelContaining(String label);
+public interface CategoryDAO extends JpaRepository<Category, Integer>{
 
+	List<Category> findByLabelContaining(String label);
+	
+	Category findCategoryByLabelIgnoreCase(String label);
 }

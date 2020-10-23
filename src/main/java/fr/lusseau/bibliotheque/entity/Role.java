@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Classe en charge de definir le bean Role.
+ * Class in charge of defining Role entity.
  * @Version Bibliotheque -v1,0
  * @date  14 août 2020 - 09:49:04
  * @author Claude LUSSEAU
@@ -31,20 +31,21 @@ public class Role {
 	@Column(name = "idRole")
 	private int idRole;
 	
-	@Column(name = "libelle", unique = true)
-	private String libelle;
+	@Column(name = "label", unique = true)
+	private String label;
 	
-	@OneToMany(targetEntity = Personne.class, mappedBy = "role", fetch = FetchType.LAZY)
-	private Set<Personne> personnes = new HashSet<Personne>();
+	@OneToMany(targetEntity = User.class, mappedBy = "role", fetch = FetchType.LAZY)
+	private Set<User> users = new HashSet<User>();
 	
 	/**
-	 * Constructeur.
+	 * Constructor.
 	 */
 	public Role() {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de idRole.
+	 * Method in charge of getting idRole's value .
 	 * @return the idRole
 	 */
 	public int getIdRole() {
@@ -52,7 +53,7 @@ public class Role {
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de idRole.
+	 * Method in charge of setting idRole's value.
 	 * @param idRole the idRole to set
 	 */
 	public void setIdRole(int idRole) {
@@ -60,35 +61,35 @@ public class Role {
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de libelle.
-	 * @return the libelle
+	 * Method in charge of getting label's value .
+	 * @return the label
 	 */
-	public String getLibelle() {
-		return libelle;
+	public String getLabel() {
+		return label;
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de libelle.
-	 * @param libelle the libelle to set
+	 * Method in charge of setting label's value.
+	 * @param label the label to set
 	 */
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	/**
-	 * Méthode en charge de récupérer la valeur de personnes.
-	 * @return the personnes
+	 * Method in charge of getting users's value .
+	 * @return the users
 	 */
-	public Set<Personne> getPersonnes() {
-		return personnes;
+	public Set<User> getUsers() {
+		return users;
 	}
 
 	/**
-	 * Méthode en charge de définir la valeur de personnes.
-	 * @param personnes the personnes to set
+	 * Method in charge of setting users's value.
+	 * @param users the users to set
 	 */
-	public void setPersonnes(Set<Personne> personnes) {
-		this.personnes = personnes;
+	public void setUsers(Set<User> users) {
+		this.users = users;
 	}
 
 	/**
@@ -99,8 +100,8 @@ public class Role {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + idRole;
-		result = prime * result + ((libelle == null) ? 0 : libelle.hashCode());
-		result = prime * result + ((personnes == null) ? 0 : personnes.hashCode());
+		result = prime * result + ((label == null) ? 0 : label.hashCode());
+		result = prime * result + ((users == null) ? 0 : users.hashCode());
 		return result;
 	}
 
@@ -119,23 +120,21 @@ public class Role {
 		if (idRole != other.idRole) {
 			return false;
 		}
-		if (libelle == null) {
-			if (other.libelle != null) {
+		if (label == null) {
+			if (other.label != null) {
 				return false;
 			}
-		} else if (!libelle.equals(other.libelle)) {
+		} else if (!label.equals(other.label)) {
 			return false;
 		}
-		if (personnes == null) {
-			if (other.personnes != null) {
+		if (users == null) {
+			if (other.users != null) {
 				return false;
 			}
-		} else if (!personnes.equals(other.personnes)) {
+		} else if (!users.equals(other.users)) {
 			return false;
 		}
 		return true;
 	}
-
-	
 
 }

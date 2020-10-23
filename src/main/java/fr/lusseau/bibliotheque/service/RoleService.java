@@ -22,9 +22,9 @@ public interface RoleService {
 	
 	public void deleteRole(Integer idRole);
 	
-	public Role findRoleByLibelle(String libelle);
+	public Role findRoleByLabel(String label);
 	
-	public List<Role> findByLibelleContaining(String libelle);
+	public List<Role> findByLabelContaining(String label);
 	
 	public boolean checkIfIdExists(Integer idRole);
 

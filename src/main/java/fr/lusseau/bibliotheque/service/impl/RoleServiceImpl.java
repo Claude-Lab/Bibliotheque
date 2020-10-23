@@ -56,16 +56,16 @@ public class RoleServiceImpl implements RoleService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Role findRoleByLibelle(String libelle) {
-		return dao.findByLibelle(libelle);
+	public Role findRoleByLabel(String label) {
+		return dao.findByLabel(label);
 	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public List<Role> findByLibelleContaining(String libelle) {
-		return dao.findByLibelleContaining(libelle);
+	public List<Role> findByLabelContaining(String label) {
+		return dao.findByLabelContaining(label);
 	}
 
 	/**
