@@ -3,6 +3,9 @@
  */
 package fr.lusseau.bibliotheque.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import fr.lusseau.bibliotheque.entity.Surety;
 
 /**
@@ -22,4 +25,9 @@ public interface SuretyService {
 	
 	public boolean checkIfSuretyExists (Integer idSurety);
 
+	public List<Surety> findAll();
+		
+	public Optional<Surety> findById(Integer idSurety);
+	
+	public Surety findByNbBooks(Integer nbBooks);
 }

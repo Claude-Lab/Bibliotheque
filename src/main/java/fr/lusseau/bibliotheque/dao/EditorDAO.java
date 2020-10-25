@@ -21,5 +21,8 @@ import fr.lusseau.bibliotheque.entity.Editor;
 public interface EditorDAO extends JpaRepository<Editor, Integer> {
 	
 	List<Editor> findByNameContaining(String name);
+	
+	Editor findByName(String name);
+	
 
 }

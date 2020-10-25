@@ -1,60 +1,77 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.dto.request;
+package fr.lusseau.bibliotheque.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Class in charge of defining .
- * 
  * @Version Bibliotheque -v1,0
- * @date 23 oct. 2020 - 18:56:31
+ * @date  25 oct. 2020 - 14:28:16
  * @author Claude LUSSEAU
  *
  */
-@ApiModel(value = "Create Role Model")
-public class CreateRoleRequest implements Comparable<CreateRoleRequest> {
-
-	@ApiModelProperty(value = "Role idRole")
-	private Integer idRole;
-
+@ApiModel(value = "Request Role Model")
+public class RoleRequestDTO implements Comparable<RoleRequestDTO> {
+	
+	@ApiModelProperty(value = "Role id")
+	private int idRole;
+	
 	@ApiModelProperty(value = "Role label")
 	private String label;
-
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public int compareTo(RoleRequestDTO o) {
+		return o.getLabel().compareToIgnoreCase(this.label);
+	}
+	
 	/**
 	 * Constructor.
 	 */
-	public CreateRoleRequest() {
+	public RoleRequestDTO() {
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param label
 	 */
-	public CreateRoleRequest(String label) {
+	public RoleRequestDTO(String label) {
 		super();
 		this.label = label;
 	}
-	
+
+	/**
+	 * Constructor.
+	 * @param idRole
+	 * @param label
+	 */
+	public RoleRequestDTO(int idRole, String label) {
+		super();
+		this.idRole = idRole;
+		this.label = label;
+	}
+
 	/**
 	 * Method in charge of getting idRole's value .
 	 * @return the idRole
 	 */
-	public Integer getIdRole() {
+	public int getIdRole() {
 		return idRole;
 	}
-
 
 	/**
 	 * Method in charge of setting idRole's value.
 	 * @param idRole the idRole to set
 	 */
-	public void setIdRole(Integer idRole) {
+	public void setIdRole(int idRole) {
 		this.idRole = idRole;
 	}
-
 
 	/**
 	 * Method in charge of getting label's value .
@@ -64,7 +81,6 @@ public class CreateRoleRequest implements Comparable<CreateRoleRequest> {
 		return label;
 	}
 
-
 	/**
 	 * Method in charge of setting label's value.
 	 * @param label the label to set
@@ -72,15 +88,7 @@ public class CreateRoleRequest implements Comparable<CreateRoleRequest> {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public int compareTo(CreateRoleRequest o) {
-
-		return o.getLabel().compareTo(this.label);
-	}
+	
+	
 
 }

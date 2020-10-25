@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import fr.lusseau.bibliotheque.entity.Editor;
 
@@ -26,5 +27,11 @@ public interface EditorService {
 	public List<Editor> findByNameContaining(String name);
 
 	public boolean checkIfEditorExists(Integer idEditor);
+	
+	public List<Editor> findAll();
+	
+	public Editor findByName(String name);
+	
+	public Optional<Editor> findById(Integer idEditor);
 
 }

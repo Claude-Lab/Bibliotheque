@@ -76,5 +76,13 @@ public class StateServiceImpl implements StateService {
 	public boolean checkIfIdExists(Integer idState) {
 		return dao.existsById(idState);
 	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public List<State> findAll() {
+		return dao.findAll();
+	}
 
 }

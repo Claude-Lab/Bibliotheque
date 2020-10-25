@@ -57,8 +57,8 @@ public class AuthorServiceImpl implements AuthorService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public List<Author> findByFullNameContaining(String fullName) {
-		return dao.findByFullNameContaining((new StringBuilder()).append("%").append(fullName).append("%").toString());
+	public List<Author> findByLastNameContaining(String lastName) {
+		return dao.findByLastNameContaining((new StringBuilder()).append("%").append(lastName).append("%").toString());
 	}
 
 	/**
@@ -77,8 +77,8 @@ public class AuthorServiceImpl implements AuthorService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Author findByFullName(String fullName) {
-		return dao.findByFullName(fullName);
+	public Author findByLastName(String lastName) {
+		return dao.findByLastName(lastName);
 	}
 
 }

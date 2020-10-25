@@ -27,10 +27,10 @@ public interface AuthorDAO extends JpaRepository<Author, Integer> {
 	
 	List<Author> findByLastNameLikeIgnoreCase(String lastName);
 	
-	Author findByFullName(String fullName);
+	Author findByLastName(String lastName);
 	
 	Author findAuthorByIdAuthor(Integer idAuthor);
 	
-	List<Author> findByFullNameContaining(String fullName);
+	List<Author> findByLastNameContaining(String lastName);
 	
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.dto.request;
+package fr.lusseau.bibliotheque.dto;
 
 import java.time.LocalDate;
 
@@ -13,29 +13,31 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Class in charge of defining .
- * 
  * @Version Bibliotheque -v1,0
- * @date 23 oct. 2020 - 18:56:31
+ * @date  25 oct. 2020 - 19:17:04
  * @author Claude LUSSEAU
  *
  */
-@ApiModel(value = "Create User Model")
-public class CreateUserRequest implements Comparable<CreateUserRequest> {
-
+@ApiModel(value = "Request User Model")
+public class UserRequestDTO {
+	
 	@ApiModelProperty(value = "User id")
 	private int idUser;
 
 	@ApiModelProperty(value = "User firstName")
 	private String firstName;
 
-	@ApiModelProperty(value = "User lastName")
+	@ApiModelProperty(value = "lastName")
 	private String lastName;
 
 	@ApiModelProperty(value = "User fullName")
 	private String fullName = firstName + " " + lastName;
+	
+	@ApiModelProperty(value = "User registrationDate")
+	private LocalDate registrationDate;
 
-	@ApiModelProperty(value = "User password")
-	private String password;
+	@ApiModelProperty(value = "User enabled")
+	private boolean enabled;
 
 	@ApiModelProperty(value = "User role")
 	private Role role;
@@ -43,19 +45,13 @@ public class CreateUserRequest implements Comparable<CreateUserRequest> {
 	@ApiModelProperty(value = "User contact")
 	private Contact contact;
 
-	@ApiModelProperty(value = "User surety")
+	@ApiModelProperty(value = "surety")
 	private Surety surety;
-
-	@ApiModelProperty(value = "User registrationDate")
-	private LocalDate registrationDate;
-
-	@ApiModelProperty(value = "User enabled")
-	private boolean enabled;
 	
 	/**
 	 * Constructor.
 	 */
-	public CreateUserRequest() {
+	public UserRequestDTO() {
 	}
 
 	/**
@@ -63,28 +59,50 @@ public class CreateUserRequest implements Comparable<CreateUserRequest> {
 	 * @param firstName
 	 * @param lastName
 	 * @param fullName
-	 * @param password
+	 * @param registrationDate
+	 * @param enabled
 	 * @param role
 	 * @param contact
 	 * @param surety
-	 * @param registrationDate
-	 * @param enabled
 	 */
-	public CreateUserRequest(String firstName, String lastName, String fullName, String password, Role role,
-			Contact contact, Surety surety, LocalDate registrationDate, boolean enabled) {
+	public UserRequestDTO(String firstName, String lastName, String fullName, LocalDate registrationDate,
+			boolean enabled, Role role, Contact contact, Surety surety) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.fullName = fullName;
-		this.password = password;
+		this.registrationDate = registrationDate;
+		this.enabled = enabled;
 		this.role = role;
 		this.contact = contact;
 		this.surety = surety;
-		this.registrationDate = registrationDate;
-		this.enabled = enabled;
 	}
 
-
+	/**
+	 * Constructor.
+	 * @param idUser
+	 * @param firstName
+	 * @param lastName
+	 * @param fullName
+	 * @param registrationDate
+	 * @param enabled
+	 * @param role
+	 * @param contact
+	 * @param surety
+	 */
+	public UserRequestDTO(int idUser, String firstName, String lastName, String fullName, LocalDate registrationDate,
+			boolean enabled, Role role, Contact contact, Surety surety) {
+		super();
+		this.idUser = idUser;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.fullName = fullName;
+		this.registrationDate = registrationDate;
+		this.enabled = enabled;
+		this.role = role;
+		this.contact = contact;
+		this.surety = surety;
+	}
 
 	/**
 	 * Method in charge of getting idUser's value .
@@ -151,19 +169,35 @@ public class CreateUserRequest implements Comparable<CreateUserRequest> {
 	}
 
 	/**
-	 * Method in charge of getting password's value .
-	 * @return the password
+	 * Method in charge of getting registrationDate's value .
+	 * @return the registrationDate
 	 */
-	public String getPassword() {
-		return password;
+	public LocalDate getRegistrationDate() {
+		return registrationDate;
 	}
 
 	/**
-	 * Method in charge of setting password's value.
-	 * @param password the password to set
+	 * Method in charge of setting registrationDate's value.
+	 * @param registrationDate the registrationDate to set
 	 */
-	public void setPassword(String password) {
-		this.password = password;
+	public void setRegistrationDate(LocalDate registrationDate) {
+		this.registrationDate = registrationDate;
+	}
+
+	/**
+	 * Method in charge of getting enabled's value .
+	 * @return the enabled
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * Method in charge of setting enabled's value.
+	 * @param enabled the enabled to set
+	 */
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 	/**
@@ -213,46 +247,9 @@ public class CreateUserRequest implements Comparable<CreateUserRequest> {
 	public void setSurety(Surety surety) {
 		this.surety = surety;
 	}
+	
+	
 
-	/**
-	 * Method in charge of getting registrationDate's value .
-	 * @return the registrationDate
-	 */
-	public LocalDate getRegistrationDate() {
-		return registrationDate;
-	}
-
-	/**
-	 * Method in charge of setting registrationDate's value.
-	 * @param registrationDate the registrationDate to set
-	 */
-	public void setRegistrationDate(LocalDate registrationDate) {
-		this.registrationDate = registrationDate;
-	}
-
-	/**
-	 * Method in charge of getting enabled's value .
-	 * @return the enabled
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * Method in charge of setting enabled's value.
-	 * @param enabled the enabled to set
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public int compareTo(CreateUserRequest o) {
-
-		return o.getFullName().compareToIgnoreCase(this.fullName);
-	}
+	
 
 }

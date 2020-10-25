@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,30 @@ public class EditorServiceImpl implements EditorService {
 	@Override
 	public boolean checkIfEditorExists(Integer idEditor) {
 		return dao.existsById(idEditor);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public List<Editor> findAll() {
+		return dao.findAll();
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Editor findByName(String name) {
+		return dao.findByName(name);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Optional<Editor> findById(Integer idEditor) {
+		return dao.findById(idEditor);
 	}
 
 }

@@ -3,16 +3,11 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -34,8 +29,6 @@ public class State {
 	@Column(name = "label", nullable = false)
 	private String label;
 
-	@OneToMany(targetEntity = Book.class, mappedBy = "state", fetch = FetchType.LAZY)
-	private Set<Book> books = new HashSet<Book>();
 	
 	/**
 	 * Constructor.
@@ -49,9 +42,8 @@ public class State {
 	 * @param label
 	 * @param books
 	 */
-	public State(String label, Set<Book> books) {
+	public State(String label) {
 		this.label = label;
-		this.books = books;
 	}
 
 	/**
@@ -60,10 +52,9 @@ public class State {
 	 * @param label
 	 * @param books
 	 */
-	public State(int idState, String label, Set<Book> books) {
+	public State(int idState, String label) {
 		this.idState = idState;
 		this.label = label;
-		this.books = books;
 	}
 
 	/**
@@ -99,29 +90,12 @@ public class State {
 	}
 
 	/**
-	 * Method in charge of getting books's value .
-	 * @return the books
-	 */
-	public Set<Book> getBooks() {
-		return books;
-	}
-
-	/**
-	 * Method in charge of setting books's value.
-	 * @param books the books to set
-	 */
-	public void setBooks(Set<Book> books) {
-		this.books = books;
-	}
-
-	/**
 	 * @{inheritDoc}
 	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((books == null) ? 0 : books.hashCode());
 		result = prime * result + idState;
 		result = prime * result + ((label == null) ? 0 : label.hashCode());
 		return result;
@@ -139,13 +113,6 @@ public class State {
 			return false;
 		}
 		State other = (State) obj;
-		if (books == null) {
-			if (other.books != null) {
-				return false;
-			}
-		} else if (!books.equals(other.books)) {
-			return false;
-		}
 		if (idState != other.idState) {
 			return false;
 		}
@@ -158,5 +125,7 @@ public class State {
 		}
 		return true;
 	}
+
+	
 
 }

@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.query.Param;
 
@@ -31,6 +32,10 @@ public interface UserService {
 	public boolean checkIfIdExists(Integer idUser);
 	
 	public User findUserByContactEmail(@Param("email") String email);
+	
+	public Optional<User> findById(Integer idUser);
+	
+	public List<User> findAll();
 	
 //	Personne findEmail(@Param("idPersonne") Personne personne);
 	

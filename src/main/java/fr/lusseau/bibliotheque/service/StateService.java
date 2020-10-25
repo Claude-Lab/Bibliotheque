@@ -27,5 +27,7 @@ public interface StateService {
 	public List<State> findByLabelContaining(String label);
 	
 	public boolean checkIfIdExists(Integer idState);
+	
+	public List<State> findAll();
 
 }

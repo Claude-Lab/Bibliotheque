@@ -3,11 +3,10 @@
  */
 package fr.lusseau.bibliotheque.controller;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.lusseau.bibliotheque.dto.CategoryRequestDTO;
 import fr.lusseau.bibliotheque.entity.Category;
 import fr.lusseau.bibliotheque.service.impl.CategoryServiceImpl;
 import io.swagger.annotations.Api;
@@ -42,7 +42,7 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping("/rest/api/v1")
 public class CategoryController {
 
-	public static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+//	public static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
 	@Autowired
 	CategoryServiceImpl categoryService;
@@ -53,41 +53,46 @@ public class CategoryController {
 	 * @param categorie
 	 * @return
 	 */
-	@PostMapping("/category/addCategory")
-	@ApiOperation(value = "Ajouter une nouvelle catégorie", response = Category.class)
+	@PostMapping("/categories/addCategory")
+	@ApiOperation(value = "Ajouter une nouvelle catégorie", response = CategoryRequestDTO.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : la catégorie existe déjà"),
 			@ApiResponse(code = 201, message = "Création : la catégorie a été correctement créée"),
 			@ApiResponse(code = 304, message = "Non modifiée : la catégorie n'a pas été créée") })
-	public ResponseEntity<Category> createNewCategory(@RequestBody Category category) {
-		Category existingCategory = categoryService.findCategoryByLabelIgnoreCase(category.getLabel());
+	public ResponseEntity<CategoryRequestDTO> createNewCategory(@RequestBody CategoryRequestDTO categoryDTORequest) {
+		Category existingCategory = categoryService.findCategoryByLabelIgnoreCase(categoryDTORequest.getLabel());
 		if (existingCategory != null) {
-			return new ResponseEntity<Category>(HttpStatus.CONFLICT);
+			return new ResponseEntity<CategoryRequestDTO>(HttpStatus.CONFLICT);
 		}
-		Category categoryResponse = categoryService.saveCategory(category);
+		Category categoryRequest = mapCategoryDTOToCategory(categoryDTORequest);
+		Category categoryResponse = categoryService.saveCategory(categoryRequest);
 		if (categoryResponse != null) {
-
-			return new ResponseEntity<Category>(categoryResponse, HttpStatus.CREATED);
+			CategoryRequestDTO categoryDTO = mapCategoryToCategoryDTO(categoryRequest);
+			return new ResponseEntity<CategoryRequestDTO>(categoryDTO, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<Category>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<CategoryRequestDTO>(HttpStatus.NOT_MODIFIED);
 	}
 
 	/**
 	 * Methode en charge de lister toutes les catégories de la base de données.
 	 * @return
 	 */
-	@GetMapping("/category/listCategories")
+	@GetMapping("/categories")
 	@ApiOperation(value="List all book categories of the Library", response = List.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
 	})
-	public ResponseEntity<List<Category>> CategoriesList() {
+	public ResponseEntity<List<CategoryRequestDTO>> CategoriesList() {
+		
 		List<Category> categories = categoryService.findAllCategory();
 		if (!CollectionUtils.isEmpty(categories)) {
-			categories.removeAll(Collections.singleton(null));
-			return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
+			List<CategoryRequestDTO> categoryDTOs = categories.stream().map(category -> { 
+				return mapCategoryToCategoryDTO(category);
+			}).collect(Collectors.toList());
+			
+			return new ResponseEntity<List<CategoryRequestDTO>>(categoryDTOs, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<Category>>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<List<CategoryRequestDTO>>(HttpStatus.NO_CONTENT);
 	}
 	
 	/**
@@ -124,6 +129,30 @@ public class CategoryController {
 			return new ResponseEntity<Category>(categorie, HttpStatus.OK);
 		}
 		return new ResponseEntity<Category>(HttpStatus.NOT_MODIFIED);
+	}
+	
+	/**
+	 * Transforme un entity Customer en un POJO CustomerDTO
+	 * 
+	 * @param customer
+	 * @return
+	 */
+	private CategoryRequestDTO mapCategoryToCategoryDTO(Category category) {
+		ModelMapper mapper = new ModelMapper();
+		CategoryRequestDTO categoryDTO = mapper.map(category, CategoryRequestDTO.class);
+		return categoryDTO;
+	}
+
+	/**
+	 * Transforme un POJO CustomerDTO en en entity Customer
+	 * 
+	 * @param customerDTO
+	 * @return
+	 */
+	private Category mapCategoryDTOToCategory(CategoryRequestDTO categoryDTO) {
+		ModelMapper mapper = new ModelMapper();
+		Category category = mapper.map(categoryDTO, Category.class);
+		return category;
 	}
 
 

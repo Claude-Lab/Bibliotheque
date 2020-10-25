@@ -56,7 +56,7 @@ public class RoleServiceImpl implements RoleService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Role findRoleByLabel(String label) {
+	public Role findByLabel(String label) {
 		return dao.findByLabel(label);
 	}
 
@@ -74,6 +74,14 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public boolean checkIfIdExists(Integer idRole) {
 		return dao.existsById(idRole);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public List<Role> findAll() {
+		return dao.findAll();
 	}
 
 }

@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -25,6 +26,7 @@ import fr.lusseau.bibliotheque.service.UserService;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+	
 	
 	@Autowired
 	private UserDAO dao;
@@ -89,6 +91,22 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findByLastNameContaining(String name) {
 		return dao.findByLastNameContaining(name);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Optional<User> findById(Integer idUser) {
+		return dao.findById(idUser);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public List<User> findAll() {
+		return dao.findAll();
 	}
 
 //	/**

@@ -3,9 +3,6 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -42,9 +38,6 @@ public class Editor {
 	@JoinColumn(name="idContact", nullable=false )
 	private Contact contact;
 	
-	@OneToMany(targetEntity = Book.class, mappedBy = "editor", fetch = FetchType.LAZY )
-	private Set<Book> books = new HashSet<Book>();
-	
 	/**
 	 * Constructor.
 	 */
@@ -58,10 +51,9 @@ public class Editor {
 	 * @param contact
 	 * @param books
 	 */
-	public Editor(String name, Contact contact, Set<Book> books) {
+	public Editor(String name, Contact contact) {
 		this.name = name;
 		this.contact = contact;
-		this.books = books;
 	}
 
 	/**
@@ -71,11 +63,10 @@ public class Editor {
 	 * @param contact
 	 * @param books
 	 */
-	public Editor(int idEditor, String name, Contact contact, Set<Book> books) {
+	public Editor(int idEditor, String name, Contact contact) {
 		this.idEditor = idEditor;
 		this.name = name;
 		this.contact = contact;
-		this.books = books;
 	}
 
 	/**
@@ -127,29 +118,13 @@ public class Editor {
 	}
 
 	/**
-	 * Method in charge of getting books's value .
-	 * @return the books
-	 */
-	public Set<Book> getBooks() {
-		return books;
-	}
-
-	/**
-	 * Method in charge of setting books's value.
-	 * @param books the books to set
-	 */
-	public void setBooks(Set<Book> books) {
-		this.books = books;
-	}
-
-	/**
 	 * @{inheritDoc}
 	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((books == null) ? 0 : books.hashCode());
+		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
 		result = prime * result + idEditor;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -167,11 +142,11 @@ public class Editor {
 			return false;
 		}
 		Editor other = (Editor) obj;
-		if (books == null) {
-			if (other.books != null) {
+		if (contact == null) {
+			if (other.contact != null) {
 				return false;
 			}
-		} else if (!books.equals(other.books)) {
+		} else if (!contact.equals(other.contact)) {
 			return false;
 		}
 		if (idEditor != other.idEditor) {
@@ -187,4 +162,5 @@ public class Editor {
 		return true;
 	}
 
+	
 }

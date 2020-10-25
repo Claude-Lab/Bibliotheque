@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Class in charge of defining Author entity.
@@ -38,8 +39,8 @@ public class Author {
 	@Column(nullable = false, name = "lastName")
 	private String lastName;
 	
-	@Column(nullable = false, name = "fullName")
-	private String fullName = (firstName + " " + lastName);
+	@Transient
+	private String fullName = firstName + " " + lastName;
 
 	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "authors", fetch = FetchType.LAZY)
 	private Set<Book> books = new HashSet<Book>();
@@ -133,6 +134,7 @@ public class Author {
 	 * @return the fullName
 	 */
 	public String getFullName() {
+		fullName = this.firstName + " " + this.lastName;
 		return fullName;
 	}
 
@@ -141,7 +143,8 @@ public class Author {
 	 * @param fullName the fullName to set
 	 */
 	public void setFullName(String fullName) {
-		this.fullName = (firstName + " " + lastName);
+		fullName = this.firstName + " " + this.lastName;
+		this.fullName = fullName;
 	}
 
 	/**

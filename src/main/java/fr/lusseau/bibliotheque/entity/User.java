@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Class in charge of defining User entity.
@@ -42,7 +43,7 @@ public class User {
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 
-	@Column(name = "fullName", nullable = false)
+	@Transient
 	private String fullName = firstName + " " + lastName;
 
 	@Column(name = "password", nullable = false)

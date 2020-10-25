@@ -51,6 +51,7 @@ public class Loan {
 	@JoinColumn(name="idUser", nullable=false)
 	private User user;
 	
+	
 	/**
 	 * Constructor.
 	 */
@@ -123,38 +124,6 @@ public class Loan {
 	}
 
 	/**
-	 * Method in charge of getting book's value .
-	 * @return the book
-	 */
-	public Book getBook() {
-		return book;
-	}
-
-	/**
-	 * Method in charge of setting book's value.
-	 * @param book the book to set
-	 */
-	public void setBook(Book book) {
-		this.book = book;
-	}
-
-	/**
-	 * Method in charge of getting user's value .
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
-	 * Method in charge of setting user's value.
-	 * @param user the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	/**
 	 * @{inheritDoc}
 	*/
 	@Override
@@ -162,11 +131,9 @@ public class Loan {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((beginDate == null) ? 0 : beginDate.hashCode());
-		result = prime * result + ((book == null) ? 0 : book.hashCode());
 		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
 		result = prime * result + ((idLoan == null) ? 0 : idLoan.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -189,13 +156,6 @@ public class Loan {
 		} else if (!beginDate.equals(other.beginDate)) {
 			return false;
 		}
-		if (book == null) {
-			if (other.book != null) {
-				return false;
-			}
-		} else if (!book.equals(other.book)) {
-			return false;
-		}
 		if (endDate == null) {
 			if (other.endDate != null) {
 				return false;
@@ -213,16 +173,7 @@ public class Loan {
 		if (status != other.status) {
 			return false;
 		}
-		if (user == null) {
-			if (other.user != null) {
-				return false;
-			}
-		} else if (!user.equals(other.user)) {
-			return false;
-		}
 		return true;
 	}
-	
-	
 
 }

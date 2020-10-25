@@ -22,11 +22,11 @@ public interface AuthorService {
 	
 	public void deleteAuthor(Integer idAuthor);
 	
-	public Author findByFullName(String fullName);
+	public Author findByLastName(String lastName);
 	
-	public List<Author> findByLastNameLikeIgnoreCase(String name);
+	public List<Author> findByLastNameLikeIgnoreCase(String lastName);
 	
-	public List<Author> findByFullNameContaining(String name);
+	public List<Author> findByLastNameContaining(String lastName);
 	
 	public boolean checkIfIdexists(Integer idAuthor);
 		

@@ -1,48 +1,67 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.dto.request;
+package fr.lusseau.bibliotheque.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Class in charge of defining .
- * 
  * @Version Bibliotheque -v1,0
- * @date 23 oct. 2020 - 18:56:31
+ * @date  25 oct. 2020 - 15:01:05
  * @author Claude LUSSEAU
  *
  */
-@ApiModel(value = "Create State Model")
-public class CreateStateRequest implements Comparable<CreateStateRequest> {
-
+@ApiModel(value = "Request State Model")
+public class StateRequestDTO implements Comparable<StateRequestDTO> {
+	
 	@ApiModelProperty(value = "State id")
-	private Integer idState;
+	private int idState;
 
 	@ApiModelProperty(value = "State label")
 	private String label;
 	
 	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public int compareTo(StateRequestDTO o) {
+		return o.getLabel().compareToIgnoreCase(this.label);
+	}
+	
+	/**
 	 * Constructor.
 	 */
-	public CreateStateRequest() {
+	public StateRequestDTO() {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * Constructor.
 	 * @param label
 	 */
-	public CreateStateRequest(String label) {
+	public StateRequestDTO(String label) {
 		super();
 		this.label = label;
 	}
-	
+
+	/**
+	 * Constructor.
+	 * @param idState
+	 * @param label
+	 */
+	public StateRequestDTO(int idState, String label) {
+		super();
+		this.idState = idState;
+		this.label = label;
+	}
+
 	/**
 	 * Method in charge of getting idState's value .
 	 * @return the idState
 	 */
-	public Integer getIdState() {
+	public int getIdState() {
 		return idState;
 	}
 
@@ -50,7 +69,7 @@ public class CreateStateRequest implements Comparable<CreateStateRequest> {
 	 * Method in charge of setting idState's value.
 	 * @param idState the idState to set
 	 */
-	public void setIdState(Integer idState) {
+	public void setIdState(int idState) {
 		this.idState = idState;
 	}
 
@@ -69,14 +88,7 @@ public class CreateStateRequest implements Comparable<CreateStateRequest> {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-
-	/**
-	 * @{inheritDoc}
-	 */
-	@Override
-	public int compareTo(CreateStateRequest o) {
-
-		return o.getLabel().compareToIgnoreCase(this.label);
-	}
+	
+	
 
 }

@@ -3,8 +3,6 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -40,10 +37,7 @@ public class Library {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	@JoinColumn( name="idContact", nullable=false )
 	private Contact contact;
-	
-	@OneToMany( targetEntity=Book.class, mappedBy="library", fetch = FetchType.LAZY)
-	private Set<Book> books;
-	
+		
 	/**
 	 * Constructor.
 	 */
@@ -57,10 +51,9 @@ public class Library {
 	 * @param contact
 	 * @param books
 	 */
-	public Library(String name, Contact contact, Set<Book> books) {
+	public Library(String name, Contact contact) {
 		this.name = name;
 		this.contact = contact;
-		this.books = books;
 	}
 
 	/**
@@ -70,11 +63,10 @@ public class Library {
 	 * @param contact
 	 * @param books
 	 */
-	public Library(int idLibrary, String name, Contact contact, Set<Book> books) {
+	public Library(int idLibrary, String name, Contact contact) {
 		this.idLibrary = idLibrary;
 		this.name = name;
 		this.contact = contact;
-		this.books = books;
 	}
 
 	/**
@@ -126,29 +118,13 @@ public class Library {
 	}
 
 	/**
-	 * Method in charge of getting books's value .
-	 * @return the books
-	 */
-	public Set<Book> getBooks() {
-		return books;
-	}
-
-	/**
-	 * Method in charge of setting books's value.
-	 * @param books the books to set
-	 */
-	public void setBooks(Set<Book> books) {
-		this.books = books;
-	}
-
-	/**
 	 * @{inheritDoc}
 	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((books == null) ? 0 : books.hashCode());
+		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
 		result = prime * result + idLibrary;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -166,11 +142,11 @@ public class Library {
 			return false;
 		}
 		Library other = (Library) obj;
-		if (books == null) {
-			if (other.books != null) {
+		if (contact == null) {
+			if (other.contact != null) {
 				return false;
 			}
-		} else if (!books.equals(other.books)) {
+		} else if (!contact.equals(other.contact)) {
 			return false;
 		}
 		if (idLibrary != other.idLibrary) {
@@ -185,6 +161,6 @@ public class Library {
 		}
 		return true;
 	}
-	
+
 	
 }

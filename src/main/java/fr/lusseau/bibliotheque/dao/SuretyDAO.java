@@ -21,7 +21,9 @@ public interface SuretyDAO extends JpaRepository<Surety, Integer>{
 
 	
 	@Query(value = "SELECT SUM(c.value) total, COUNT(p.id_surety) FROM User u INNER JOIN Surety s ON s.id_surety = u.id_surety", nativeQuery = true)
-	public double sumCaution();
+	public double sumSurety();
+	
+	public Surety findByNbBooks(Integer nbBooks);
 	
 	
 }

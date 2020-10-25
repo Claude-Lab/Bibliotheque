@@ -22,10 +22,12 @@ public interface RoleService {
 	
 	public void deleteRole(Integer idRole);
 	
-	public Role findRoleByLabel(String label);
+	public Role findByLabel(String label);
 	
 	public List<Role> findByLabelContaining(String label);
 	
 	public boolean checkIfIdExists(Integer idRole);
+	
+	public List<Role> findAll();
 
 }

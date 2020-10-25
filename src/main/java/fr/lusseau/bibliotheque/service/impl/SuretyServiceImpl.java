@@ -3,6 +3,9 @@
  */
 package fr.lusseau.bibliotheque.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +57,30 @@ public class SuretyServiceImpl implements SuretyService {
 	@Override
 	public boolean checkIfSuretyExists(Integer idSurety) {
 		return dao.existsById(idSurety);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public List<Surety> findAll() {
+		return dao.findAll();
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Optional<Surety> findById(Integer idSurety) {
+		return dao.findById(idSurety);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Surety findByNbBooks(Integer nbBooks) {
+		return dao.findByNbBooks(nbBooks);
 	}
 
 }

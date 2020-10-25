@@ -37,6 +37,8 @@ public interface UserDAO extends JpaRepository<User, Integer> {
 	
 	List<User> findByLastNameContaining(String lastName);
 	
+//	User findOne(Integer idUser);
+	
 	long count();
 
 

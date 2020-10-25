@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.dto.request;
+package fr.lusseau.bibliotheque.dto;
 
 import fr.lusseau.bibliotheque.entity.Contact;
 import io.swagger.annotations.ApiModel;
@@ -10,38 +10,55 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  23 oct. 2020 - 19:00:35
+ * @date  25 oct. 2020 - 08:46:15
  * @author Claude LUSSEAU
  *
  */
-@ApiModel(value = "Create Library Model")
-public class CreateLibraryRequest implements Comparable<CreateLibraryRequest> {
+@ApiModel(value = "Request Library Model")
+public class LibraryRequestDTO implements Comparable<LibraryRequestDTO> {
 	
 	@ApiModelProperty(value = "Library id")
 	private int idLibrary;
-
+	
 	@ApiModelProperty(value = "Library name")
 	private String name;
 	
-	@ApiModelProperty(value = "Library Contact")
-	private ContactResponse contact;
+	@ApiModelProperty(value = "Library contact")
+	private Contact contact;
 	
+
 	/**
 	 * Constructor.
 	 */
-	public CreateLibraryRequest() {
+	public LibraryRequestDTO() {
 	}
+
 
 	/**
 	 * Constructor.
 	 * @param name
 	 * @param contact
 	 */
-	public CreateLibraryRequest(String name, ContactResponse contact) {
+	public LibraryRequestDTO(String name, Contact contact) {
 		super();
 		this.name = name;
 		this.contact = contact;
 	}
+
+
+	/**
+	 * Constructor.
+	 * @param idLibrary
+	 * @param name
+	 * @param contact
+	 */
+	public LibraryRequestDTO(int idLibrary, String name, Contact contact) {
+		super();
+		this.idLibrary = idLibrary;
+		this.name = name;
+		this.contact = contact;
+	}
+
 
 	/**
 	 * Method in charge of getting idLibrary's value .
@@ -51,6 +68,7 @@ public class CreateLibraryRequest implements Comparable<CreateLibraryRequest> {
 		return idLibrary;
 	}
 
+
 	/**
 	 * Method in charge of setting idLibrary's value.
 	 * @param idLibrary the idLibrary to set
@@ -58,6 +76,7 @@ public class CreateLibraryRequest implements Comparable<CreateLibraryRequest> {
 	public void setIdLibrary(int idLibrary) {
 		this.idLibrary = idLibrary;
 	}
+
 
 	/**
 	 * Method in charge of getting name's value .
@@ -67,6 +86,7 @@ public class CreateLibraryRequest implements Comparable<CreateLibraryRequest> {
 		return name;
 	}
 
+
 	/**
 	 * Method in charge of setting name's value.
 	 * @param name the name to set
@@ -75,27 +95,30 @@ public class CreateLibraryRequest implements Comparable<CreateLibraryRequest> {
 		this.name = name;
 	}
 
+
 	/**
 	 * Method in charge of getting contact's value .
 	 * @return the contact
 	 */
-	public ContactResponse getContact() {
+	public Contact getContact() {
 		return contact;
 	}
+
 
 	/**
 	 * Method in charge of setting contact's value.
 	 * @param contact the contact to set
 	 */
-	public void setContact(ContactResponse contact) {
+	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
+
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public int compareTo(CreateLibraryRequest o) {
+	public int compareTo(LibraryRequestDTO o) {
 		return o.getName().compareTo(this.name);
 	}
 	
