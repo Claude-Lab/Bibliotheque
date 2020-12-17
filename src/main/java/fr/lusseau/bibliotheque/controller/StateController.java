@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.StateRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.StateRequestDTO;
 import fr.lusseau.bibliotheque.entity.State;
 import fr.lusseau.bibliotheque.service.impl.StateServiceImpl;
 import io.swagger.annotations.Api;
@@ -36,8 +37,9 @@ import io.swagger.annotations.ApiResponses;
  * @author Claude LUSSEAU
  *
  */
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/api/v1")
+@RequestMapping("states")
 @Api(value = "State Rest Controller: contient toutes les operations pour la gestion des états")
 public class StateController {
 
@@ -50,7 +52,7 @@ public class StateController {
 	 * @param categorie
 	 * @return
 	 */
-	@PostMapping("/states/addState")
+	@PostMapping("/addState")
 	@ApiOperation(value = "Ajouter un nouvel état", response = StateRequestDTO.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : le livre existe déjà"),
 			@ApiResponse(code = 201, message = "Création : l'état a été correctement créé"),
@@ -73,7 +75,7 @@ public class StateController {
 	 * Methode en charge de lister toutes les catégories de la base de données.
 	 * @return
 	 */
-	@GetMapping("/states")
+	@GetMapping("")
 	@ApiOperation(value="List all states of the Libraries", response = List.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
@@ -98,7 +100,7 @@ public class StateController {
 	 * @param idCategorie
 	 * @return
 	 */
-	@DeleteMapping("/states/deleteState/{idState}")
+	@DeleteMapping("/deleteState/{idState}")
 	@ApiOperation(value = "Supprimer un état. Si l'état n'existe pas, rien ne se passe", response = String.class)
 	@ApiResponse(code = 204, message = "Pas de donnée: état correctement supprimé")
 	public ResponseEntity<String> deleteState(@PathVariable Integer idState) {

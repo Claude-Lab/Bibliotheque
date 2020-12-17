@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import fr.lusseau.bibliotheque.entity.Loan;
 
@@ -19,7 +19,7 @@ import fr.lusseau.bibliotheque.entity.Loan;
  * @author Claude LUSSEAU
  *
  */
-@Repository
+@RepositoryRestResource
 public interface LoanDAO extends JpaRepository<Loan, Integer> {
 
 	public List<Loan> findByEndDateBefore(LocalDate maxEndDate);

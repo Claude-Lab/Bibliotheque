@@ -33,6 +33,9 @@ public class Library {
 	@Column(unique = true, name = "name")
 	private String name;
 	
+	@Column(unique = true, name = "email")
+	private String email;
+	
 	
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	@JoinColumn( name="idContact", nullable=false )
@@ -51,9 +54,10 @@ public class Library {
 	 * @param contact
 	 * @param books
 	 */
-	public Library(String name, Contact contact) {
+	public Library(String name, Contact contact, String email) {
 		this.name = name;
 		this.contact = contact;
+		this.email = email;
 	}
 
 	/**
@@ -63,10 +67,11 @@ public class Library {
 	 * @param contact
 	 * @param books
 	 */
-	public Library(int idLibrary, String name, Contact contact) {
+	public Library(int idLibrary, String name, Contact contact, String email) {
 		this.idLibrary = idLibrary;
 		this.name = name;
 		this.contact = contact;
+		this.email = email;
 	}
 
 	/**
@@ -118,6 +123,22 @@ public class Library {
 	}
 
 	/**
+	 * Method in charge of getting email's value .
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * Method in charge of setting email's value.
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
 	 * @{inheritDoc}
 	*/
 	@Override
@@ -125,6 +146,7 @@ public class Library {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + idLibrary;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -147,6 +169,13 @@ public class Library {
 				return false;
 			}
 		} else if (!contact.equals(other.contact)) {
+			return false;
+		}
+		if (email == null) {
+			if (other.email != null) {
+				return false;
+			}
+		} else if (!email.equals(other.email)) {
 			return false;
 		}
 		if (idLibrary != other.idLibrary) {

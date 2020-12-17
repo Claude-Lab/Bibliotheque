@@ -5,7 +5,7 @@ package fr.lusseau.bibliotheque.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import fr.lusseau.bibliotheque.entity.Surety;
 
@@ -16,7 +16,7 @@ import fr.lusseau.bibliotheque.entity.Surety;
  * @author Claude LUSSEAU
  *
  */
-@Repository
+@RepositoryRestResource
 public interface SuretyDAO extends JpaRepository<Surety, Integer>{
 
 	

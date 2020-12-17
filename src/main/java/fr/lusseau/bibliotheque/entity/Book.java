@@ -31,8 +31,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Book")
-public class Book {
+public class Book  {
 	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idBook")
@@ -53,16 +54,16 @@ public class Book {
 	@Column(name = "nbOfCopies")
 	private Integer nbOfCopies;
 	
-	@ManyToMany(targetEntity= Author.class, cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable( name = "book_Author",
-                joinColumns = @JoinColumn( name = "idBook", referencedColumnName = "idBook" ),
-                inverseJoinColumns = @JoinColumn( name = "idAuthor", referencedColumnName = "idAuthor" ))
+                joinColumns = @JoinColumn( name = "idBook"),
+                inverseJoinColumns = @JoinColumn( name = "idAuthor"))
 	private Set<Author> authors = new HashSet<Author>();
 	
-	@ManyToMany(targetEntity= Category.class, cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-	@JoinTable(  name = "book__Category",
-            joinColumns = @JoinColumn( name = "idBook", referencedColumnName = "idBook"),
-            inverseJoinColumns = @JoinColumn( name = "code", referencedColumnName = "code" ))
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(  name = "book_Category",
+            joinColumns = @JoinColumn( name = "idBook"),
+            inverseJoinColumns = @JoinColumn( name = "idCategory"))
 	private Set<Category> categories = new HashSet<Category>();
 	
 	@Lob

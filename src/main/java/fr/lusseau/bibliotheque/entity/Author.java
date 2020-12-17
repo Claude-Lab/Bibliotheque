@@ -3,6 +3,7 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,9 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "Author")
-public class Author {
+public class Author implements Serializable {
+
+	private static final long serialVersionUID = -1040204095656578272L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +45,7 @@ public class Author {
 	@Transient
 	private String fullName = firstName + " " + lastName;
 
-	@ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "authors", fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.MERGE, mappedBy = "authors", fetch = FetchType.LAZY)
 	private Set<Book> books = new HashSet<Book>();
 	
 	/**

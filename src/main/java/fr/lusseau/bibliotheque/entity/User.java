@@ -3,202 +3,286 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Class in charge of defining User entity.
+ * 
  * @Version Bibliotheque -v1,0
- * @date  23 oct. 2020 - 12:32:19
+ * @date 23 oct. 2020 - 12:32:19
  * @author Claude LUSSEAU
  *
  */
 @Entity
-@Table(name = "User")
+@Table(name = "User", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
+		@UniqueConstraint(columnNames = { "email" }) })
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idUser")
-	private int idUser;
+	private Long id;
 
-	@Column(name = "firstName", nullable = false)
-	private String firstName;
+	@NotBlank
+	@Size(max = 20)
+	private String firstname;
 
-	@Column(name = "lastName", nullable = false)
-	private String lastName;
+	@NotBlank
+	@Size(max = 20)
+	private String lastname;
 
-	@Transient
-	private String fullName = firstName + " " + lastName;
+	@NotBlank
+	private String username;
 
-	@Column(name = "password", nullable = false)
+	@NotBlank
+	@Size(max = 50)
+	@Email
+	private String email;
+
+	@NotBlank
+	@Size(max = 120)
 	private String password;
 
-	@ManyToOne(fetch = FetchType.LAZY )
-	@JoinColumn(name = "idRole", nullable = false)
-	private Role role;
+	@NotBlank
+	@Size(max = 10)
+	private String phone;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "idContact", nullable = false)
-	private Contact contact;
+	@NotBlank
+	@Size(max = 120)
+	private String address;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@NotBlank
+	@Size(min = 5, max = 5)
+	private String zip;
+
+	@NotBlank
+	@Size(max = 60)
+	private String city;
+
+	@NotBlank
+	@DateTimeFormat
+	private LocalDateTime createdAt;
+
+	@NotBlank
+	@DateTimeFormat
+	private LocalDateTime updatedAt;
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "idSurety", nullable = false)
 	private Surety surety;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
 	private Set<Loan> loans = new HashSet<Loan>();
 
-	@Column(name = "registrationDate", nullable = false)
-	private LocalDate registrationDate;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@NotNull
+	private Set<Role> roles = new HashSet<>();
 
-	@Column(name = "enable", nullable = false)
-	private boolean enabled;
-	
 	/**
-	 * Constructor.
+	 * Constructor without parameter.
 	 */
 	public User() {
-		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Constructor for registration.
+	 * 
+	 * @param firstname
+	 * @param lastname
+	 * @param username
+	 * @param email
+	 * @param password
+	 * @param phone
+	 * @param address
+	 * @param zip
+	 * @param city
+	 * @param createdAt
+	 * @param updatedAt
+	 * @param surety
+	 * @param loans
+	 * @param roles
+	 */
+	public User(@NotBlank @Size(max = 20) String firstname, @NotBlank @Size(max = 20) String lastname,
+			@NotBlank String username, @NotBlank @Size(max = 50) @Email String email,
+			@NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 10) String phone,
+			@NotBlank @Size(max = 120) String address, @NotBlank @Size(min = 5, max = 5) String zip,
+			@NotBlank @Size(max = 60) String city, @NotBlank LocalDateTime createdAt, @NotBlank LocalDateTime updatedAt,
+			Surety surety, Set<Loan> loans, @NotNull Set<Role> roles) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.phone = phone;
+		this.address = address;
+		this.zip = zip;
+		this.city = city;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.surety = surety;
+		this.loans = loans;
+		this.roles = roles;
 	}
 
 	/**
 	 * Constructor.
-	 * @param firstName
-	 * @param lastName
-	 * @param fullName
+	 * 
+	 * @param id
+	 * @param firstname
+	 * @param lastname
+	 * @param username
+	 * @param email
 	 * @param password
-	 * @param role
-	 * @param contact
+	 * @param phone
+	 * @param address
+	 * @param zip
+	 * @param city
+	 * @param createdAt
+	 * @param updatedAt
 	 * @param surety
 	 * @param loans
-	 * @param registrationDate
-	 * @param enabled
+	 * @param roles
 	 */
-	public User(String firstName, String lastName, String fullName, String password, Role role, Contact contact,
-			Surety surety, Set<Loan> loans, LocalDate registrationDate, boolean enabled) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fullName = fullName;
+	public User(Long id, @NotBlank @Size(max = 20) String firstname, @NotBlank @Size(max = 20) String lastname,
+			@NotBlank String username, @NotBlank @Size(max = 50) @Email String email,
+			@NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 10) String phone,
+			@NotBlank @Size(max = 120) String address, @NotBlank @Size(min = 5, max = 5) String zip,
+			@NotBlank @Size(max = 60) String city, @NotBlank LocalDateTime createdAt, @NotBlank LocalDateTime updatedAt,
+			Surety surety, Set<Loan> loans, @NotNull Set<Role> roles) {
+		super();
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.email = email;
 		this.password = password;
-		this.role = role;
-		this.contact = contact;
+		this.phone = phone;
+		this.address = address;
+		this.zip = zip;
+		this.city = city;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.surety = surety;
 		this.loans = loans;
-		this.registrationDate = registrationDate;
-		this.enabled = enabled;
+		this.roles = roles;
 	}
 
 	/**
-	 * Constructor.
-	 * @param idUser
-	 * @param firstName
-	 * @param lastName
-	 * @param fullName
-	 * @param password
-	 * @param role
-	 * @param contact
-	 * @param surety
-	 * @param loans
-	 * @param registrationDate
-	 * @param enabled
+	 * Method in charge of getting id's value.
+	 * 
+	 * @return the id
 	 */
-	public User(int idUser, String firstName, String lastName, String fullName, String password, Role role,
-			Contact contact, Surety surety, Set<Loan> loans, LocalDate registrationDate, boolean enabled) {
-		this.idUser = idUser;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fullName = fullName;
-		this.password = password;
-		this.role = role;
-		this.contact = contact;
-		this.surety = surety;
-		this.loans = loans;
-		this.registrationDate = registrationDate;
-		this.enabled = enabled;
+	public Long getId() {
+		return id;
 	}
 
 	/**
-	 * Method in charge of getting idUser's value .
-	 * @return the idUser
+	 * Method in charge of setting id's value.
+	 * 
+	 * @param id the id to set
 	 */
-	public int getIdUser() {
-		return idUser;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	/**
-	 * Method in charge of setting idUser's value.
-	 * @param idUser the idUser to set
+	 * Method in charge of getting firstname's value .
+	 * 
+	 * @return the firstname
 	 */
-	public void setIdUser(int idUser) {
-		this.idUser = idUser;
+	public String getFirstname() {
+		return firstname;
 	}
 
 	/**
-	 * Method in charge of getting firstName's value .
-	 * @return the firstName
+	 * Method in charge of setting firstname's value.
+	 * 
+	 * @param firstname the firstname to set
 	 */
-	public String getFirstName() {
-		return firstName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 	/**
-	 * Method in charge of setting firstName's value.
-	 * @param firstName the firstName to set
+	 * Method in charge of getting lastname's value .
+	 * 
+	 * @return the lastname
 	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public String getLastname() {
+		return lastname;
 	}
 
 	/**
-	 * Method in charge of getting lastName's value .
-	 * @return the lastName
+	 * Method in charge of setting lastname's value.
+	 * 
+	 * @param lastname the lastname to set
 	 */
-	public String getLastName() {
-		return lastName;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	/**
-	 * Method in charge of setting lastName's value.
-	 * @param lastName the lastName to set
+	 * Method in charge of getting username's value .
+	 * 
+	 * @return the username
 	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public String getUsername() {
+		return username;
 	}
 
 	/**
-	 * Method in charge of getting fullName's value .
-	 * @return the fullName
+	 * Method in charge of setting username's value.
+	 * 
+	 * @param username the username to set
 	 */
-	public String getFullName() {
-		return fullName;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
-	 * Method in charge of setting fullName's value.
-	 * @param fullName the fullName to set
+	 * Method in charge of getting email's value .
+	 * 
+	 * @return the email
 	 */
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * Method in charge of setting email's value.
+	 * 
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	/**
 	 * Method in charge of getting password's value .
+	 * 
 	 * @return the password
 	 */
 	public String getPassword() {
@@ -207,6 +291,7 @@ public class User {
 
 	/**
 	 * Method in charge of setting password's value.
+	 * 
 	 * @param password the password to set
 	 */
 	public void setPassword(String password) {
@@ -214,39 +299,116 @@ public class User {
 	}
 
 	/**
-	 * Method in charge of getting role's value .
-	 * @return the role
+	 * Method in charge of getting phone's value .
+	 * 
+	 * @return the phone
 	 */
-	public Role getRole() {
-		return role;
+	public String getPhone() {
+		return phone;
 	}
 
 	/**
-	 * Method in charge of setting role's value.
-	 * @param role the role to set
+	 * Method in charge of setting phone's value.
+	 * 
+	 * @param phone the phone to set
 	 */
-	public void setRole(Role role) {
-		this.role = role;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	/**
-	 * Method in charge of getting contact's value .
-	 * @return the contact
+	 * Method in charge of getting address's value .
+	 * 
+	 * @return the address
 	 */
-	public Contact getContact() {
-		return contact;
+	public String getAddress() {
+		return address;
 	}
 
 	/**
-	 * Method in charge of setting contact's value.
-	 * @param contact the contact to set
+	 * Method in charge of setting address's value.
+	 * 
+	 * @param address the address to set
 	 */
-	public void setContact(Contact contact) {
-		this.contact = contact;
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	/**
+	 * Method in charge of getting zip's value .
+	 * 
+	 * @return the zip
+	 */
+	public String getZip() {
+		return zip;
+	}
+
+	/**
+	 * Method in charge of setting zip's value.
+	 * 
+	 * @param zip the zip to set
+	 */
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	/**
+	 * Method in charge of getting city's value .
+	 * 
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * Method in charge of setting city's value.
+	 * 
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/**
+	 * Method in charge of getting createdAt's value .
+	 * 
+	 * @return the createdAt
+	 */
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	/**
+	 * Method in charge of setting createdAt's value.
+	 * 
+	 * @param createdAt the createdAt to set
+	 */
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	/**
+	 * Method in charge of getting updatedAt's value .
+	 * 
+	 * @return the updatedAt
+	 */
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	/**
+	 * Method in charge of setting updatedAt's value.
+	 * 
+	 * @param updatedAt the updatedAt to set
+	 */
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	/**
 	 * Method in charge of getting surety's value .
+	 * 
 	 * @return the surety
 	 */
 	public Surety getSurety() {
@@ -255,6 +417,7 @@ public class User {
 
 	/**
 	 * Method in charge of setting surety's value.
+	 * 
 	 * @param surety the surety to set
 	 */
 	public void setSurety(Surety surety) {
@@ -263,6 +426,7 @@ public class User {
 
 	/**
 	 * Method in charge of getting loans's value .
+	 * 
 	 * @return the loans
 	 */
 	public Set<Loan> getLoans() {
@@ -271,6 +435,7 @@ public class User {
 
 	/**
 	 * Method in charge of setting loans's value.
+	 * 
 	 * @param loans the loans to set
 	 */
 	public void setLoans(Set<Loan> loans) {
@@ -278,132 +443,21 @@ public class User {
 	}
 
 	/**
-	 * Method in charge of getting registrationDate's value .
-	 * @return the registrationDate
+	 * Method in charge of getting roles's value .
+	 * 
+	 * @return the roles
 	 */
-	public LocalDate getRegistrationDate() {
-		return registrationDate;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
 	/**
-	 * Method in charge of setting registrationDate's value.
-	 * @param registrationDate the registrationDate to set
+	 * Method in charge of setting roles's value.
+	 * 
+	 * @param roles the roles to set
 	 */
-	public void setRegistrationDate(LocalDate registrationDate) {
-		this.registrationDate = registrationDate;
-	}
-
-	/**
-	 * Method in charge of getting enabled's value .
-	 * @return the enabled
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * Method in charge of setting enabled's value.
-	 * @param enabled the enabled to set
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
-		result = prime * result + (enabled ? 1231 : 1237);
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
-		result = prime * result + idUser;
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((registrationDate == null) ? 0 : registrationDate.hashCode());
-		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((surety == null) ? 0 : surety.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof User)) {
-			return false;
-		}
-		User other = (User) obj;
-		if (contact == null) {
-			if (other.contact != null) {
-				return false;
-			}
-		} else if (!contact.equals(other.contact)) {
-			return false;
-		}
-		if (enabled != other.enabled) {
-			return false;
-		}
-		if (firstName == null) {
-			if (other.firstName != null) {
-				return false;
-			}
-		} else if (!firstName.equals(other.firstName)) {
-			return false;
-		}
-		if (fullName == null) {
-			if (other.fullName != null) {
-				return false;
-			}
-		} else if (!fullName.equals(other.fullName)) {
-			return false;
-		}
-		if (idUser != other.idUser) {
-			return false;
-		}
-		if (lastName == null) {
-			if (other.lastName != null) {
-				return false;
-			}
-		} else if (!lastName.equals(other.lastName)) {
-			return false;
-		}
-		if (password == null) {
-			if (other.password != null) {
-				return false;
-			}
-		} else if (!password.equals(other.password)) {
-			return false;
-		}
-		if (registrationDate == null) {
-			if (other.registrationDate != null) {
-				return false;
-			}
-		} else if (!registrationDate.equals(other.registrationDate)) {
-			return false;
-		}
-		if (role == null) {
-			if (other.role != null) {
-				return false;
-			}
-		} else if (!role.equals(other.role)) {
-			return false;
-		}
-		if (surety == null) {
-			if (other.surety != null) {
-				return false;
-			}
-		} else if (!surety.equals(other.surety)) {
-			return false;
-		}
-		return true;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 }

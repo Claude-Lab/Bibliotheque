@@ -3,31 +3,20 @@
  */
 package fr.lusseau.bibliotheque.service;
 
-import java.util.List;
+import java.util.Optional;
 
 import fr.lusseau.bibliotheque.entity.Role;
+import fr.lusseau.bibliotheque.entity.RoleName;
 
 /**
- * Classe en charge de
+ * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  18 oct. 2020 - 07:44:43
+ * @date  2 nov. 2020 - 17:39:11
  * @author Claude LUSSEAU
  *
  */
 public interface RoleService {
 	
-	public Role saveRole (Role role);
-	
-	public Role updateRole (Role role);
-	
-	public void deleteRole(Integer idRole);
-	
-	public Role findByLabel(String label);
-	
-	public List<Role> findByLabelContaining(String label);
-	
-	public boolean checkIfIdExists(Integer idRole);
-	
-	public List<Role> findAll();
-
+	Optional<Role> findByName(RoleName roleName);
+	 
 }

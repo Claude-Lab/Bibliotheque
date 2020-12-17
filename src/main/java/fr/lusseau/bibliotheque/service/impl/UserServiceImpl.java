@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +16,9 @@ import fr.lusseau.bibliotheque.service.UserService;
 
 /**
  * Classe en charge de
+ * 
  * @Version Bibliotheque -v1,0
- * @date  18 oct. 2020 - 07:56:22
+ * @date 18 oct. 2020 - 07:56:22
  * @author Claude LUSSEAU
  *
  */
@@ -27,9 +27,10 @@ import fr.lusseau.bibliotheque.service.UserService;
 public class UserServiceImpl implements UserService {
 
 	
-	
 	@Autowired
 	private UserDAO dao;
+	
+	
 	/**
 	 * @{inheritDoc}
 	*/
@@ -50,57 +51,34 @@ public class UserServiceImpl implements UserService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public void deleteUser(Integer idUser) {
-		dao.deleteById(idUser);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean checkIfIdExists(Integer idPersonne) {
-		return dao.existsById(idPersonne);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public User findUserByContactEmail(@Param("email") String email) {
-		return dao.findUserByContactEmail(email);
+	public void deleteUser(Long id) {
+		dao.deleteById(id);
 	}
 	
 	/**
 	 * @{inheritDoc}
 	*/
-	public User findPersonneById(Integer personneId) {
-		return dao.getOne(personneId);
+	public Optional<User> findById(Long id) {
+		return dao.findById(id);
 	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public List<User> findByLastNameLikeIgnoreCase(String name) {
-		return dao.findByLastNameLikeIgnoreCase(name);
+	public List<User> findByLastnameLikeIgnoreCase(String lastname) {
+		return dao.findByLastnameLikeIgnoreCase(lastname);
 	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public List<User> findByLastNameContaining(String name) {
-		return dao.findByLastNameContaining(name);
+	public List<User> findByLastnameContaining(String lastname) {
+		return dao.findByLastnameContaining(lastname);
 	}
 	
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public Optional<User> findById(Integer idUser) {
-		return dao.findById(idUser);
-	}
-	
+		
 	/**
 	 * @{inheritDoc}
 	*/
@@ -109,17 +87,40 @@ public class UserServiceImpl implements UserService {
 		return dao.findAll();
 	}
 
-//	/**
-//	 * @{inheritDoc}
-//	*/
-//	@Override
-//	public Personne findEmail(Personne personne) {
-//		return dao.findEmail(personne);
-//	}
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public User findByUsername(String username) {
+		return dao.findByUsername(username);
+	}
 
-	
 
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public User findByEmail(String email) {
+		return dao.findByEmail(email);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Optional<User> findByUsernameOrEmail(String username, String email) {
+		return dao.findByUsernameOrEmail(username, email);
+	}
 	
-	
+	@Override
+	public boolean existsByUsername(String username) {
+		return dao.existsByUsername(username);
+	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+    	return dao.existsByEmail(email);
+    }
 
 }

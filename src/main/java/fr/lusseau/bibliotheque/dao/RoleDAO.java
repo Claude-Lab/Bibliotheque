@@ -3,25 +3,25 @@
  */
 package fr.lusseau.bibliotheque.dao;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import fr.lusseau.bibliotheque.entity.Role;
+import fr.lusseau.bibliotheque.entity.RoleName;
 
 /**
- * Classe en charge de
+ * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  14 août 2020 - 11:09:42
+ * @date  2 nov. 2020 - 17:37:44
  * @author Claude LUSSEAU
  *
  */
-@Repository
-public interface RoleDAO extends JpaRepository<Role, Integer> {
+@RepositoryRestResource
+public interface RoleDAO extends JpaRepository<Role, Long>{
 	
-	Role findByLabel(String label);
+	Optional<Role> findByName(RoleName roleName);
 	
-	public List<Role> findByLabelContaining(String label);
 
 }

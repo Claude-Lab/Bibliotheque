@@ -6,7 +6,7 @@ package fr.lusseau.bibliotheque.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import fr.lusseau.bibliotheque.entity.Editor;
 
@@ -17,7 +17,7 @@ import fr.lusseau.bibliotheque.entity.Editor;
  * @author Claude LUSSEAU
  *
  */
-@Repository
+@RepositoryRestResource
 public interface EditorDAO extends JpaRepository<Editor, Integer> {
 	
 	List<Editor> findByNameContaining(String name);

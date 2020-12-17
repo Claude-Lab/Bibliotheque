@@ -1,11 +1,9 @@
-/**
- * 
- */
 package fr.lusseau.bibliotheque.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,11 +26,12 @@ import io.swagger.annotations.ApiResponses;
  * @author Claude LUSSEAU
  *
  */
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/api/v1")
+@RequestMapping("contact")
 @Api(value = "Contact Rest Controller: contient toutes les operations pour la gestion des Coordonnées")
 public class ContactController {
-	
+
 	@Autowired
 	ContactServiceImpl contactService;
 	
@@ -42,7 +41,7 @@ public class ContactController {
 	 * @param contact
 	 * @return
 	 */
-	@PostMapping("/contact/addContact")
+	@PostMapping("/addContact")
 	@ApiOperation(value = "Ajouter une nouvelle Coordonnee", response = Contact.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : la Coordonnee existe déjà"),
 			@ApiResponse(code = 201, message = "Création : la Coordonnee a été correctement créée"),
@@ -65,7 +64,7 @@ public class ContactController {
 	 * @param coordonneeRequest
 	 * @return
 	 */
-	@PutMapping("/updateCoordonnee")
+	@PutMapping("/updateContact")
 	@ApiOperation(value = "Modifie une coordonnee existante", response = Contact.class)
 	@ApiResponses(value = { @ApiResponse(code = 404, message = "Not Found : L'Bibliotheque.trice n'existe pas"),
 			@ApiResponse(code = 200, message = "Ok: La coordonnee a été mise à jour"),
@@ -86,7 +85,7 @@ public class ContactController {
 	 * Methode en charge de d'afficher une coordonnee de la base de données.
 	 * @return
 	 */
-	@GetMapping("/contact/{idContact}")
+	@GetMapping("/{idContact}")
 	@ApiOperation(value="affiche une coordonnee", response = Contact.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok !"),

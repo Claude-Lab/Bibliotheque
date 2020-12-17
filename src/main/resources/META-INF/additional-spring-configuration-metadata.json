@@ -8,5 +8,135 @@
     "name": "jwt.get.token.uri",
     "type": "java.lang.String",
     "description": "A description for 'jwt.get.token.uri'"
+  },
+  {
+    "name": "bibliotheque.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtSecret'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpiration",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpiration'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpiration",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpiration'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpiration",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpiration'"
+  },
+  {
+    "name": "bibliotheque.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtSecret'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpiration",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpiration'"
+  },
+  {
+    "name": "bibliotheque.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtSecret'"
+  },
+  {
+    "name": "bibliotheque.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtSecret'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpiration",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpiration'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpirationMs",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpirationMs'"
+  },
+  {
+    "name": "bibliotheque.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtSecret'"
+  },
+  {
+    "name": "bibliotheque.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtSecret'"
+  },
+  {
+    "name": "bibliotheque.app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtSecret'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpirationMs",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpirationMs'"
+  },
+  {
+    "name": "bibliotheque.app.jwtExpirationMs",
+    "type": "java.lang.String",
+    "description": "A description for 'bibliotheque.app.jwtExpirationMs'"
+  },
+  {
+    "name": "jwt.header",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.header'"
+  },
+  {
+    "name": "jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.expiration'"
+  },
+  {
+    "name": "jwt.route.authentication.path",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.route.authentication.path'"
+  },
+  {
+    "name": "jwt.route.authentication.refresh",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.route.authentication.refresh'"
+  },
+  {
+    "name": "app.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwtSecret'"
+  },
+  {
+    "name": "app.jwtExpirationInMs",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwtExpirationInMs'"
+  },
+  {
+    "name": "app.jwtExpirationInMs",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwtExpirationInMs'"
+  },
+  {
+    "name": "app.jwtExpirationInMs",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwtExpirationInMs'"
+  },
+  {
+    "name": "app.jwtExpirationInMs",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwtExpirationInMs'"
+  },
+  {
+    "name": "app.jwtExpirationInMs",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwtExpirationInMs'"
+  },
+  {
+    "name": "app.jwtExpirationInMs",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwtExpirationInMs'"
   }
 ]}

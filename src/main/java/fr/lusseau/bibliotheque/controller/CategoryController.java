@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.CategoryRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.CategoryRequestDTO;
 import fr.lusseau.bibliotheque.entity.Category;
 import fr.lusseau.bibliotheque.service.impl.CategoryServiceImpl;
 import io.swagger.annotations.Api;
@@ -37,9 +38,10 @@ import io.swagger.annotations.ApiResponses;
  * @author Claude LUSSEAU
  *
  */
+@CrossOrigin("*")
 @RestController
 @Api(value = "Category Rest Controller: Contient toute les opération pour la gestion des categories")
-@RequestMapping("/rest/api/v1")
+@RequestMapping("categories")
 public class CategoryController {
 
 //	public static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
@@ -53,7 +55,7 @@ public class CategoryController {
 	 * @param categorie
 	 * @return
 	 */
-	@PostMapping("/categories/addCategory")
+	@PostMapping("/addCategory")
 	@ApiOperation(value = "Ajouter une nouvelle catégorie", response = CategoryRequestDTO.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : la catégorie existe déjà"),
 			@ApiResponse(code = 201, message = "Création : la catégorie a été correctement créée"),
@@ -76,7 +78,7 @@ public class CategoryController {
 	 * Methode en charge de lister toutes les catégories de la base de données.
 	 * @return
 	 */
-	@GetMapping("/categories")
+	@GetMapping("")
 	@ApiOperation(value="List all book categories of the Library", response = List.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
@@ -101,7 +103,7 @@ public class CategoryController {
 	 * @param idCategorie
 	 * @return
 	 */
-	@DeleteMapping("/category/deleteCategory/{idCategory}")
+	@DeleteMapping("/deleteCategory/{idCategory}")
 	@ApiOperation(value = "Supprimer une catégorie. Si la categorie n'existe pas, rien ne se passe", response = String.class)
 	@ApiResponse(code = 204, message = "Pas de donnée: catégorie correctement supprimée")
 	public ResponseEntity<String> deleteCategory(@PathVariable Integer idCategory) {
@@ -114,7 +116,7 @@ public class CategoryController {
 	 * @param categorieRequest
 	 * @return
 	 */
-	@PutMapping("/category/updateCategory")
+	@PutMapping("/updateCategory")
 	@ApiOperation(value = "Modifie une categorie existante", response = Category.class)
 	@ApiResponses(value = { @ApiResponse(code = 404, message = "Not Found : L'auteur.trice n'existe pas"),
 			@ApiResponse(code = 200, message = "Ok: L'auteur.trice a été mis à jour"),

@@ -20,39 +20,70 @@ repositories {
 }
 
 dependencies {
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.3.4.RELEASE', ext: 'pom'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-jersey'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	//implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.4.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-actuator-autoconfigure', version: '2.4.1.RELEASE'
+      compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.5.0.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client', version: '2.4.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-resource-server', version: '2.4.1'
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.4.0'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.4.1.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.4.1.RELEASE', ext: 'pom'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas', version: '2.4.1.RELEASE'
+  
+	
+	runtimeOnly 'mysql:mysql-connector-java'
+	
 	providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 	compile group: 'javax.servlet', name: 'jstl', version: '1.2'
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	
 	compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.1.6.Final'
 	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.22.Final'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.3.4.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-actuator-autoconfigure', version: '2.3.4.RELEASE'
+
 	compile group: 'org.apache.tomcat', name: 'tomcat-jsp-api', version: '9.0.37'
 	providedCompile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.39'
 	compile group: 'org.apache.tomcat', name: 'tomcat-jasper', version: '9.0.39'
+	
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.3'
 	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.3'
+	
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
     compile group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.4.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest', version: '2.3.4.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.3.4.RELEASE'
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.2'
     compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+    
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
 
+    // compile group: 'org.keycloak', name: 'keycloak-spring-boot-adapter-core', version: '11.0.3'
+    // compile group: 'org.keycloak', name: 'keycloak-spring-boot-starter', version: '11.0.3'
+    // compile group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: '11.0.3', ext: 'pom'
+    // compile group: 'org.keycloak', name: 'keycloak-adapter-core', version: '11.0.3'
+    // compile group: 'org.keycloak', name: 'keycloak-adapter-spi', version: '11.0.3'
+    // compile group: 'org.keycloak', name: 'keycloak-admin-client', version: '11.0.3'
+    // compile group: 'org.keycloak', name: 'keycloak-core', version: '11.0.3'
+    // providedCompile group: 'org.keycloak', name: 'keycloak-server-spi', version: '11.0.3'
+    
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    
+    testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.0-alpha1'
+    testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version: '2.0.0-alpha1'
+    
+    // providedCompile group: 'org.jboss.spec.javax.ejb', name: 'jboss-ejb-api_3.2_spec', version: '2.0.0.Final'
+    
+    // testCompile group: 'org.jboss.arquillian.graphene', name: 'graphene-webdriver', version: '2.3.2', ext: 'pom'
+    // compile group: 'org.jboss.arquillian.extension', name: 'arquillian-phantom-driver', version: '1.2.1.1'
+    
+    // compile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.4.1.Final'
+    
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

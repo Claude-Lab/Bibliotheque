@@ -3,11 +3,17 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
@@ -34,6 +40,9 @@ public class Category {
 	@Column(unique = true, nullable = false, name = "label")
 	private String label;
 	
+	@ManyToMany(cascade = CascadeType.MERGE, mappedBy = "categories", fetch = FetchType.LAZY)
+	private Set<Book> books = new HashSet<Book>();
+	
 	/**
 	 * Constructor.
 	 */
@@ -45,10 +54,13 @@ public class Category {
 	 * Constructor.
 	 * @param code
 	 * @param label
+	 * @param books
 	 */
-	public Category(String code, @NotBlank String label) {
+	public Category(String code, @NotBlank String label, Set<Book> books) {
+		super();
 		this.code = code;
 		this.label = label;
+		this.books = books;
 	}
 
 	/**
@@ -56,11 +68,14 @@ public class Category {
 	 * @param idCategory
 	 * @param code
 	 * @param label
+	 * @param books
 	 */
-	public Category(Integer idCategory, String code, @NotBlank String label) {
+	public Category(Integer idCategory, String code, @NotBlank String label, Set<Book> books) {
+		super();
 		this.idCategory = idCategory;
 		this.code = code;
 		this.label = label;
+		this.books = books;
 	}
 
 	/**
@@ -112,12 +127,29 @@ public class Category {
 	}
 
 	/**
+	 * Method in charge of getting books's value .
+	 * @return the books
+	 */
+	public Set<Book> getBooks() {
+		return books;
+	}
+
+	/**
+	 * Method in charge of setting books's value.
+	 * @param books the books to set
+	 */
+	public void setBooks(Set<Book> books) {
+		this.books = books;
+	}
+
+	/**
 	 * @{inheritDoc}
 	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((books == null) ? 0 : books.hashCode());
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		result = prime * result + ((idCategory == null) ? 0 : idCategory.hashCode());
 		result = prime * result + ((label == null) ? 0 : label.hashCode());
@@ -136,6 +168,13 @@ public class Category {
 			return false;
 		}
 		Category other = (Category) obj;
+		if (books == null) {
+			if (other.books != null) {
+				return false;
+			}
+		} else if (!books.equals(other.books)) {
+			return false;
+		}
 		if (code == null) {
 			if (other.code != null) {
 				return false;
@@ -159,7 +198,7 @@ public class Category {
 		}
 		return true;
 	}
-	
+
 	
 
 }

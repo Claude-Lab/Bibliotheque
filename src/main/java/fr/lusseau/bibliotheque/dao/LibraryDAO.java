@@ -5,10 +5,8 @@ package fr.lusseau.bibliotheque.dao;
 
 import java.util.List;
 
-import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import fr.lusseau.bibliotheque.entity.Library;
 
@@ -19,11 +17,9 @@ import fr.lusseau.bibliotheque.entity.Library;
  * @author Claude LUSSEAU
  *
  */
-@Repository
+@RepositoryRestResource
 public interface LibraryDAO extends JpaRepository<Library, Integer>{
-	
-	@Query(value = "select b.id_library, b.id_contact, c.email from Library b INNER JOIN Contact c ON  b.id_contact = c.id_contact where c.email= :email")
-	public Library findLibraryByContactEmail(@Param("email") String email);
+
 	
 	public List<Library> findByNameContaining(String name);
 	

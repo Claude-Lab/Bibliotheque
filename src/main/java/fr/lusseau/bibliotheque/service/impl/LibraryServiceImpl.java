@@ -6,7 +6,6 @@ package fr.lusseau.bibliotheque.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,13 +72,7 @@ public class LibraryServiceImpl implements LibraryService {
 		return dao.existsById(idLibrary);
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public Library findLibraryByContactEmail(@Param("email") String email) {
-		return dao.findLibraryByContactEmail(email);
-	}
+	
 
 	/**
 	 * @{inheritDoc}

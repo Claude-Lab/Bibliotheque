@@ -33,6 +33,9 @@ public class Editor {
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 	
+	@Column(name = "email", unique = true, nullable = true)
+	private String email;
+	
 
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name="idContact", nullable=false )
@@ -51,9 +54,10 @@ public class Editor {
 	 * @param contact
 	 * @param books
 	 */
-	public Editor(String name, Contact contact) {
+	public Editor(String name, String email, Contact contact) {
 		this.name = name;
 		this.contact = contact;
+		this.email = email;
 	}
 
 	/**
@@ -63,9 +67,10 @@ public class Editor {
 	 * @param contact
 	 * @param books
 	 */
-	public Editor(int idEditor, String name, Contact contact) {
+	public Editor(int idEditor, String name, String email, Contact contact) {
 		this.idEditor = idEditor;
 		this.name = name;
+		this.email = email;
 		this.contact = contact;
 	}
 
@@ -118,6 +123,22 @@ public class Editor {
 	}
 
 	/**
+	 * Method in charge of getting email's value .
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * Method in charge of setting email's value.
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
 	 * @{inheritDoc}
 	*/
 	@Override
@@ -125,6 +146,7 @@ public class Editor {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + idEditor;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -149,6 +171,13 @@ public class Editor {
 		} else if (!contact.equals(other.contact)) {
 			return false;
 		}
+		if (email == null) {
+			if (other.email != null) {
+				return false;
+			}
+		} else if (!email.equals(other.email)) {
+			return false;
+		}
 		if (idEditor != other.idEditor) {
 			return false;
 		}
@@ -162,5 +191,6 @@ public class Editor {
 		return true;
 	}
 
+	
 	
 }

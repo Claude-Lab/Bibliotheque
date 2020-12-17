@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.LibraryRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.LibraryRequestDTO;
 import fr.lusseau.bibliotheque.entity.Library;
 import fr.lusseau.bibliotheque.service.impl.LibraryServiceImpl;
 import io.swagger.annotations.Api;
@@ -35,8 +36,9 @@ import io.swagger.annotations.ApiResponses;
  * @author Claude LUSSEAU
  *
  */
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/api/v1/libraries")
+@RequestMapping("libraries")
 @Api(value = "Library Rest Controller: contient toutes les operations pour la gestion des bibliotheques")
 public class LibraryController {
 

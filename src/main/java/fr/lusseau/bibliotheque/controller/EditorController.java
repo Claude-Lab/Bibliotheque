@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.EditorRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.EditorRequestDTO;
 import fr.lusseau.bibliotheque.entity.Editor;
 import fr.lusseau.bibliotheque.service.impl.EditorServiceImpl;
 import io.swagger.annotations.Api;
@@ -35,8 +37,9 @@ import io.swagger.annotations.ApiResponses;
  * @author Claude LUSSEAU
  *
  */
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/rest/api/v1/editors")
+@RequestMapping("editors")
 @Api(value = "Editor Rest Controller: contient toutes les operations pour la gestion des éditeurs")
 public class EditorController {
 
@@ -134,18 +137,18 @@ public class EditorController {
 	 * @return
 	 */
 	@GetMapping("/{idEditor}")
-	@ApiOperation(value="affiche un éditeur", response = Editor.class)
+	@ApiOperation(value="affiche un éditeur", response = EditorRequestDTO.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok !"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
 	})
-//	public ResponseEntity<Editor> findEditor(@PathVariable Integer idEditor) {
-//		Optional<Editor> editor = editorService.findById(idEditor);
-//		if (editor != null) {
-//			return new ResponseEntity<Editor>(editor, HttpStatus.OK);
-//		}
-//		return new ResponseEntity<Editor>(HttpStatus.NO_CONTENT);
-//	}
+	public ResponseEntity<Editor> findEditor(@PathVariable Integer idEditor) {
+		Optional<Editor> editor = editorService.findById(idEditor);
+		if (editor != null) {
+			return new ResponseEntity<Editor>(HttpStatus.OK);
+		}
+		return new ResponseEntity<Editor>(HttpStatus.NO_CONTENT);
+	}
 	
 	/**
 	 * Transforme un entity Customer en un POJO CustomerDTO

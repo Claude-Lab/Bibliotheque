@@ -16,6 +16,8 @@ import fr.lusseau.bibliotheque.entity.Author;
  */
 public interface AuthorService {
 	
+	public List<Author> findAll();
+	
 	public Author saveAuthor ( Author auteur);
 	
 	public Author updateAuthor ( Author auteur);
@@ -30,5 +32,5 @@ public interface AuthorService {
 	
 	public boolean checkIfIdexists(Integer idAuthor);
 		
-
+	public Author findById(Integer idAuthor);
 }

@@ -81,4 +81,16 @@ public class AuthorServiceImpl implements AuthorService {
 		return dao.findByLastName(lastName);
 	}
 
+	
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Author findById(Integer idBook) {
+		// TODO Auto-generated method stub
+		return dao.findById(idBook).get();
+	}
+
+
 }

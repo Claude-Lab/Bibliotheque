@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,9 +34,10 @@ import io.swagger.annotations.Api;
  * @author Claude LUSSEAU
  *
  */
+@CrossOrigin("*")
 @RestController
 @Api(value = "Emprunt Rest Controller: Contient toute les opération pour la gestion des emprunts")
-@RequestMapping("/rest/api/v1")
+@RequestMapping("loans")
 public class LoanController {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(LoanController.class);
@@ -48,7 +50,7 @@ public class LoanController {
      * @param maxEndDateStr
      * @return
      */
-    @GetMapping("/loan/maxEndDate")
+    @GetMapping("/maxEndDate")
     public ResponseEntity<List<Loan>> searchAllLoansBeforeThisDate(@RequestParam("date") String  maxEndDateStr) {
         List<Loan> loans = loanService.findAllLoansByEndDateBefore(LocalDate.parse(maxEndDateStr));
         // on retire tous les élts null que peut contenir cette liste => pour éviter les NPE par la suite
@@ -61,7 +63,7 @@ public class LoanController {
      * @param email
      * @return
      */
-    @GetMapping("/loan/userLoans")
+    @GetMapping("/userLoans")
     public ResponseEntity<List<Loan>> searchAllOpenedLoansOfThisUser(@RequestParam("email") String email) {
         List<Loan> loans = loanService.getAllOpenLoansOfThisUser(email, LoanStatus.OPEN);
         // on retire tous les élts null que peut contenir cette liste => pour éviter les NPE par la suite
@@ -75,7 +77,7 @@ public class LoanController {
      * @param uriComponentBuilder
      * @return
      */
-    @PostMapping("/loan/addLoan")
+    @PostMapping("/addLoan")
     public ResponseEntity<Boolean> createNewLoan(@RequestBody Loan loan,
             UriComponentsBuilder uriComponentBuilder) {
         boolean isLoanExists = loanService.checkIfLoanExists(loan);
@@ -96,7 +98,7 @@ public class LoanController {
      * @param uriComponentBuilder
      * @return
      */
-    @PostMapping("/loan/closeLoan")
+    @PostMapping("/closeLoan")
     public ResponseEntity<Boolean> closeLoan(@RequestBody Loan loanRequest,
             UriComponentsBuilder Loan) {
     	Loan existingLoan = loanService.getOpenedLoan(loanRequest);

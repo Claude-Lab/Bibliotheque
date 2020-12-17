@@ -35,17 +35,11 @@ public class Contact {
 	@Column(name = "city", nullable = false)
 	private String city;
 	
-	@Column(name = "country", nullable = false)
+	@Column(name = "country", nullable = true)
 	private String country;
-	
-	@Column(name = "mobile")
-	private String mobile;
-	
-	@Column(name = "phone")
+		
+	@Column(name = "phone", nullable = true)
 	private String phone;
-	
-	@Column(name = "email", nullable = false)
-	private String email;
 	
 	/**
 	 * Constructor.
@@ -60,18 +54,15 @@ public class Contact {
 	 * @param zip
 	 * @param city
 	 * @param country
-	 * @param mobile
 	 * @param phone
 	 * @param email
 	 */
-	public Contact(String street, String zip, String city, String country, String mobile, String phone, String email) {
+	public Contact(String street, String zip, String city, String country, String phone) {
 		this.street = street;
 		this.zip = zip;
 		this.city = city;
 		this.country = country;
-		this.mobile = mobile;
 		this.phone = phone;
-		this.email = email;
 	}
 
 	/**
@@ -81,20 +72,16 @@ public class Contact {
 	 * @param zip
 	 * @param city
 	 * @param country
-	 * @param mobile
 	 * @param phone
 	 * @param email
 	 */
-	public Contact(int idContact, String street, String zip, String city, String country, String mobile, String phone,
-			String email) {
+	public Contact(int idContact, String street, String zip, String city, String country, String phone) {
 		this.idContact = idContact;
 		this.street = street;
 		this.zip = zip;
 		this.city = city;
 		this.country = country;
-		this.mobile = mobile;
 		this.phone = phone;
-		this.email = email;
 	}
 
 	/**
@@ -178,22 +165,6 @@ public class Contact {
 	}
 
 	/**
-	 * Method in charge of getting mobile's value .
-	 * @return the mobile
-	 */
-	public String getMobile() {
-		return mobile;
-	}
-
-	/**
-	 * Method in charge of setting mobile's value.
-	 * @param mobile the mobile to set
-	 */
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-
-	/**
 	 * Method in charge of getting phone's value .
 	 * @return the phone
 	 */
@@ -210,22 +181,6 @@ public class Contact {
 	}
 
 	/**
-	 * Method in charge of getting email's value .
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * Method in charge of setting email's value.
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
 	 * @{inheritDoc}
 	*/
 	@Override
@@ -234,9 +189,7 @@ public class Contact {
 		int result = 1;
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((country == null) ? 0 : country.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + idContact;
-		result = prime * result + ((mobile == null) ? 0 : mobile.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + ((street == null) ? 0 : street.hashCode());
 		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
@@ -269,21 +222,7 @@ public class Contact {
 		} else if (!country.equals(other.country)) {
 			return false;
 		}
-		if (email == null) {
-			if (other.email != null) {
-				return false;
-			}
-		} else if (!email.equals(other.email)) {
-			return false;
-		}
 		if (idContact != other.idContact) {
-			return false;
-		}
-		if (mobile == null) {
-			if (other.mobile != null) {
-				return false;
-			}
-		} else if (!mobile.equals(other.mobile)) {
 			return false;
 		}
 		if (phone == null) {
@@ -309,6 +248,7 @@ public class Contact {
 		}
 		return true;
 	}
+
 	
 	
 

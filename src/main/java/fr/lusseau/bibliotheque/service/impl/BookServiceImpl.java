@@ -83,5 +83,4 @@ public class BookServiceImpl implements BookService {
 	public List<Book> findAll() {
 		return dao.findAll();
 	}
-
 }

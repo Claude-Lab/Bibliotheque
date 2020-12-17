@@ -5,8 +5,6 @@ package fr.lusseau.bibliotheque.service;
 
 import java.util.List;
 
-import org.springframework.data.repository.query.Param;
-
 import fr.lusseau.bibliotheque.entity.Library;
 
 /**
@@ -27,8 +25,6 @@ public interface LibraryService {
 	public List<Library> findByNameContaining(String name);
 	
 	public boolean checkIsLibraryExists(Integer idLibrary);
-	
-	public Library findLibraryByContactEmail(@Param("email") String email);
 	
 	public Library findByName(String name);
 	

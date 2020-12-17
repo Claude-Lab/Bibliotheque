@@ -28,14 +28,10 @@ public class Surety {
 	@Column(name = "idSurety")
 	private int idSurety;
 	
-	@NotNull
-	@Min(value=0)
 	@Column(unique = true, name = "value")
 	private double value;
 	
-	@NotNull
-	@Min(value=0)
-	@Column(name = "nbBooks")
+	@Column(name = "nbBooks", unique = true)
 	private int nbBooks;
 		
 	/**
@@ -117,46 +113,5 @@ public class Surety {
 		this.nbBooks = nbBooks;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + idSurety;
-		result = prime * result + nbBooks;
-		long temp;
-		temp = Double.doubleToLongBits(value);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Surety)) {
-			return false;
-		}
-		Surety other = (Surety) obj;
-		if (idSurety != other.idSurety) {
-			return false;
-		}
-		if (nbBooks != other.nbBooks) {
-			return false;
-		}
-		if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value)) {
-			return false;
-		}
-		return true;
-	}
-
-	
-	
 
 }

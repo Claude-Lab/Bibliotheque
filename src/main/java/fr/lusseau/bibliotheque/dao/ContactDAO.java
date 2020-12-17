@@ -4,7 +4,7 @@
 package fr.lusseau.bibliotheque.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import fr.lusseau.bibliotheque.entity.Contact;
 
@@ -15,11 +15,9 @@ import fr.lusseau.bibliotheque.entity.Contact;
  * @author Claude LUSSEAU
  *
  */
-@Repository
+@RepositoryRestResource
 public interface ContactDAO extends JpaRepository<Contact, Integer> {
 	
-	public Contact findByEmail(String email);
-	
-	
+		
 
 }

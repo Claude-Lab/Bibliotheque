@@ -3,85 +3,35 @@
  */
 package fr.lusseau.bibliotheque.service.impl;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.lusseau.bibliotheque.dao.RoleDAO;
 import fr.lusseau.bibliotheque.entity.Role;
+import fr.lusseau.bibliotheque.entity.RoleName;
 import fr.lusseau.bibliotheque.service.RoleService;
 
 /**
- * Classe en charge de
+ * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  18 oct. 2020 - 07:48:56
+ * @date  2 nov. 2020 - 17:39:58
  * @author Claude LUSSEAU
  *
  */
+@Service("RoleService")
 @Transactional
-@Service(value = "RoleService")
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl implements RoleService{
 
-	
-	@Autowired
-	private RoleDAO dao;
-	
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public Role saveRole(Role role) {
-		return dao.save(role);
-	}
+	RoleDAO dao;
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Role updateRole(Role role) {
-		return dao.save(role);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public void deleteRole(Integer idRole) {
-		dao.deleteById(idRole);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public Role findByLabel(String label) {
-		return dao.findByLabel(label);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public List<Role> findByLabelContaining(String label) {
-		return dao.findByLabelContaining(label);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean checkIfIdExists(Integer idRole) {
-		return dao.existsById(idRole);
+	public Optional<Role> findByName(RoleName roleName){
+		return dao.findByName(roleName);
 	}
 	
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public List<Role> findAll() {
-		return dao.findAll();
-	}
-
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.BookRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.BookRegisterDTO;
+import fr.lusseau.bibliotheque.dto.request.BookRequestDTO;
 import fr.lusseau.bibliotheque.entity.Book;
 import fr.lusseau.bibliotheque.service.impl.BookServiceImpl;
 import io.swagger.annotations.Api;
@@ -36,12 +38,12 @@ import io.swagger.annotations.ApiResponses;
  * @author Claude LUSSEAU
  *
  */
+@CrossOrigin("*")
 @RestController
 @Api(value = "Category Book Controller: Contient toute les opération pour la gestion des livres")
-@RequestMapping("/rest/api/v1")
+@RequestMapping("books")
 public class BookController {
 
-//	public static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
 	@Autowired
 	BookServiceImpl bookService;
@@ -52,30 +54,30 @@ public class BookController {
 	 * @param categorie
 	 * @return
 	 */
-	@PostMapping("/books/addBook")
-	@ApiOperation(value = "Ajouter un nouveau livre", response = BookRequestDTO.class)
+	@PostMapping("/addBook")
+	@ApiOperation(value = "Ajouter un nouveau livre", response = BookRegisterDTO.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : le livre existe déjà"),
 			@ApiResponse(code = 201, message = "Création : le livre a été correctement créé"),
 			@ApiResponse(code = 304, message = "Non modifiée : le livre n'a pas été créé") })
-	public ResponseEntity<BookRequestDTO> createNewBook(@RequestBody BookRequestDTO bookDTORequest) {
-		Book existingBook = bookService.findByTitle(bookDTORequest.getTitle());
+	public ResponseEntity<BookRegisterDTO> createNewBook(@RequestBody BookRegisterDTO bookDTOReg) {
+		Book existingBook = bookService.findByTitle(bookDTOReg.getTitle());
 		if (existingBook != null) {
-			return new ResponseEntity<BookRequestDTO>(HttpStatus.CONFLICT);
+			return new ResponseEntity<BookRegisterDTO>(HttpStatus.CONFLICT);
 		}
-		Book bookRequest = mapBookDTOToBook(bookDTORequest);
+		Book bookRequest = mapBookDTOToBookReg(bookDTOReg);
 		Book bookResponse = bookService.saveBook(bookRequest);
 		if (bookResponse != null) {
-			BookRequestDTO bookDTO = mapBookToBookDTO(bookRequest);
-			return new ResponseEntity<BookRequestDTO>(bookDTO, HttpStatus.CREATED);
+			BookRegisterDTO bookDTO = mapBookToBookDTOReg(bookRequest);
+			return new ResponseEntity<BookRegisterDTO>(bookDTO, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<BookRequestDTO>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<BookRegisterDTO>(HttpStatus.NOT_MODIFIED);
 	}
 
 	/**
 	 * Methode en charge de lister toutes les catégories de la base de données.
 	 * @return
 	 */
-	@GetMapping("/books")
+	@GetMapping("")
 	@ApiOperation(value="List all books of the Libraries", response = List.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
@@ -100,7 +102,7 @@ public class BookController {
 	 * @param idCategorie
 	 * @return
 	 */
-	@DeleteMapping("/books/deleteBook/{idBook}")
+	@DeleteMapping("/deleteBook/{idBook}")
 	@ApiOperation(value = "Supprimer une catégorie. Si la categorie n'existe pas, rien ne se passe", response = String.class)
 	@ApiResponse(code = 204, message = "Pas de donnée: catégorie correctement supprimée")
 	public ResponseEntity<String> deleteBook(@PathVariable Integer idBook) {
@@ -113,7 +115,7 @@ public class BookController {
 	 * @param categorieRequest
 	 * @return
 	 */
-	@PutMapping("/books/updatebook")
+	@PutMapping("/updatebook")
 	@ApiOperation(value = "Modifie une categorie existante", response = BookRequestDTO.class)
 	@ApiResponses(value = { @ApiResponse(code = 404, message = "Not Found : L'auteur.trice n'existe pas"),
 			@ApiResponse(code = 200, message = "Ok: L'auteur.trice a été mis à jour"),
@@ -151,6 +153,30 @@ public class BookController {
 	 * @return
 	 */
 	private Book mapBookDTOToBook(BookRequestDTO bookDTO) {
+		ModelMapper mapper = new ModelMapper();
+		Book book = mapper.map(bookDTO, Book.class);
+		return book;
+	}
+	
+	/**
+	 * Transforme un entity Customer en un POJO CustomerDTO
+	 * 
+	 * @param customer
+	 * @return
+	 */
+	private BookRegisterDTO mapBookToBookDTOReg(Book book) {
+		ModelMapper mapper = new ModelMapper();
+		BookRegisterDTO bookDTO = mapper.map(book, BookRegisterDTO.class);
+		return bookDTO;
+	}
+	
+	/**
+	 * Transforme un POJO CustomerDTO en en entity Customer
+	 * 
+	 * @param customerDTO
+	 * @return
+	 */
+	private Book mapBookDTOToBookReg(BookRegisterDTO bookDTO) {
 		ModelMapper mapper = new ModelMapper();
 		Book book = mapper.map(bookDTO, Book.class);
 		return book;
