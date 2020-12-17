@@ -3,6 +3,7 @@
  */
 package fr.lusseau.bibliotheque.dto.request;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.springframework.hateoas.server.core.Relation;
@@ -25,13 +26,13 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Request User Model")
 public class UserRequestDTO {
 
-	@ApiModelProperty(value = "User UUID")
+	@ApiModelProperty(value = "User is")
 	private Long id;
 
-	@ApiModelProperty(value = "User firstName")
+	@ApiModelProperty(value = "User firstname")
 	private String firstname;
 
-	@ApiModelProperty(value = "User lastName")
+	@ApiModelProperty(value = "User lastname")
 	private String lastname;
 
 	@ApiModelProperty(value = "User username")
@@ -64,13 +65,18 @@ public class UserRequestDTO {
 	@ApiModelProperty(value = "User loans")
 	private Set<Loan> loans;
 	
+	@ApiModelProperty(value = "User create")
+	private LocalDateTime createdAt;
+
+	@ApiModelProperty(value = "User update")
+	private LocalDateTime updatedAt;
+	
 
 	/**
 	 * Constructor.
 	 */
 	public UserRequestDTO() {
 	}
-	
 	
 
 	/**
@@ -88,7 +94,7 @@ public class UserRequestDTO {
 	 * @param loans
 	 */
 	public UserRequestDTO(String firstname, String lastname, String username, String email, String phone,
-			String address, String zip, String city, Set<Role> roles, Surety surety, Set<Loan> loans) {
+			String address, String zip, String city, LocalDateTime createdAt, LocalDateTime updatedAt, Set<Role> roles, Surety surety, Set<Loan> loans) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -98,6 +104,8 @@ public class UserRequestDTO {
 		this.address = address;
 		this.zip = zip;
 		this.city = city;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.roles = roles;
 		this.surety = surety;
 		this.loans = loans;
@@ -121,7 +129,7 @@ public class UserRequestDTO {
 	 * @param loans
 	 */
 	public UserRequestDTO(Long id, String firstname, String lastname, String username, String email, String password,
-			String phone, String address, String zip, String city, Set<Role> roles, Surety surety, Set<Loan> loans) {
+			String phone, String address, String zip, String city, LocalDateTime createdAt, LocalDateTime updatedAt, Set<Role> roles, Surety surety, Set<Loan> loans) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -133,6 +141,8 @@ public class UserRequestDTO {
 		this.address = address;
 		this.zip = zip;
 		this.city = city;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.roles = roles;
 		this.surety = surety;
 		this.loans = loans;
@@ -167,17 +177,18 @@ public class UserRequestDTO {
 	public String getFirstname() {
 		return firstname;
 	}
-
+	
 
 
 	/**
-	 * Method in charge of setting firstName's value.
-	 * @param firstName the firstName to set
+	 * Method in charge of setting firstname's value.
+	 * @param firstname the firstname to set
 	 */
-	public void setFirstName(String firstname) {
+	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
-
+	
+	
 
 
 	/**
@@ -397,5 +408,47 @@ public class UserRequestDTO {
 	public void setLoans(Set<Loan> loans) {
 		this.loans = loans;
 	}
+
+
+
+	/**
+	 * Method in charge of getting createdAt's value .
+	 * @return the createdAt
+	 */
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+
+
+	/**
+	 * Method in charge of setting createdAt's value.
+	 * @param createdAt the createdAt to set
+	 */
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+
+
+	/**
+	 * Method in charge of getting updatedAt's value .
+	 * @return the updatedAt
+	 */
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+
+
+	/**
+	 * Method in charge of setting updatedAt's value.
+	 * @param updatedAt the updatedAt to set
+	 */
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+
 
 }

@@ -4,7 +4,6 @@
 package fr.lusseau.bibliotheque.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,14 +50,14 @@ public class UserServiceImpl implements UserService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public void deleteUser(Long id) {
+	public void deleteUser(long id) {
 		dao.deleteById(id);
 	}
 	
 	/**
 	 * @{inheritDoc}
 	*/
-	public Optional<User> findById(Long id) {
+	public User findById(long id) {
 		return dao.findById(id);
 	}
 
@@ -95,8 +94,6 @@ public class UserServiceImpl implements UserService {
 		return dao.findByUsername(username);
 	}
 
-
-
 	/**
 	 * @{inheritDoc}
 	*/
@@ -109,7 +106,7 @@ public class UserServiceImpl implements UserService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Optional<User> findByUsernameOrEmail(String username, String email) {
+	public User findByUsernameOrEmail(String username, String email) {
 		return dao.findByUsernameOrEmail(username, email);
 	}
 	
@@ -122,5 +119,13 @@ public class UserServiceImpl implements UserService {
 	public boolean existsByEmail(String email) {
     	return dao.existsByEmail(email);
     }
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsById(long id) {
+		return dao.existsById(id);
+	}
 
 }

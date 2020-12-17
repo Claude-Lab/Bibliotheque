@@ -1,114 +1,85 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.entity;
+package fr.lusseau.bibliotheque.dto.registration;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import org.springframework.hateoas.server.core.Relation;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import fr.lusseau.bibliotheque.entity.Loan;
+import fr.lusseau.bibliotheque.entity.Role;
+import fr.lusseau.bibliotheque.entity.Surety;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Class in charge of defining User entity.
+ * Class in charge of defining .
  * 
  * @Version Bibliotheque -v1,0
- * @date 23 oct. 2020 - 12:32:19
+ * @date 16 déc. 2020 - 10:32:45
  * @author Claude LUSSEAU
  *
  */
-@Entity
-@Table(name = "User", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
-		@UniqueConstraint(columnNames = { "email" }) })
-public class User {
+@Relation(value = "user", collectionRelation = "users")
+@ApiModel(value = "Request User Model")
+public class UserUpdate {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(value = "User UUID")
 	private Long id;
 
-	@NotBlank
-	@Size(max = 20)
+	@ApiModelProperty(value = "User firstname")
 	private String firstname;
 
-	@NotBlank
-	@Size(max = 20)
+	@ApiModelProperty(value = "User lastname")
 	private String lastname;
 
-	@NotBlank
+	@ApiModelProperty(value = "User username")
 	private String username;
 
-	@NotBlank
-	@Size(max = 50)
-	@Email
+	@ApiModelProperty(value = "User email")
 	private String email;
 
-	@NotBlank
-	@Size(max = 120)
+	@ApiModelProperty(value = "User password")
 	private String password;
 
-	@NotBlank
-	@Size(max = 10)
+	@ApiModelProperty(value = "User phone")
 	private String phone;
 
-	@NotBlank
-	@Size(max = 120)
+	@ApiModelProperty(value = "User address")
 	private String address;
 
-	@NotBlank
-	@Size(min = 5, max = 5)
+	@ApiModelProperty(value = "User zip code")
 	private String zip;
 
-	@NotBlank
-	@Size(max = 60)
+	@ApiModelProperty(value = "User city")
 	private String city;
-
 	
-	@DateTimeFormat
-	private LocalDateTime createdAt = LocalDateTime.now();
+	@ApiModelProperty(value = "User created date")
+	private LocalDateTime createdAt;
 
-	
-	@DateTimeFormat
+	@ApiModelProperty(value = "User updated date")
 	private LocalDateTime updatedAt = LocalDateTime.now();
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-	@JoinColumn(name = "idSurety", nullable = false)
+	@ApiModelProperty(value = "User role(s)")
+	private Set<Role> roles;
+
+	@ApiModelProperty(value = "User surety")
 	private Surety surety;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<Loan> loans = new HashSet<Loan>();
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	@NotNull
-	private Set<Role> roles = new HashSet<>();
+	@ApiModelProperty(value = "User loans")
+	private Set<Loan> loans;
 
 	/**
-	 * Constructor without parameter.
+	 * Constructor.
 	 */
-	public User() {
+	public UserUpdate() {
+		super();
 	}
 
 	/**
-	 * Constructor for registration.
-	 * 
+	 * Constructor.
 	 * @param firstname
 	 * @param lastname
 	 * @param username
@@ -120,16 +91,13 @@ public class User {
 	 * @param city
 	 * @param createdAt
 	 * @param updatedAt
+	 * @param roles
 	 * @param surety
 	 * @param loans
-	 * @param roles
 	 */
-	public User(@NotBlank @Size(max = 20) String firstname, @NotBlank @Size(max = 20) String lastname,
-			@NotBlank String username, @NotBlank @Size(max = 50) @Email String email,
-			@NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 10) String phone,
-			@NotBlank @Size(max = 120) String address, @NotBlank @Size(min = 5, max = 5) String zip,
-			@NotBlank @Size(max = 60) String city, @NotBlank LocalDateTime createdAt, LocalDateTime updatedAt,
-			Surety surety, Set<Loan> loans, @NotNull Set<Role> roles) {
+	public UserUpdate(String firstname, String lastname, String username, String email, String password, String phone,
+			String address, String zip, String city, LocalDateTime createdAt, LocalDateTime updatedAt, Set<Role> roles,
+			Surety surety, Set<Loan> loans) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -142,14 +110,13 @@ public class User {
 		this.city = city;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.roles = roles;
 		this.surety = surety;
 		this.loans = loans;
-		this.roles = roles;
 	}
-
+	
 	/**
 	 * Constructor.
-	 * 
 	 * @param id
 	 * @param firstname
 	 * @param lastname
@@ -162,16 +129,13 @@ public class User {
 	 * @param city
 	 * @param createdAt
 	 * @param updatedAt
+	 * @param roles
 	 * @param surety
 	 * @param loans
-	 * @param roles
 	 */
-	public User(Long id, @NotBlank @Size(max = 20) String firstname, @NotBlank @Size(max = 20) String lastname,
-			@NotBlank String username, @NotBlank @Size(max = 50) @Email String email,
-			@NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 10) String phone,
-			@NotBlank @Size(max = 120) String address, @NotBlank @Size(min = 5, max = 5) String zip,
-			@NotBlank @Size(max = 60) String city, @NotBlank LocalDateTime createdAt, @NotBlank LocalDateTime updatedAt,
-			Surety surety, Set<Loan> loans, @NotNull Set<Role> roles) {
+	public UserUpdate(Long id, String firstname, String lastname, String username, String email, String password,
+			String phone, String address, String zip, String city, LocalDateTime createdAt, LocalDateTime updatedAt,
+			Set<Role> roles, Surety surety, Set<Loan> loans) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -185,13 +149,14 @@ public class User {
 		this.city = city;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.roles = roles;
 		this.surety = surety;
 		this.loans = loans;
-		this.roles = roles;
 	}
 
+	
 	/**
-	 * Method in charge of getting id's value.
+	 * Method in charge of getting id's value .
 	 * 
 	 * @return the id
 	 */
@@ -220,7 +185,7 @@ public class User {
 	/**
 	 * Method in charge of setting firstname's value.
 	 * 
-	 * @param firstname the firstname to set
+	 * @param firstName the firstname to set
 	 */
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
@@ -238,7 +203,7 @@ public class User {
 	/**
 	 * Method in charge of setting lastname's value.
 	 * 
-	 * @param lastname the lastname to set
+	 * @param lastName the lastname to set
 	 */
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
@@ -369,10 +334,11 @@ public class User {
 	public void setCity(String city) {
 		this.city = city;
 	}
+	
+	
 
 	/**
 	 * Method in charge of getting createdAt's value .
-	 * 
 	 * @return the createdAt
 	 */
 	public LocalDateTime getCreatedAt() {
@@ -381,7 +347,6 @@ public class User {
 
 	/**
 	 * Method in charge of setting createdAt's value.
-	 * 
 	 * @param createdAt the createdAt to set
 	 */
 	public void setCreatedAt(LocalDateTime createdAt) {
@@ -390,7 +355,6 @@ public class User {
 
 	/**
 	 * Method in charge of getting updatedAt's value .
-	 * 
 	 * @return the updatedAt
 	 */
 	public LocalDateTime getUpdatedAt() {
@@ -399,11 +363,28 @@ public class User {
 
 	/**
 	 * Method in charge of setting updatedAt's value.
-	 * 
 	 * @param updatedAt the updatedAt to set
 	 */
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	/**
+	 * Method in charge of getting roles's value .
+	 * 
+	 * @return the roles
+	 */
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * Method in charge of setting roles's value.
+	 * 
+	 * @param roles the roles to set
+	 */
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 	/**
@@ -440,24 +421,6 @@ public class User {
 	 */
 	public void setLoans(Set<Loan> loans) {
 		this.loans = loans;
-	}
-
-	/**
-	 * Method in charge of getting roles's value .
-	 * 
-	 * @return the roles
-	 */
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * Method in charge of setting roles's value.
-	 * 
-	 * @param roles the roles to set
-	 */
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
 	}
 
 }

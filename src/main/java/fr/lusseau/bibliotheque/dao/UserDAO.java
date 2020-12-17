@@ -4,7 +4,6 @@
 package fr.lusseau.bibliotheque.dao;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -22,7 +21,9 @@ import fr.lusseau.bibliotheque.entity.User;
 @RepositoryRestResource(collectionResourceRel = "user", path = "users")
 public interface UserDAO extends JpaRepository<User, Long> {
 	
-	Optional<User> findByUsernameOrEmail(String username, String email);
+	User findById(long id);
+	
+	User findByUsernameOrEmail(String username, String email);
 
 	List<User> findByLastnameIgnoreCase(String lastname);
 
@@ -35,6 +36,8 @@ public interface UserDAO extends JpaRepository<User, Long> {
 	boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+    
+    boolean existsById(long id);
 
     User findByEmail(String email);
 

@@ -4,7 +4,6 @@
 package fr.lusseau.bibliotheque.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import fr.lusseau.bibliotheque.entity.User;
 
@@ -22,11 +21,11 @@ public interface UserService {
 
 	User updateUser(User user);
 
-	void deleteUser(Long idUser);
+	void deleteUser(long id);
 		
 	List<User> findAll();
 	
-	Optional<User> findById(Long idUser);
+	User findById(long id);
 
 	User findByUsername(String username);
 
@@ -36,10 +35,12 @@ public interface UserService {
 	
 	User findByEmail(String email);
 	
-	Optional<User> findByUsernameOrEmail(String username, String email);
+	User findByUsernameOrEmail(String username, String email);
 	
 	boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+    
+    boolean existsById(long id);
 
 }

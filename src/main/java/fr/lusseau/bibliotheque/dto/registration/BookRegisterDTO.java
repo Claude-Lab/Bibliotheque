@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.dto.request;
+package fr.lusseau.bibliotheque.dto.registration;
 
 import java.time.LocalDate;
 import java.util.HashSet;

@@ -8,6 +8,8 @@ import java.util.Set;
 
 import org.springframework.hateoas.server.core.Relation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import fr.lusseau.bibliotheque.entity.Loan;
 import fr.lusseau.bibliotheque.entity.Role;
 import fr.lusseau.bibliotheque.entity.Surety;
@@ -26,7 +28,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Request User Model")
 public class UserRegistration {
 
-	@ApiModelProperty(value = "User UUID")
+	@ApiModelProperty(value = "User id")
 	private Long id;
 
 	@ApiModelProperty(value = "User firstname")
@@ -60,6 +62,7 @@ public class UserRegistration {
 	private LocalDateTime createdAt;
 
 	@ApiModelProperty(value = "User updated date")
+	@JsonIgnore
 	private LocalDateTime updatedAt;
 
 	@ApiModelProperty(value = "User role(s)")
@@ -342,7 +345,7 @@ public class UserRegistration {
 	 * @return the createdAt
 	 */
 	public LocalDateTime getCreatedAt() {
-		return createdAt;
+		return createdAt = LocalDateTime.now();
 	}
 
 	/**
@@ -358,7 +361,7 @@ public class UserRegistration {
 	 * @return the updatedAt
 	 */
 	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
+		return updatedAt = LocalDateTime.now();
 	}
 
 	/**
