@@ -45,7 +45,6 @@ import io.swagger.annotations.ApiResponses;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/admin")
-//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 @Api(value = "User Rest Controller: contains all operations for managing users")
 public class UserController {
 
@@ -92,7 +91,7 @@ public class UserController {
 			@ApiResponse(code = 500, message = "Erreur: Pseudonyme ou email déjà existant"),
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
 	public ResponseEntity<?> updateUser(@RequestBody UserUpdate userUpdate, User user, @PathVariable("id") Long id) {
 
 		if (userService.existsByEmail(user.getEmail())) {
