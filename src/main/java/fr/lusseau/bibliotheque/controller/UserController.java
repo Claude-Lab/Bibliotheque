@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -66,6 +67,7 @@ public class UserController {
 	@ApiOperation(value = "List all users of the Libraries", response = List.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 	public ResponseEntity<List<User>> listUsers() {
 
 		List<User> users = userService.findAll();
@@ -86,19 +88,22 @@ public class UserController {
 	 */
 	@PutMapping("/updateUser/{id}")
 	@ApiOperation(value = "Update user", response = List.class)
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok: liste réussie"),
+	@ApiResponses(value = { 
+			@ApiResponse(code = 500, message = "Erreur: Pseudonyme ou email déjà existant"),
+			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
-	public ResponseEntity<?> updateUser(@RequestBody UserUpdate userUpdate, @PathVariable("id") Long id) {
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
+	public ResponseEntity<?> updateUser(@RequestBody UserUpdate userUpdate, User user, @PathVariable("id") Long id) {
 
-		if (checkUsernameAvailability(userUpdate.getUsername()) == null) {
-			return new ResponseEntity<Object>(new RestApiResponse(false, "Username is already taken!"),
-					HttpStatus.CONFLICT);
-		}
-		if (checkEmailAvailability(userUpdate.getEmail()) == null) {
+		if (userService.existsByEmail(user.getEmail())) {
 			return new ResponseEntity<Object>(new RestApiResponse(false, "Email is already taken!"),
 					HttpStatus.CONFLICT);
 		}
-		User user = userService.findById(id);
+		if (userService.existsByUsername(user.getUsername())) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Username is already taken!"),
+					HttpStatus.CONFLICT);
+		}
+		user = userService.findById(id);
 		if (user != null) {
 			user.setFirstname(userUpdate.getFirstname());
 			user.setLastname(userUpdate.getLastname());
@@ -114,11 +119,13 @@ public class UserController {
 			user.setSurety(userUpdate.getSurety());
 			user.setLoans(userUpdate.getLoans());
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			
 			User userResponse = userService.updateUser(user);
 			if (userResponse != null) {
 				return new ResponseEntity<User>(userResponse, HttpStatus.OK);
 			}
-		} 
+		}
+
 		return new ResponseEntity<User>(HttpStatus.NOT_MODIFIED);
 	}
 
@@ -130,6 +137,7 @@ public class UserController {
 	 * @return
 	 */
 	@DeleteMapping("/deleteUser/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		User user = userService.findById(id);
 		if (user != null) {
@@ -148,6 +156,7 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping("/user/{username}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 	public ResponseEntity<?> findUser(@PathVariable String username) {
 		if (userService.findByUsername(username) != null) {
 			User user = userService.findByUsername(username);
