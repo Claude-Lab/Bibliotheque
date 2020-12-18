@@ -22,7 +22,7 @@ import fr.lusseau.bibliotheque.service.RoleService;
  */
 @Service("RoleService")
 @Transactional
-public class RoleServiceImpl implements RoleService{
+public class RoleServiceImpl implements RoleService {
 
 	RoleDAO dao;
 
@@ -30,7 +30,7 @@ public class RoleServiceImpl implements RoleService{
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Optional<Role> findByName(RoleName roleName){
+	public Optional<Role> findByName(RoleName roleName) {
 		return dao.findByName(roleName);
 	}
 	

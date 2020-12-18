@@ -5,6 +5,7 @@ package fr.lusseau.bibliotheque.utils;
 
 import org.springframework.util.StringUtils;
 
+import fr.lusseau.bibliotheque.dto.registration.UserRegistration;
 import fr.lusseau.bibliotheque.dto.registration.UserUpdate;
 import fr.lusseau.bibliotheque.dto.request.UserRequestDTO;
 import fr.lusseau.bibliotheque.entity.User;
@@ -40,10 +41,23 @@ public class UserMapper {
 	 * @return
 	 */
 	public UserUpdate entityUpdateToDtoUpdate(User user) {
-		UserUpdate dto = new UserUpdate(user.getId(), user.getFirstname(), user.getLastname(),
-				user.getUsername(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress(),
-				user.getZip(), user.getCity(), user.getCreatedAt(), user.getUpdatedAt(), user.getRoles(),
-				user.getSurety(), user.getLoans());
+		UserUpdate dto = new UserUpdate(user.getFirstname(), user.getLastname(), user.getUsername(),
+				user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress(), user.getZip(), user.getCity(),
+				user.getCreatedAt(), user.getUpdatedAt(), user.getRoles(), user.getSurety(), user.getLoans());
+
+		return dto;
+	}
+	
+	/**
+	 * Transforme un entity User en un POJO UserRegistration.
+	 * 
+	 * @param User
+	 * @return
+	 */
+	public UserRegistration entityToUserRegistration(User user) {
+		UserRegistration dto = new UserRegistration(user.getFirstname(), user.getLastname(), user.getUsername(),
+				user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress(), user.getZip(), user.getCity(),
+				user.getCreatedAt(), user.getUpdatedAt(), user.getRoles(), user.getSurety(), user.getLoans());
 
 		return dto;
 	}
@@ -54,10 +68,10 @@ public class UserMapper {
 	 * @param UserRegistration
 	 * @return
 	 */
-	public User userRegistrationToEntity(UserRequestDTO dto) {
+	public User userRegistrationToEntity(UserRegistration dto) {
 		User user = new User(dto.getFirstname(), dto.getLastname(), dto.getUsername(), dto.getEmail(),
 				dto.getPassword(), dto.getPhone(), dto.getAddress(), dto.getZip(), dto.getCity(), dto.getCreatedAt(),
-				dto.getUpdatedAt(), dto.getSurety(), dto.getLoans(), dto.getRoles());
+				dto.getUpdatedAt(), dto.getRoles(), dto.getSurety(), dto.getLoans());
 		if (!StringUtils.isEmpty(dto.getId())) {
 			user.setId(dto.getId());
 		}
@@ -73,10 +87,8 @@ public class UserMapper {
 	public User userUpdateToEntity(UserUpdate dto) {
 		User user = new User(dto.getFirstname(), dto.getLastname(), dto.getUsername(), dto.getEmail(),
 				dto.getPassword(), dto.getPhone(), dto.getAddress(), dto.getZip(), dto.getCity(), dto.getCreatedAt(),
-				dto.getUpdatedAt(), dto.getSurety(), dto.getLoans(), dto.getRoles());
-		if (!StringUtils.isEmpty(dto.getId())) {
-			user.setId(dto.getId());
-		}
+				dto.getUpdatedAt(), dto.getRoles(), dto.getSurety(), dto.getLoans());
+		
 		return user;
 	}
 

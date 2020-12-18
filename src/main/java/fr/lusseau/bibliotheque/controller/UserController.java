@@ -9,9 +9,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +18,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.lusseau.bibliotheque.dto.registration.UserUpdate;
-import fr.lusseau.bibliotheque.dto.request.UserRequestDTO;
 import fr.lusseau.bibliotheque.entity.User;
+import fr.lusseau.bibliotheque.payload.RestApiResponse;
+import fr.lusseau.bibliotheque.payload.UserIdentityAvailability;
 import fr.lusseau.bibliotheque.service.RoleService;
 import fr.lusseau.bibliotheque.service.UserService;
 import io.swagger.annotations.Api;
@@ -43,7 +44,7 @@ import io.swagger.annotations.ApiResponses;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
+//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 @Api(value = "User Rest Controller: contains all operations for managing users")
 public class UserController {
 
@@ -52,6 +53,9 @@ public class UserController {
 
 	@Autowired
 	RoleService roleService;
+
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	/**
 	 * Methode en charge de lister toutes les personnes de la base de données.
@@ -62,39 +66,61 @@ public class UserController {
 	@ApiOperation(value = "List all users of the Libraries", response = List.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
-	public ResponseEntity<List<UserRequestDTO>> listUsers() {
+	public ResponseEntity<List<User>> listUsers() {
 
 		List<User> users = userService.findAll();
 		if (!CollectionUtils.isEmpty(users)) {
-			List<UserRequestDTO> userDTOs = users.stream().map(user -> {
-				return convertToDto(user);
+			List<User> listUsers = users.stream().map(user -> {
+				return user;
 			}).collect(Collectors.toList());
 
-			return new ResponseEntity<List<UserRequestDTO>>(userDTOs, HttpStatus.OK);
+			return new ResponseEntity<List<User>>(listUsers, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<UserRequestDTO>>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
 	}
-	
+
 	/**
 	 * Methode en charge de mettre à jour un utilisateur de la base de données.
 	 * 
 	 * @return
 	 */
-	@PutMapping("/updateUser")
+	@PutMapping("/updateUser/{id}")
 	@ApiOperation(value = "Update user", response = List.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
-	public ResponseEntity<User> updateUser(@RequestBody User userUpdate) {
-        //, UriComponentsBuilder uriComponentBuilder
-        if (!userService.existsById(userUpdate.getId())) {
-            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-        }
-        User userResponse = userService.saveUser(userUpdate);
-        if (userResponse != null) {
-            return new ResponseEntity<User>(userResponse, HttpStatus.OK);
-        }
-        return new ResponseEntity<User>(HttpStatus.NOT_MODIFIED);
-    }
+	public ResponseEntity<?> updateUser(@RequestBody UserUpdate userUpdate, @PathVariable("id") Long id) {
+
+		if (checkUsernameAvailability(userUpdate.getUsername()) == null) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Username is already taken!"),
+					HttpStatus.CONFLICT);
+		}
+		if (checkEmailAvailability(userUpdate.getEmail()) == null) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Email is already taken!"),
+					HttpStatus.CONFLICT);
+		}
+		User user = userService.findById(id);
+		if (user != null) {
+			user.setFirstname(userUpdate.getFirstname());
+			user.setLastname(userUpdate.getLastname());
+			user.setUsername(userUpdate.getUsername());
+			user.setEmail(userUpdate.getEmail());
+			user.setPassword(userUpdate.getPassword());
+			user.setPhone(userUpdate.getPhone());
+			user.setAddress(userUpdate.getAddress());
+			user.setZip(userUpdate.getZip());
+			user.setCity(userUpdate.getCity());
+			user.setUpdatedAt(userUpdate.getUpdatedAt());
+			user.setRoles(userUpdate.getRoles());
+			user.setSurety(userUpdate.getSurety());
+			user.setLoans(userUpdate.getLoans());
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			User userResponse = userService.updateUser(user);
+			if (userResponse != null) {
+				return new ResponseEntity<User>(userResponse, HttpStatus.OK);
+			}
+		} 
+		return new ResponseEntity<User>(HttpStatus.NOT_MODIFIED);
+	}
 
 	/**
 	 * Supprime une Personne dans la base de données. Si la personne n'est pas
@@ -104,11 +130,16 @@ public class UserController {
 	 * @return
 	 */
 	@DeleteMapping("/deleteUser/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-		userService.deleteUser(id);
-		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+		User user = userService.findById(id);
+		if (user != null) {
+			userService.deleteUser(id);
+			return new ResponseEntity<Object>(new RestApiResponse(true, "User has been successfully deleted !"),
+					HttpStatus.OK);
+		}
+		return new ResponseEntity<Object>(new RestApiResponse(false, "User not found !"), HttpStatus.NOT_FOUND);
 	}
-	
+
 	/**
 	 * Supprime une Personne dans la base de données. Si la personne n'est pas
 	 * retrouvée, on retourne le Statut HTTP NO_CONTENT.
@@ -116,74 +147,38 @@ public class UserController {
 	 * @param idUser
 	 * @return
 	 */
-	@GetMapping("/user/{id}")
-	public ResponseEntity<User> findUser(@PathVariable Long id) {
-		User user = userService.findById(id);
-		return new ResponseEntity<User>(user, HttpStatus.OK);
-	}
-	
-	
-
-	/**
-	 * Transforme un entity User en un POJO UserDTO.
-	 * 
-	 * @param User
-	 * @return
-	 */
-	protected UserRequestDTO convertToDto(User user) {
-		UserRequestDTO dto = new UserRequestDTO(user.getId(), user.getFirstname(), user.getLastname(),
-				user.getUsername(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress(),
-				user.getZip(), user.getCity(), user.getCreatedAt(), user.getUpdatedAt(), user.getRoles(),
-				user.getSurety(), user.getLoans());
-
-		return dto;
-	}
-	
-	/**
-	 * Transforme un entity User en un POJO UserDTO.
-	 * 
-	 * @param User
-	 * @return
-	 */
-	protected UserUpdate convertToDto2(User user) {
-		UserUpdate dto = new UserUpdate(user.getId(), user.getFirstname(), user.getLastname(),
-				user.getUsername(), user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress(),
-				user.getZip(), user.getCity(), user.getCreatedAt(), user.getUpdatedAt(), user.getRoles(),
-				user.getSurety(), user.getLoans());
-
-		return dto;
-	}
-
-	/**
-	 * Transforme un POJO UserDTO en en entity User.
-	 * 
-	 * @param UserRegistration
-	 * @return
-	 */
-	protected User convertToEntity(UserRequestDTO dto) {
-		User user = new User(dto.getFirstname(), dto.getLastname(), dto.getUsername(), dto.getEmail(),
-				dto.getPassword(), dto.getPhone(), dto.getAddress(), dto.getZip(), dto.getCity(), dto.getCreatedAt(),
-				dto.getUpdatedAt(), dto.getSurety(), dto.getLoans(), dto.getRoles());
-		if (!StringUtils.isEmpty(dto.getId())) {
-			user.setId(dto.getId());
+	@GetMapping("/user/{username}")
+	public ResponseEntity<?> findUser(@PathVariable String username) {
+		if (userService.findByUsername(username) != null) {
+			User user = userService.findByUsername(username);
+			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
-		return user;
+		return new ResponseEntity<Object>(new RestApiResponse(false, "User not found !"), HttpStatus.NOT_FOUND);
+
 	}
-	
+
 	/**
-	 * Transforme un POJO UserDTO en en entity User.
+	 * Method in charge of
 	 * 
-	 * @param UserRegistration
+	 * @param username
 	 * @return
 	 */
-	protected User convertToEntity2(UserUpdate dto) {
-		User user = new User(dto.getFirstname(), dto.getLastname(), dto.getUsername(), dto.getEmail(),
-				dto.getPassword(), dto.getPhone(), dto.getAddress(), dto.getZip(), dto.getCity(), dto.getCreatedAt(),
-				dto.getUpdatedAt(), dto.getSurety(), dto.getLoans(), dto.getRoles());
-		if (!StringUtils.isEmpty(dto.getId())) {
-			user.setId(dto.getId());
-		}
-		return user;
+	@GetMapping("/user/checkUsernameAvailability")
+	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
+		Boolean isAvailable = !userService.existsByUsername(username);
+		return new UserIdentityAvailability(isAvailable);
+	}
+
+	/**
+	 * Method in charge of
+	 * 
+	 * @param email
+	 * @return
+	 */
+	@GetMapping("/user/checkEmailAvailability")
+	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
+		Boolean isAvailable = !userService.existsByEmail(email);
+		return new UserIdentityAvailability(isAvailable);
 	}
 
 }

@@ -6,6 +6,14 @@ package fr.lusseau.bibliotheque.dto.registration;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.hateoas.server.core.Relation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,45 +35,67 @@ import io.swagger.annotations.ApiModelProperty;
 @Relation(value = "user", collectionRelation = "users")
 @ApiModel(value = "Request User Model")
 public class UserRegistration {
-
-	@ApiModelProperty(value = "User id")
-	private Long id;
-
+	
 	@ApiModelProperty(value = "User firstname")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
+	@ApiModelProperty(value = "User firstname")
+	@NotBlank
+    @Size(min = 4, max = 40)
 	private String firstname;
 
 	@ApiModelProperty(value = "User lastname")
+	@NotBlank
+    @Size(min = 4, max = 40)
 	private String lastname;
 
 	@ApiModelProperty(value = "User username")
+	@NotBlank
+    @Size(min = 4, max = 40)
 	private String username;
 
 	@ApiModelProperty(value = "User email")
+	@NotBlank
+    @Size(max = 40)
+    @Email
 	private String email;
 
 	@ApiModelProperty(value = "User password")
+	@NotBlank
+    @Size(min = 6, max = 20)
 	private String password;
 
 	@ApiModelProperty(value = "User phone")
+	@NotBlank
+    @Size(min = 10, max = 10)
 	private String phone;
 
 	@ApiModelProperty(value = "User address")
+	@NotBlank
+    @Size(min = 4, max = 40)
 	private String address;
 
 	@ApiModelProperty(value = "User zip code")
+	@NotBlank
+    @Size(min = 5, max = 5)
 	private String zip;
 
 	@ApiModelProperty(value = "User city")
+	@NotBlank
+    @Size(min = 4, max = 40)
 	private String city;
 	
 	@ApiModelProperty(value = "User created date")
-	private LocalDateTime createdAt;
+	private LocalDateTime createdAt = LocalDateTime.now();
 
 	@ApiModelProperty(value = "User updated date")
 	@JsonIgnore
 	private LocalDateTime updatedAt;
 
 	@ApiModelProperty(value = "User role(s)")
+	@NotNull
 	private Set<Role> roles;
 
 	@ApiModelProperty(value = "User surety")
@@ -74,12 +104,15 @@ public class UserRegistration {
 	@ApiModelProperty(value = "User loans")
 	private Set<Loan> loans;
 
+	
 	/**
 	 * Constructor.
 	 */
 	public UserRegistration() {
-		super();
+		// TODO Auto-generated constructor stub
 	}
+	
+	
 
 	/**
 	 * Constructor.
@@ -98,49 +131,14 @@ public class UserRegistration {
 	 * @param surety
 	 * @param loans
 	 */
-	public UserRegistration(String firstname, String lastname, String username, String email, String password, String phone,
-			String address, String zip, String city, LocalDateTime createdAt, LocalDateTime updatedAt, Set<Role> roles,
-			Surety surety, Set<Loan> loans) {
+	public UserRegistration(@NotBlank @Size(min = 4, max = 40) String firstname,
+			@NotBlank @Size(min = 4, max = 40) String lastname, @NotBlank @Size(min = 4, max = 40) String username,
+			@NotBlank @Size(max = 40) @Email String email, @NotBlank @Size(min = 6, max = 20) String password,
+			@NotBlank @Size(min = 10, max = 10) String phone, @NotBlank @Size(min = 4, max = 40) String address,
+			@NotBlank @Size(min = 5, max = 5) String zip, @NotBlank @Size(min = 4, max = 40) String city,
+			LocalDateTime createdAt, LocalDateTime updatedAt, @NotNull Set<Role> roles, Surety surety,
+			Set<Loan> loans) {
 		super();
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
-		this.address = address;
-		this.zip = zip;
-		this.city = city;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.roles = roles;
-		this.surety = surety;
-		this.loans = loans;
-	}
-	
-	/**
-	 * Constructor.
-	 * @param id
-	 * @param firstname
-	 * @param lastname
-	 * @param username
-	 * @param email
-	 * @param password
-	 * @param phone
-	 * @param address
-	 * @param zip
-	 * @param city
-	 * @param createdAt
-	 * @param updatedAt
-	 * @param roles
-	 * @param surety
-	 * @param loans
-	 */
-	public UserRegistration(Long id, String firstname, String lastname, String username, String email, String password,
-			String phone, String address, String zip, String city, LocalDateTime createdAt, LocalDateTime updatedAt,
-			Set<Role> roles, Surety surety, Set<Loan> loans) {
-		super();
-		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
@@ -157,24 +155,27 @@ public class UserRegistration {
 		this.loans = loans;
 	}
 
-	
+
+
 	/**
 	 * Method in charge of getting id's value .
-	 * 
 	 * @return the id
 	 */
 	public Long getId() {
 		return id;
 	}
 
+
+
 	/**
 	 * Method in charge of setting id's value.
-	 * 
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	/**
 	 * Method in charge of getting firstname's value .

@@ -27,6 +27,8 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Class in charge of defining User entity.
  * 
@@ -62,6 +64,7 @@ public class User {
 
 	@NotBlank
 	@Size(max = 120)
+	@JsonIgnore
 	private String password;
 
 	@NotBlank
@@ -128,8 +131,8 @@ public class User {
 			@NotBlank String username, @NotBlank @Size(max = 50) @Email String email,
 			@NotBlank @Size(max = 120) String password, @NotBlank @Size(max = 10) String phone,
 			@NotBlank @Size(max = 120) String address, @NotBlank @Size(min = 5, max = 5) String zip,
-			@NotBlank @Size(max = 60) String city, @NotBlank LocalDateTime createdAt, LocalDateTime updatedAt,
-			Surety surety, Set<Loan> loans, @NotNull Set<Role> roles) {
+			@NotBlank @Size(max = 60) String city, @NotBlank LocalDateTime createdAt, LocalDateTime updatedAt, @NotNull Set<Role> roles,
+			Surety surety, Set<Loan> loans) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;

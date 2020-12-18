@@ -11,12 +11,12 @@ package fr.lusseau.bibliotheque.payload;
  * @author Claude LUSSEAU
  *
  */
-public class ApiResponse {
+public class RestApiResponse {
 
 	private Boolean success;
 	private String message;
 
-	public ApiResponse(Boolean success, String message) {
+	public RestApiResponse(Boolean success, String message) {
 		this.success = success;
 		this.message = message;
 	}

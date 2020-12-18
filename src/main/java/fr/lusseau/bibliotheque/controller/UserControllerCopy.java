@@ -58,8 +58,8 @@
 //	@Secured("ROLE_ADMIN")
 //	@ApiOperation(value="List all users of the Libraries", response = List.class)
 //	@ApiResponses(value = {
-//			@ApiResponse(code = 200, message = "Ok: liste réussie"),
-//			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
+//			@RestApiResponse(code = 200, message = "Ok: liste réussie"),
+//			@RestApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
 //	})
 //	public ResponseEntity<List<UserRequestDTO>> getAllUsers() {
 //		
@@ -92,9 +92,9 @@
 ////    @PostMapping("/addUser")
 ////    @ResponseStatus(code = HttpStatus.CREATED)
 ////    @ApiOperation(value = "Ajouter une nouvelle personne à la Bibliotheque", response = UserRegistrationDTO.class)
-////    @ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur: la personne existe déjà en base"),
-////            @ApiResponse(code = 201, message = "Création: le compte de la personne à été correctement enregistrée en base"),
-////            @ApiResponse(code = 304, message = "Nom modifié: la personne n'a pas été correctement insérée") })
+////    @ApiResponses(value = { @RestApiResponse(code = 409, message = "Erreur: la personne existe déjà en base"),
+////            @RestApiResponse(code = 201, message = "Création: le compte de la personne à été correctement enregistrée en base"),
+////            @RestApiResponse(code = 304, message = "Nom modifié: la personne n'a pas été correctement insérée") })
 ////    public ResponseEntity<UserRequestDTO> createNewUser(@RequestBody UserRequestDTO userRegistration, String email, String username) {
 ////    	
 ////    	User existingEmail = userService.findByEmail(email);

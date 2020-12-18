@@ -6,6 +6,11 @@ package fr.lusseau.bibliotheque.dto.registration;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.hateoas.server.core.Relation;
 
 import fr.lusseau.bibliotheque.entity.Loan;
@@ -26,36 +31,53 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Request User Model")
 public class UserUpdate {
 
-	@ApiModelProperty(value = "User UUID")
 	private Long id;
-
+	
 	@ApiModelProperty(value = "User firstname")
+	@NotBlank
+	@Size(max = 20)
 	private String firstname;
 
 	@ApiModelProperty(value = "User lastname")
+	@NotBlank
+	@Size(max = 20)
 	private String lastname;
 
 	@ApiModelProperty(value = "User username")
+	@NotBlank
+	@Size(min = 4, max = 20)
 	private String username;
 
 	@ApiModelProperty(value = "User email")
+	@Email
+	@Size(max = 30)
 	private String email;
 
 	@ApiModelProperty(value = "User password")
+	@NotBlank
+	@Size(max = 20)
 	private String password;
 
 	@ApiModelProperty(value = "User phone")
+	@NotBlank
+	@Size(min = 10, max = 10)
 	private String phone;
 
 	@ApiModelProperty(value = "User address")
+	@NotBlank
+	@Size(max = 40)
 	private String address;
 
 	@ApiModelProperty(value = "User zip code")
+	@NotBlank
+	@Size(min = 5, max = 5)
 	private String zip;
 
 	@ApiModelProperty(value = "User city")
+	@NotBlank
+	@Size(max = 40)
 	private String city;
-	
+
 	@ApiModelProperty(value = "User created date")
 	private LocalDateTime createdAt;
 
@@ -63,9 +85,11 @@ public class UserUpdate {
 	private LocalDateTime updatedAt = LocalDateTime.now();
 
 	@ApiModelProperty(value = "User role(s)")
+	@NotNull
 	private Set<Role> roles;
 
 	@ApiModelProperty(value = "User surety")
+	@NotNull
 	private Surety surety;
 
 	@ApiModelProperty(value = "User loans")
@@ -80,6 +104,7 @@ public class UserUpdate {
 
 	/**
 	 * Constructor.
+	 * 
 	 * @param firstname
 	 * @param lastname
 	 * @param username
@@ -114,50 +139,10 @@ public class UserUpdate {
 		this.surety = surety;
 		this.loans = loans;
 	}
-	
-	/**
-	 * Constructor.
-	 * @param id
-	 * @param firstname
-	 * @param lastname
-	 * @param username
-	 * @param email
-	 * @param password
-	 * @param phone
-	 * @param address
-	 * @param zip
-	 * @param city
-	 * @param createdAt
-	 * @param updatedAt
-	 * @param roles
-	 * @param surety
-	 * @param loans
-	 */
-	public UserUpdate(Long id, String firstname, String lastname, String username, String email, String password,
-			String phone, String address, String zip, String city, LocalDateTime createdAt, LocalDateTime updatedAt,
-			Set<Role> roles, Surety surety, Set<Loan> loans) {
-		super();
-		this.id = id;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
-		this.address = address;
-		this.zip = zip;
-		this.city = city;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
-		this.roles = roles;
-		this.surety = surety;
-		this.loans = loans;
-	}
 
 	
 	/**
 	 * Method in charge of getting id's value .
-	 * 
 	 * @return the id
 	 */
 	public Long getId() {
@@ -166,7 +151,6 @@ public class UserUpdate {
 
 	/**
 	 * Method in charge of setting id's value.
-	 * 
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
@@ -334,11 +318,10 @@ public class UserUpdate {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	
-	
 
 	/**
 	 * Method in charge of getting createdAt's value .
+	 * 
 	 * @return the createdAt
 	 */
 	public LocalDateTime getCreatedAt() {
@@ -347,6 +330,7 @@ public class UserUpdate {
 
 	/**
 	 * Method in charge of setting createdAt's value.
+	 * 
 	 * @param createdAt the createdAt to set
 	 */
 	public void setCreatedAt(LocalDateTime createdAt) {
@@ -355,6 +339,7 @@ public class UserUpdate {
 
 	/**
 	 * Method in charge of getting updatedAt's value .
+	 * 
 	 * @return the updatedAt
 	 */
 	public LocalDateTime getUpdatedAt() {
@@ -363,6 +348,7 @@ public class UserUpdate {
 
 	/**
 	 * Method in charge of setting updatedAt's value.
+	 * 
 	 * @param updatedAt the updatedAt to set
 	 */
 	public void setUpdatedAt(LocalDateTime updatedAt) {

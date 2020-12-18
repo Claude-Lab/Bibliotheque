@@ -101,8 +101,8 @@ public class AuthorController {
 //	@RolesAllowed({ "admin", "salarie", "user" })
 //	@GetMapping("/")
 //	@ApiOperation(value = "Liste tout.e.s les auteur.trice.s", response = AuthorRequestDTO.class)
-//	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok: liste réussie"),
-//			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat") })
+//	@ApiResponses(value = { @RestApiResponse(code = 200, message = "Ok: liste réussie"),
+//			@RestApiResponse(code = 204, message = "Pas de donnée: pas de résultat") })
 //	public ResponseEntity<List<AuthorRequestDTO>> AuthorsList(@RequestHeader String Authorization) {
 //
 //		List<Author> authors = authorService.findAll();
@@ -123,8 +123,8 @@ public class AuthorController {
 //	@GetMapping("")
 //	@ApiOperation(value="Liste tout.e.s les auteur.trice.s", response = AuthorRequestDTO.class)
 //	@ApiResponses(value = {
-//			@ApiResponse(code = 200, message = "Ok: liste réussie"),
-//			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat")})
+//			@RestApiResponse(code = 200, message = "Ok: liste réussie"),
+//			@RestApiResponse(code = 204, message = "Pas de donnée: pas de résultat")})
 //	public ResponseEntity<List<AuthorRequestDTO>> AuthorsList() {
 //		
 //		List<Author> authors = authorService.findAll();
