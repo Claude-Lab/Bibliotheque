@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.lusseau.bibliotheque.configuration.security.CurrentUser;
+import fr.lusseau.bibliotheque.configuration.security.UserPrincipal;
 import fr.lusseau.bibliotheque.dto.registration.UserUpdate;
 import fr.lusseau.bibliotheque.entity.User;
 import fr.lusseau.bibliotheque.payload.RestApiResponse;
 import fr.lusseau.bibliotheque.payload.UserIdentityAvailability;
+import fr.lusseau.bibliotheque.payload.UserSummary;
 import fr.lusseau.bibliotheque.service.RoleService;
 import fr.lusseau.bibliotheque.service.UserService;
 import io.swagger.annotations.Api;
@@ -80,6 +83,14 @@ public class UserController {
 		return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
 	}
 
+	@GetMapping("/user/me")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('USER')")
+	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
+		UserSummary user = new UserSummary(currentUser.getId(), currentUser.getFirstname(), currentUser.getLastname(), currentUser.getUsername(), currentUser.getEmail(),
+				currentUser.getPhone(), currentUser.getAddress(), currentUser.getZip(), currentUser.getCity(), currentUser.getCreatedAt(), currentUser.getUpdatedAt(), currentUser.getSurety(), currentUser.getLoans(),  currentUser.getRoles());
+		return user;
+	}
+
 	/**
 	 * Methode en charge de mettre à jour un utilisateur de la base de données.
 	 * 
@@ -87,8 +98,7 @@ public class UserController {
 	 */
 	@PutMapping("/updateUser/{id}")
 	@ApiOperation(value = "Update user", response = List.class)
-	@ApiResponses(value = { 
-			@ApiResponse(code = 500, message = "Erreur: Pseudonyme ou email déjà existant"),
+	@ApiResponses(value = { @ApiResponse(code = 500, message = "Erreur: Pseudonyme ou email déjà existant"),
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
@@ -118,7 +128,7 @@ public class UserController {
 			user.setSurety(userUpdate.getSurety());
 			user.setLoans(userUpdate.getLoans());
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			
+
 			User userResponse = userService.updateUser(user);
 			if (userResponse != null) {
 				return new ResponseEntity<User>(userResponse, HttpStatus.OK);
