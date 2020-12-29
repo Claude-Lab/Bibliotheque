@@ -30,10 +30,11 @@ public class Category {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idCategory")
-	private Integer idCategory;
+	@Column(name = "id")
+	private Integer id;
 	
-	@Column(name = "code")
+	@NotBlank
+	@Column(unique = true, nullable = false, name = "code")
 	private String code;
 	
 	@NotBlank
@@ -49,6 +50,18 @@ public class Category {
 	public Category() {
 		// TODO Auto-generated constructor stub
 	}
+
+	/**
+	 * Constructor.
+	 * @param code
+	 * @param label
+	 */
+	public Category(@NotBlank String code, @NotBlank String label) {
+		this.label = label;
+		this.code = code;
+	}
+
+
 
 	/**
 	 * Constructor.
@@ -70,9 +83,9 @@ public class Category {
 	 * @param label
 	 * @param books
 	 */
-	public Category(Integer idCategory, String code, @NotBlank String label, Set<Book> books) {
+	public Category(Integer id, String code, @NotBlank String label, Set<Book> books) {
 		super();
-		this.idCategory = idCategory;
+		this.id = id;
 		this.code = code;
 		this.label = label;
 		this.books = books;
@@ -82,16 +95,16 @@ public class Category {
 	 * Method in charge of getting idCategory's value .
 	 * @return the idCategory
 	 */
-	public Integer getIdCategory() {
-		return idCategory;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idCategory's value.
 	 * @param idCategory the idCategory to set
 	 */
-	public void setIdCategory(Integer idCategory) {
-		this.idCategory = idCategory;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**
@@ -141,64 +154,4 @@ public class Category {
 	public void setBooks(Set<Book> books) {
 		this.books = books;
 	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((books == null) ? 0 : books.hashCode());
-		result = prime * result + ((code == null) ? 0 : code.hashCode());
-		result = prime * result + ((idCategory == null) ? 0 : idCategory.hashCode());
-		result = prime * result + ((label == null) ? 0 : label.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Category)) {
-			return false;
-		}
-		Category other = (Category) obj;
-		if (books == null) {
-			if (other.books != null) {
-				return false;
-			}
-		} else if (!books.equals(other.books)) {
-			return false;
-		}
-		if (code == null) {
-			if (other.code != null) {
-				return false;
-			}
-		} else if (!code.equals(other.code)) {
-			return false;
-		}
-		if (idCategory == null) {
-			if (other.idCategory != null) {
-				return false;
-			}
-		} else if (!idCategory.equals(other.idCategory)) {
-			return false;
-		}
-		if (label == null) {
-			if (other.label != null) {
-				return false;
-			}
-		} else if (!label.equals(other.label)) {
-			return false;
-		}
-		return true;
-	}
-
-	
-
 }

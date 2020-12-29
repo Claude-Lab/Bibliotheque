@@ -23,4 +23,8 @@ public interface CategoryDAO extends JpaRepository<Category, Integer>{
 	List<Category> findByLabelContaining(String label);
 	
 	Category findCategoryByLabelIgnoreCase(String label);
+	
+	boolean existsByLabel(String label);
+	
+	boolean existsByCode(String code);
 }

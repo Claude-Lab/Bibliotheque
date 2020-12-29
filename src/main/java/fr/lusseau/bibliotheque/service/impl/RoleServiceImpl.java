@@ -5,8 +5,8 @@ package fr.lusseau.bibliotheque.service.impl;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import fr.lusseau.bibliotheque.dao.RoleDAO;
 import fr.lusseau.bibliotheque.entity.Role;
@@ -20,10 +20,10 @@ import fr.lusseau.bibliotheque.service.RoleService;
  * @author Claude LUSSEAU
  *
  */
-@Service("RoleService")
-@Transactional
+@Service
 public class RoleServiceImpl implements RoleService {
 
+	@Autowired
 	RoleDAO dao;
 
 	/**

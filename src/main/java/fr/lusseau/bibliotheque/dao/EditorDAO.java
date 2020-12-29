@@ -24,5 +24,7 @@ public interface EditorDAO extends JpaRepository<Editor, Integer> {
 	
 	Editor findByName(String name);
 	
+	boolean existsByName(String name);
+	
 
 }

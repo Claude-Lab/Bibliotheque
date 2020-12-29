@@ -22,7 +22,7 @@ import fr.lusseau.bibliotheque.service.CategoryService;
  */
 @Service("CategoryService")
 @Transactional
-public class CategoryServiceImpl implements CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private CategoryDAO dao;
@@ -31,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService{
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Category saveCategory(Category categorie) {
+	public Category save(Category categorie) {
 		return dao.save(categorie);
 	}
 
@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService{
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Category updateCategory(Category categorie) {
+	public Category update(Category categorie) {
 		return dao.save(categorie);
 	}
 
@@ -47,8 +47,8 @@ public class CategoryServiceImpl implements CategoryService{
 	 * @{inheritDoc}
 	*/
 	@Override
-	public void deleteCategory(Integer idCategory) {
-		dao.deleteById(idCategory);
+	public void delete(Integer id) {
+		dao.deleteById(id);
 	}
 
 	/**
@@ -67,21 +67,40 @@ public class CategoryServiceImpl implements CategoryService{
 		return dao.findCategoryByLabelIgnoreCase(label);
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean checkIfIdExists(Integer idCategory) {
-		return dao.existsById(idCategory);
-	}
 
 	/**
 	 * Methode en charge de
 	 * @param categorie
 	 * @return
 	 */
-	public List<Category> findAllCategory() {
+	public List<Category> findAll() {
 		return dao.findAll();
 	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Category getOne(Integer id) {
+		return dao.getOne(id);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByLabel(String label) {
+		return dao.existsByLabel(label);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByCode(String code) {
+		return dao.existsByCode(code);
+	}
+	
+	
 
 }

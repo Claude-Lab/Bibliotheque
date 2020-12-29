@@ -16,21 +16,21 @@ import fr.lusseau.bibliotheque.entity.Author;
  */
 public interface AuthorService {
 	
-	public List<Author> findAll();
+	List<Author> findAll();
 	
-	public Author saveAuthor ( Author auteur);
+	Author save(Author author);
 	
-	public Author updateAuthor ( Author auteur);
+	void delete(Integer id);
 	
-	public void deleteAuthor(Integer idAuthor);
+	Author getOne(Integer id);
 	
-	public Author findByLastName(String lastName);
+	Author findByLastname(String lastname);
 	
-	public List<Author> findByLastNameLikeIgnoreCase(String lastName);
+	List<Author> findByLastnameLikeIgnoreCase(String lastname);
 	
-	public List<Author> findByLastNameContaining(String lastName);
+	List<Author> findByLastnameContaining(String lastname);
 	
-	public boolean checkIfIdexists(Integer idAuthor);
-		
-	public Author findById(Integer idAuthor);
+	boolean checkIfIdexists(Integer id);
+	
+	boolean existsByFullname(String fullname);
 }

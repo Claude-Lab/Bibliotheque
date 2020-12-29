@@ -33,7 +33,7 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 	
 	@Override
-	public Author saveAuthor(Author auteur) {
+	public Author save(Author auteur) {
 		return dao.save(auteur);
 	}
 
@@ -41,44 +41,36 @@ public class AuthorServiceImpl implements AuthorService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Author updateAuthor(Author auteur) {
-		return dao.save(auteur);
+	public void delete(Integer id) {
+		dao.deleteById(id);
 	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public void deleteAuthor(Integer idAuthor) {
-		dao.deleteById(idAuthor);
+	public List<Author> findByLastnameContaining(String lastname) {
+		return dao.findByLastnameContaining((new StringBuilder()).append("%").append(lastname).append("%").toString());
 	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public List<Author> findByLastNameContaining(String lastName) {
-		return dao.findByLastNameContaining((new StringBuilder()).append("%").append(lastName).append("%").toString());
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean checkIfIdexists(Integer idAuthor) {
-		return dao.existsById(idAuthor);
+	public boolean checkIfIdexists(Integer id) {
+		return dao.existsById(id);
 	}
 	
-	public List<Author> findByLastNameLikeIgnoreCase(String name){
-		return dao.findByLastNameLikeIgnoreCase(name);
+	public List<Author> findByLastnameLikeIgnoreCase(String lastname){
+		return dao.findByLastnameLikeIgnoreCase(lastname);
 	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Author findByLastName(String lastName) {
-		return dao.findByLastName(lastName);
+	public Author findByLastname(String lastname) {
+		return dao.findByLastname(lastname);
 	}
 
 	
@@ -87,9 +79,16 @@ public class AuthorServiceImpl implements AuthorService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Author findById(Integer idBook) {
-		// TODO Auto-generated method stub
-		return dao.findById(idBook).get();
+	public Author getOne(Integer id) {
+		return dao.getOne(id);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByFullname(String fullname) {
+		return dao.existsByFullname(fullname);
 	}
 
 

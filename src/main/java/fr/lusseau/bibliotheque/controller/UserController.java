@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.lusseau.bibliotheque.configuration.security.CurrentUser;
 import fr.lusseau.bibliotheque.configuration.security.UserPrincipal;
-import fr.lusseau.bibliotheque.dto.registration.UserUpdate;
+import fr.lusseau.bibliotheque.dto.update.UserUpdate;
 import fr.lusseau.bibliotheque.entity.User;
 import fr.lusseau.bibliotheque.payload.RestApiResponse;
 import fr.lusseau.bibliotheque.payload.UserIdentityAvailability;
@@ -47,7 +47,7 @@ import io.swagger.annotations.ApiResponses;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/user")
 @Api(value = "User Rest Controller: contains all operations for managing users")
 public class UserController {
 
@@ -65,7 +65,7 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	@GetMapping("/users")
+	@GetMapping("/allUsers")
 	@ApiOperation(value = "List all users of the Libraries", response = List.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
@@ -81,9 +81,9 @@ public class UserController {
 			return new ResponseEntity<List<User>>(listUsers, HttpStatus.OK);
 		}
 		return new ResponseEntity<List<User>>(HttpStatus.NO_CONTENT);
-	}
+	} 
 
-	@GetMapping("/user/me")
+	@GetMapping("/me")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('USER')")
 	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
 		UserSummary user = new UserSummary(currentUser.getId(), currentUser.getFirstname(), currentUser.getLastname(), currentUser.getUsername(), currentUser.getEmail(),
@@ -97,11 +97,11 @@ public class UserController {
 	 * @return
 	 */
 	@PutMapping("/updateUser/{id}")
-	@ApiOperation(value = "Update user", response = List.class)
+	@ApiOperation(value = "Update user", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Erreur: Pseudonyme ou email déjà existant"),
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 	public ResponseEntity<?> updateUser(@RequestBody UserUpdate userUpdate, User user, @PathVariable("id") Long id) {
 
 		if (userService.existsByEmail(user.getEmail())) {
@@ -158,13 +158,13 @@ public class UserController {
 	}
 
 	/**
-	 * Supprime une Personne dans la base de données. Si la personne n'est pas
-	 * retrouvée, on retourne le Statut HTTP NO_CONTENT.
+	 * Trouve une Personne dans la base de données. Si la personne n'est pas
+	 * retrouvée, on retourne le Statut HTTP NOT_FOUND.
 	 * 
 	 * @param idUser
 	 * @return
 	 */
-	@GetMapping("/user/{username}")
+	@GetMapping("/{username}")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 	public ResponseEntity<?> findUser(@PathVariable String username) {
 		if (userService.findByUsername(username) != null) {
@@ -181,7 +181,7 @@ public class UserController {
 	 * @param username
 	 * @return
 	 */
-	@GetMapping("/user/checkUsernameAvailability")
+	@GetMapping("/checkUsernameAvailability")
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
 		Boolean isAvailable = !userService.existsByUsername(username);
 		return new UserIdentityAvailability(isAvailable);
@@ -193,7 +193,7 @@ public class UserController {
 	 * @param email
 	 * @return
 	 */
-	@GetMapping("/user/checkEmailAvailability")
+	@GetMapping("/checkEmailAvailability")
 	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
 		Boolean isAvailable = !userService.existsByEmail(email);
 		return new UserIdentityAvailability(isAvailable);

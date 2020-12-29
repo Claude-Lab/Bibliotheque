@@ -23,8 +23,8 @@ public class Contact {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idContact")
-	private int idContact;
+	@Column(name = "id")
+	private int id;
 	
 	@Column(name = "street", nullable = false)
 	private String street;
@@ -75,8 +75,8 @@ public class Contact {
 	 * @param phone
 	 * @param email
 	 */
-	public Contact(int idContact, String street, String zip, String city, String country, String phone) {
-		this.idContact = idContact;
+	public Contact(int id, String street, String zip, String city, String country, String phone) {
+		this.id = id;
 		this.street = street;
 		this.zip = zip;
 		this.city = city;
@@ -88,16 +88,16 @@ public class Contact {
 	 * Method in charge of getting idContact's value .
 	 * @return the idContact
 	 */
-	public int getIdContact() {
-		return idContact;
+	public int getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idContact's value.
-	 * @param idContact the idContact to set
+	 * @param id the id to set
 	 */
-	public void setIdContact(int idContact) {
-		this.idContact = idContact;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -180,76 +180,5 @@ public class Contact {
 		this.phone = phone;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((city == null) ? 0 : city.hashCode());
-		result = prime * result + ((country == null) ? 0 : country.hashCode());
-		result = prime * result + idContact;
-		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-		result = prime * result + ((street == null) ? 0 : street.hashCode());
-		result = prime * result + ((zip == null) ? 0 : zip.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Contact)) {
-			return false;
-		}
-		Contact other = (Contact) obj;
-		if (city == null) {
-			if (other.city != null) {
-				return false;
-			}
-		} else if (!city.equals(other.city)) {
-			return false;
-		}
-		if (country == null) {
-			if (other.country != null) {
-				return false;
-			}
-		} else if (!country.equals(other.country)) {
-			return false;
-		}
-		if (idContact != other.idContact) {
-			return false;
-		}
-		if (phone == null) {
-			if (other.phone != null) {
-				return false;
-			}
-		} else if (!phone.equals(other.phone)) {
-			return false;
-		}
-		if (street == null) {
-			if (other.street != null) {
-				return false;
-			}
-		} else if (!street.equals(other.street)) {
-			return false;
-		}
-		if (zip == null) {
-			if (other.zip != null) {
-				return false;
-			}
-		} else if (!zip.equals(other.zip)) {
-			return false;
-		}
-		return true;
-	}
-
 	
-	
-
 }

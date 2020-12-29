@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * @{inheritDoc}
 	*/
+	@Override
 	public User findById(long id) {
 		return dao.findById(id);
 	}

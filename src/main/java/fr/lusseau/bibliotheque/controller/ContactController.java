@@ -47,7 +47,7 @@ public class ContactController {
 			@ApiResponse(code = 201, message = "Création : la Coordonnee a été correctement créée"),
 			@ApiResponse(code = 304, message = "Non modifiée : la Coordonnee n'a pas été créée") })
 	public ResponseEntity<Contact> createNewexistingContact(@RequestBody Contact contact) {
-		Contact existingContact = contactService.findOne(contact.getIdContact());
+		Contact existingContact = contactService.findOne(contact.getId());
 		if (existingContact != null) {
 			return new ResponseEntity<Contact>(HttpStatus.CONFLICT);
 		}
@@ -70,7 +70,7 @@ public class ContactController {
 			@ApiResponse(code = 200, message = "Ok: La coordonnee a été mise à jour"),
 			@ApiResponse(code = 304, message = "Non modifié: La coordonnee N'A PAS ETE MISE A JOUR !") })
 	public ResponseEntity<Contact> updateContact(@RequestBody Contact contactRequest) {
-		if (!contactService.checkIfContactExists(contactRequest.getIdContact())) {
+		if (!contactService.checkIfContactExists(contactRequest.getId())) {
 			return new ResponseEntity<Contact>(HttpStatus.NOT_FOUND);
 		}
 		Contact coordonnee = contactService.updateContact(contactRequest);

@@ -1,12 +1,16 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.dto.request;
+package fr.lusseau.bibliotheque.dto.registration;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.hateoas.server.core.Relation;
 
+import fr.lusseau.bibliotheque.entity.Author;
+import fr.lusseau.bibliotheque.entity.Category;
 import fr.lusseau.bibliotheque.entity.Editor;
 import fr.lusseau.bibliotheque.entity.Library;
 import fr.lusseau.bibliotheque.entity.State;
@@ -16,14 +20,14 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  25 oct. 2020 - 12:20:21
+ * @date  28 oct. 2020 - 10:58:44
  * @author Claude LUSSEAU
  *
  */
 @Relation(value = "book", collectionRelation = "books")
-@ApiModel(value = "Request Book Model")
-public class BookRequestDTO implements Comparable<BookRequestDTO> {
-
+@ApiModel(value = "Register Book Model")
+public class BookRegister  implements Comparable<BookRegister> {
+	
 	@ApiModelProperty(value = "Book id")
 	private Integer idBook;
 	
@@ -54,18 +58,24 @@ public class BookRequestDTO implements Comparable<BookRequestDTO> {
 	@ApiModelProperty(value = "Book library")
 	private Library library;
 	
+	@ApiModelProperty(value = "Book categories")
+	private Set<Category> categories = new HashSet<Category>();
+	
+	@ApiModelProperty(value = "Book authors")
+	private Set<Author> authors = new HashSet<Author>();
+	
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public int compareTo(BookRequestDTO o) {
+	public int compareTo(BookRegister o) {
 		return ((o.getTitle().compareToIgnoreCase(this.title)) & (o.getIsbn().compareToIgnoreCase(this.isbn)));
 	}
 	
 	/**
 	 * Constructor.
 	 */
-	public BookRequestDTO() {
+	public BookRegister() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -80,9 +90,12 @@ public class BookRequestDTO implements Comparable<BookRequestDTO> {
 	 * @param editor
 	 * @param state
 	 * @param library
+	 * @param categories
+	 * @param authors
 	 */
-	public BookRequestDTO(String title, String isbn, LocalDate releaseDate, LocalDate registerDate, Integer nbOfCopies,
-			String description, Editor editor, State state, Library library) {
+	public BookRegister(String title, String isbn, LocalDate releaseDate, LocalDate registerDate, Integer nbOfCopies,
+			String description, Editor editor, State state, Library library, Set<Category> categories,
+			Set<Author> authors) {
 		super();
 		this.title = title;
 		this.isbn = isbn;
@@ -93,6 +106,8 @@ public class BookRequestDTO implements Comparable<BookRequestDTO> {
 		this.editor = editor;
 		this.state = state;
 		this.library = library;
+		this.categories = categories;
+		this.authors = authors;
 	}
 
 	/**
@@ -107,9 +122,12 @@ public class BookRequestDTO implements Comparable<BookRequestDTO> {
 	 * @param editor
 	 * @param state
 	 * @param library
+	 * @param categories
+	 * @param authors
 	 */
-	public BookRequestDTO(Integer idBook, String title, String isbn, LocalDate releaseDate, LocalDate registerDate,
-			Integer nbOfCopies, String description, Editor editor, State state, Library library) {
+	public BookRegister(Integer idBook, String title, String isbn, LocalDate releaseDate, LocalDate registerDate,
+			Integer nbOfCopies, String description, Editor editor, State state, Library library,
+			Set<Category> categories, Set<Author> authors) {
 		super();
 		this.idBook = idBook;
 		this.title = title;
@@ -121,6 +139,8 @@ public class BookRequestDTO implements Comparable<BookRequestDTO> {
 		this.editor = editor;
 		this.state = state;
 		this.library = library;
+		this.categories = categories;
+		this.authors = authors;
 	}
 
 	/**
@@ -283,5 +303,36 @@ public class BookRequestDTO implements Comparable<BookRequestDTO> {
 		this.library = library;
 	}
 
-	
+	/**
+	 * Method in charge of getting categories's value .
+	 * @return the categories
+	 */
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
+	/**
+	 * Method in charge of setting categories's value.
+	 * @param categories the categories to set
+	 */
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
+	}
+
+	/**
+	 * Method in charge of getting authors's value .
+	 * @return the authors
+	 */
+	public Set<Author> getAuthors() {
+		return authors;
+	}
+
+	/**
+	 * Method in charge of setting authors's value.
+	 * @param authors the authors to set
+	 */
+	public void setAuthors(Set<Author> authors) {
+		this.authors = authors;
+	}
+
 }

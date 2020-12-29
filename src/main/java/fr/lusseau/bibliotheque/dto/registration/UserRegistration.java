@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @Relation(value = "user", collectionRelation = "users")
-@ApiModel(value = "Request User Model")
+@ApiModel(value = "Register User Model")
 public class UserRegistration {
 	
 	@ApiModelProperty(value = "User firstname")
@@ -43,47 +43,56 @@ public class UserRegistration {
 	
 	@ApiModelProperty(value = "User firstname")
 	@NotBlank
+	@NotNull
     @Size(min = 4, max = 40)
 	private String firstname;
 
 	@ApiModelProperty(value = "User lastname")
 	@NotBlank
+	@NotNull
     @Size(min = 4, max = 40)
 	private String lastname;
 
 	@ApiModelProperty(value = "User username")
 	@NotBlank
+	@NotNull
     @Size(min = 4, max = 40)
 	private String username;
 
 	@ApiModelProperty(value = "User email")
 	@NotBlank
+	@NotNull
     @Size(max = 40)
     @Email
 	private String email;
 
 	@ApiModelProperty(value = "User password")
 	@NotBlank
+	@NotNull
     @Size(min = 6, max = 20)
 	private String password;
 
 	@ApiModelProperty(value = "User phone")
 	@NotBlank
+	@NotNull
     @Size(min = 10, max = 10)
 	private String phone;
 
 	@ApiModelProperty(value = "User address")
 	@NotBlank
+	@NotNull
     @Size(min = 4, max = 40)
 	private String address;
 
 	@ApiModelProperty(value = "User zip code")
 	@NotBlank
+	@NotNull
     @Size(min = 5, max = 5)
 	private String zip;
 
 	@ApiModelProperty(value = "User city")
 	@NotBlank
+	@NotNull
     @Size(min = 4, max = 40)
 	private String city;
 	

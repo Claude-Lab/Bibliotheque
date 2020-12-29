@@ -63,26 +63,15 @@ dependencies {
     
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
 
-    // compile group: 'org.keycloak', name: 'keycloak-spring-boot-adapter-core', version: '11.0.3'
-    // compile group: 'org.keycloak', name: 'keycloak-spring-boot-starter', version: '11.0.3'
-    // compile group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: '11.0.3', ext: 'pom'
-    // compile group: 'org.keycloak', name: 'keycloak-adapter-core', version: '11.0.3'
-    // compile group: 'org.keycloak', name: 'keycloak-adapter-spi', version: '11.0.3'
-    // compile group: 'org.keycloak', name: 'keycloak-admin-client', version: '11.0.3'
-    // compile group: 'org.keycloak', name: 'keycloak-core', version: '11.0.3'
-    // providedCompile group: 'org.keycloak', name: 'keycloak-server-spi', version: '11.0.3'
-    
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     
     testCompile group: 'org.slf4j', name: 'slf4j-log4j12', version: '2.0.0-alpha1'
     testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version: '2.0.0-alpha1'
     
-    // providedCompile group: 'org.jboss.spec.javax.ejb', name: 'jboss-ejb-api_3.2_spec', version: '2.0.0.Final'
-    
-    // testCompile group: 'org.jboss.arquillian.graphene', name: 'graphene-webdriver', version: '2.3.2', ext: 'pom'
-    // compile group: 'org.jboss.arquillian.extension', name: 'arquillian-phantom-driver', version: '1.2.1.1'
-    
-    // compile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.4.1.Final'
+    providedCompile group: 'org.jboss.spec.javax.ejb', name: 'jboss-ejb-api_3.2_spec', version: '2.0.0.Final'
+    testCompile group: 'org.jboss.arquillian.graphene', name: 'graphene-webdriver', version: '2.3.2', ext: 'pom'
+    compile group: 'org.jboss.arquillian.extension', name: 'arquillian-phantom-driver', version: '1.2.1.1'
+    compile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.4.1.Final'
     
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

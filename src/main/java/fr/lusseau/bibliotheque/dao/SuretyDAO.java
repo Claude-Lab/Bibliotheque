@@ -19,11 +19,15 @@ import fr.lusseau.bibliotheque.entity.Surety;
 @RepositoryRestResource
 public interface SuretyDAO extends JpaRepository<Surety, Integer>{
 
+	Surety findByNbBooks(int nbBooks);
+	
+	Surety findByValue(double value);
+	
+	boolean existsByValue(double value);
+	
+	boolean existsByNbBooks(int nbBooks);
 	
 	@Query(value = "SELECT SUM(c.value) total, COUNT(p.id_surety) FROM User u INNER JOIN Surety s ON s.id_surety = u.id_surety", nativeQuery = true)
-	public double sumSurety();
-	
-	public Surety findByNbBooks(Integer nbBooks);
-	
+	double sumSurety();
 	
 }

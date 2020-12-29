@@ -3,7 +3,6 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * Class in charge of defining Author entity.
@@ -27,23 +25,21 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "Author")
-public class Author implements Serializable {
-
-	private static final long serialVersionUID = -1040204095656578272L;
+public class Author {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(updatable = false, nullable = false, name = "idAuthor")
-	private Integer idAuthor;
+	@Column(name = "id")
+	private Integer id;
 	
-	@Column(nullable = false, name = "firstName")
-	private String firstName;
+	@Column(nullable = false, name = "firstname")
+	private String firstname;
 	
-	@Column(nullable = false, name = "lastName")
-	private String lastName;
+	@Column(nullable = false, name = "lastname")
+	private String lastname;
 	
-	@Transient
-	private String fullName = firstName + " " + lastName;
+	@Column(nullable = false, name = "fullname")
+	private String fullname = (firstname + " " + lastname);
 
 	@ManyToMany(cascade = CascadeType.MERGE, mappedBy = "authors", fetch = FetchType.LAZY)
 	private Set<Book> books = new HashSet<Book>();
@@ -53,101 +49,115 @@ public class Author implements Serializable {
 	 */
 	public Author() {
 	}
-
+	
 	/**
 	 * Constructor.
-	 * @param firstName
-	 * @param lastName
-	 * @param firstLastName
+	 * @param firstname
+	 * @param lastname
+	 * @param fullname
+	 */
+	public Author(String firstname, String lastname, String fullname) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.fullname = fullname;
+	}
+
+	
+	/**
+	 * Constructor.
+	 * @param firstname
+	 * @param lastname
+	 * @param fullname
 	 * @param books
 	 */
-	public Author(String firstName, String lastName, String fullName, Set<Book> books) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fullName = fullName;
+	public Author(String firstname, String lastname, String fullname, Set<Book> books) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.fullname = fullname;
 		this.books = books;
 	}
 
+	
 	/**
-	 * Constructeur.
-	 * @param idAuthor
-	 * @param firstName
-	 * @param lastName
-	 * @param firstLastName
+	 * Constructor.
+	 * @param id
+	 * @param firstname
+	 * @param lastname
+	 * @param fullname
 	 * @param books
 	 */
-	public Author(Integer idAuthor, String firstName, String lastName, String fullName, Set<Book> books) {
-		this.idAuthor = idAuthor;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.fullName = fullName;
+	public Author(Integer id, String firstname, String lastname, String fullname, Set<Book> books) {
+		this.id = id;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.fullname = fullname;
 		this.books = books;
 	}
 
+	
 	/**
-	 * Method in charge of getting the value of idAuthor.
-	 * @return the idAuthor
+	 * Method in charge of 
+	 * @return
 	 */
-	public Integer getIdAuthor() {
-		return idAuthor;
+	public Integer getId() {
+		return id;
+	}
+
+	
+	/**
+	 * Method in charge of 
+	 * @param id
+	 */
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**
-	 * Method in charge of setting the value of idAuthor.
-	 * @param idAuthor the idAuthor to set
+	 * Method in charge of getting the value of firstname.
+	 * @return the firstname
 	 */
-	public void setIdAuthor(Integer idAuthor) {
-		this.idAuthor = idAuthor;
+	public String getFirstname() {
+		return firstname;
 	}
 
 	/**
-	 * Method in charge of getting the value of firstName.
-	 * @return the firstName
+	 * Method in charge of setting the value of firstname.
+	 * @param firstname the firstname to set
 	 */
-	public String getFirstName() {
-		return firstName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
 	/**
-	 * Method in charge of setting the value of firstName.
-	 * @param firstName the firstName to set
+	 * Method in charge of getting the value of lastname.
+	 * @return the lastname
 	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public String getLastname() {
+		return lastname;
 	}
 
 	/**
-	 * Method in charge of getting the value of lastName.
-	 * @return the lastName
+	 * Method in charge of setting the value of lastname.
+	 * @param lastname the lastname to set
 	 */
-	public String getLastName() {
-		return lastName;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	/**
-	 * Method in charge of setting the value of lastName.
-	 * @param lastName the lastName to set
+	 * Method in charge of getting the value of fullname.
+	 * @return the fullname
 	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public String getFullname() {
+		return new String(this.firstname + " " + this.lastname);
 	}
 
 	/**
-	 * Method in charge of getting the value of fullName.
-	 * @return the fullName
+	 * Method in charge of setting the value of fullname.
+	 * @param fullname the fullname to set
 	 */
-	public String getFullName() {
-		fullName = this.firstName + " " + this.lastName;
-		return fullName;
-	}
-
-	/**
-	 * Method in charge of setting the value of fullName.
-	 * @param fullName the fullName to set
-	 */
-	public void setFullName(String fullName) {
-		fullName = this.firstName + " " + this.lastName;
-		this.fullName = fullName;
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	/**
@@ -166,70 +176,4 @@ public class Author implements Serializable {
 		this.books = books;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((books == null) ? 0 : books.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
-		result = prime * result + ((idAuthor == null) ? 0 : idAuthor.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Author)) {
-			return false;
-		}
-		Author other = (Author) obj;
-		if (books == null) {
-			if (other.books != null) {
-				return false;
-			}
-		} else if (!books.equals(other.books)) {
-			return false;
-		}
-		if (firstName == null) {
-			if (other.firstName != null) {
-				return false;
-			}
-		} else if (!firstName.equals(other.firstName)) {
-			return false;
-		}
-		if (fullName == null) {
-			if (other.fullName != null) {
-				return false;
-			}
-		} else if (!fullName.equals(other.fullName)) {
-			return false;
-		}
-		if (idAuthor == null) {
-			if (other.idAuthor != null) {
-				return false;
-			}
-		} else if (!idAuthor.equals(other.idAuthor)) {
-			return false;
-		}
-		if (lastName == null) {
-			if (other.lastName != null) {
-				return false;
-			}
-		} else if (!lastName.equals(other.lastName)) {
-			return false;
-		}
-		return true;
-	}
-
-	
 }

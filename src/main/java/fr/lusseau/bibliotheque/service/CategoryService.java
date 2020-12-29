@@ -16,15 +16,22 @@ import fr.lusseau.bibliotheque.entity.Category;
  */
 public interface CategoryService {
 
-	public Category saveCategory (Category category);
+	Category save (Category category);
 	
-	public Category updateCategory (Category category);
+	Category update (Category category);
 	
-	public void deleteCategory(Integer idPersonne);
+	void delete(Integer id);
 	
-	public List<Category> findByLabelContaining(String label);
+	Category getOne(Integer id);
 	
-	public Category findCategoryByLabelIgnoreCase(String label);
+	List<Category> findAll();
 	
-	public boolean checkIfIdExists(Integer idCategory);
+	List<Category> findByLabelContaining(String label);
+	
+	Category findCategoryByLabelIgnoreCase(String label);
+	
+	boolean existsByLabel(String label);
+	
+	boolean existsByCode(String code);
+	
 }

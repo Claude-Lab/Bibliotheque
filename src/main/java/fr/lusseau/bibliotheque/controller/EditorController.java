@@ -4,13 +4,11 @@
 package fr.lusseau.bibliotheque.controller;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.request.EditorRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.EditorRequest;
 import fr.lusseau.bibliotheque.entity.Editor;
-import fr.lusseau.bibliotheque.service.impl.EditorServiceImpl;
+import fr.lusseau.bibliotheque.payload.RestApiResponse;
+import fr.lusseau.bibliotheque.service.EditorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -37,14 +36,14 @@ import io.swagger.annotations.ApiResponses;
  * @author Claude LUSSEAU
  *
  */
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("editors")
+@RequestMapping("/admin/editor")
 @Api(value = "Editor Rest Controller: contient toutes les operations pour la gestion des éditeurs")
 public class EditorController {
 
 	@Autowired
-	EditorServiceImpl editorService;
+	EditorService service;
 	
 	/**
 	 * Methode en charge d'ajouter une nouvelle Bibliotheque dans la base de données.
@@ -53,22 +52,24 @@ public class EditorController {
 	 * @return
 	 */
 	@PostMapping("/addEditor")
-	@ApiOperation(value = "Ajouter une nouvel éditeur", response = EditorRequestDTO.class)
+	@ApiOperation(value = "Ajouter une nouvel éditeur", response = Editor.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : l'éditeur existe déjà"),
 			@ApiResponse(code = 201, message = "Création : l'éditeur a été correctement créé"),
 			@ApiResponse(code = 304, message = "Non modifiée : l'éditeur n'a pas été créé") })
-	public ResponseEntity<EditorRequestDTO> createNewEditor(@RequestBody EditorRequestDTO editorRequestDTO) {
-		Editor existingEditor = editorService.findByName(editorRequestDTO.getName());
-		if (existingEditor != null) {
-			return new ResponseEntity<EditorRequestDTO>(HttpStatus.CONFLICT);
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
+	public ResponseEntity<?> createNewEditor(@RequestBody Editor editor) {
+		
+		if (service.existsByName(editor.getName())) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Editor with this fullname is already taken!"),
+					HttpStatus.CONFLICT);
 		}
-		Editor editorResquest = mapEditorDTOToEditor(editorRequestDTO);
-		Editor editorResponse = editorService.saveEditor(editorResquest);
-		if (editorResponse != null) {
-			EditorRequestDTO editorDTO = mapEditorToEditorDTO(editorResponse);
-			return new ResponseEntity<EditorRequestDTO>(editorDTO, HttpStatus.CREATED);
+		editor = new Editor(editor.getName(), editor.getEmail(), editor.getContact());
+		Editor editorResponse = service.save(editor);
+		if (editorResponse == null) {
+			return new ResponseEntity<Editor>(editor, HttpStatus.NOT_IMPLEMENTED);
 		}
-		return new ResponseEntity<EditorRequestDTO>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<Object>(new RestApiResponse(true, "Editor registered successfully"),
+				HttpStatus.CREATED);
 	}
 
 	
@@ -76,22 +77,39 @@ public class EditorController {
 	 * Methode en charge de lister toutes les Bibliotheques de la base de données.
 	 * @return
 	 */
-	@GetMapping("")
-	@ApiOperation(value="Liste toutes les Editeurs", response = EditorRequestDTO.class)
+	@GetMapping(value = "/allEditors")
+	@ApiOperation(value="Liste toutes les Editeurs", response = List.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
 	})
-	public ResponseEntity<List<EditorRequestDTO>> listEditor() {
-		
-		List<Editor> editors = editorService.findAll();
-		if (editors != null &&  !CollectionUtils.isEmpty(editors)) {
-			List<EditorRequestDTO> editorDTOs = editors.stream().map(editor -> { 
-				return mapEditorToEditorDTO(editor);
-			}).collect(Collectors.toList());
-			return new ResponseEntity<List<EditorRequestDTO>>(editorDTOs, HttpStatus.OK);
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
+	public ResponseEntity<List<Editor>> EditorsList() {
+		List<Editor> editors = service.findAll();
+		if (!CollectionUtils.isEmpty(editors)) {
+				return new ResponseEntity<List<Editor>>(editors, HttpStatus.OK);
+			}
+			return new ResponseEntity<List<Editor>>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<List<EditorRequestDTO>>(HttpStatus.NO_CONTENT);
+	
+	/**
+	 * Methode en charge de d'afficher un editeur de la base de données.
+	 * 
+	 * @return
+	 */
+	@GetMapping("/{id}")
+	@ApiOperation(value = "affiche un editeur", response = Editor.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok !"),
+			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
+	public ResponseEntity<?> getEditor(@PathVariable Integer id) {
+		if (service.getOne(id) == null) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Editor not found !"), HttpStatus.NOT_FOUND);
+		}
+		Editor editor = service.getOne(id);
+		return new ResponseEntity<Object>(editor, HttpStatus.OK);
+		
+
 	}
 	
 	/**
@@ -100,12 +118,18 @@ public class EditorController {
 	 * @param idBibliotheque
 	 * @return
 	 */
-	@DeleteMapping("/deleteEditor/{idEditor}")
-	@ApiOperation(value = "Supprimer une Bibliotheque. Si l'éditeur n'existe pas, rien ne se passe", response = String.class)
+	@DeleteMapping("/delete/{id}")
+	@ApiOperation(value = "Supprimer un Editeur. Si l'éditeur n'existe pas, rien ne se passe", response = String.class)
 	@ApiResponse(code = 204, message = "Pas de donnée: Editeur correctement supprimée")
-	public ResponseEntity<String> deleteEditor(@PathVariable Integer idEditor) {
-		editorService.deleteEditor(idEditor);
-		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> deleteEditor(@PathVariable Integer id) {
+		Editor editor = service.getOne(id);
+		if (editor != null) {
+			service.delete(id);
+			return new ResponseEntity<Object>(new RestApiResponse(true, "Editor has been successfully deleted !"),
+					HttpStatus.OK);
+		}
+		return new ResponseEntity<Object>(new RestApiResponse(false, "Editor not found !"), HttpStatus.NOT_FOUND);
 	}
 	
 	
@@ -115,63 +139,33 @@ public class EditorController {
 	 * @param BibliothequeRequest
 	 * @return
 	 */
-	@PutMapping("/updateEditor")
+	@PutMapping("/update/{id}")
 	@ApiOperation(value = "Modifie une éditeur existante", response = Editor.class)
 	@ApiResponses(value = { @ApiResponse(code = 404, message = "Not Found : L'éditeur n'existe pas"),
 			@ApiResponse(code = 200, message = "Ok: L'éditeur a été mise à jour"),
 			@ApiResponse(code = 304, message = "Non modifié: L'éditeur N'A PAS ETE MISE A JOUR !") })
-	public ResponseEntity<Editor> updateEditor(@RequestBody Editor editorRequest) {
-		if (!editorService.checkIfEditorExists(editorRequest.getIdEditor())) {
-			return new ResponseEntity<Editor>(HttpStatus.NOT_FOUND);
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
+	public ResponseEntity<?> updateEditor(@RequestBody EditorRequest update, Editor editor, @PathVariable("id") Integer id) {
+		editor = service.getOne(id);
+		
+		if (service.existsByName(update.getName())) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Editor with this name is already taken!"),
+					HttpStatus.CONFLICT);
 		}
-		Editor editor = editorService.updateEditor(editorRequest);
+		
 		if (editor != null) {
+			editor.setName(update.getName());
+			editor.setEmail(update.getEmail());
+			editor.setContact(update.getContact());
 			
-			return new ResponseEntity<Editor>(editor, HttpStatus.OK);
+			Editor response = service.save(editor);
+			if( response != null) {
+				return new ResponseEntity<Editor>(response, HttpStatus.OK);
+			}
 		}
 		return new ResponseEntity<Editor>(HttpStatus.NOT_MODIFIED);
+		
 	}
 	
-	/**
-	 * Methode en charge de d'afficher une Bibliothèques de la base de données.
-	 * @return
-	 */
-	@GetMapping("/{idEditor}")
-	@ApiOperation(value="affiche un éditeur", response = EditorRequestDTO.class)
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Ok !"),
-			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
-	})
-	public ResponseEntity<Editor> findEditor(@PathVariable Integer idEditor) {
-		Optional<Editor> editor = editorService.findById(idEditor);
-		if (editor != null) {
-			return new ResponseEntity<Editor>(HttpStatus.OK);
-		}
-		return new ResponseEntity<Editor>(HttpStatus.NO_CONTENT);
-	}
-	
-	/**
-	 * Transforme un entity Customer en un POJO CustomerDTO
-	 * 
-	 * @param customer
-	 * @return
-	 */
-	private EditorRequestDTO mapEditorToEditorDTO(Editor editor) {
-		ModelMapper mapper = new ModelMapper();
-		EditorRequestDTO editorDTO = mapper.map(editor, EditorRequestDTO.class);
-		return editorDTO;
-	}
-
-	/**
-	 * Transforme un POJO CustomerDTO en en entity Customer
-	 * 
-	 * @param customerDTO
-	 * @return
-	 */
-	private Editor mapEditorDTOToEditor(EditorRequestDTO editorDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Editor editor = mapper.map(editorDTO, Editor.class);
-		return editor;
-	}
 	
 }

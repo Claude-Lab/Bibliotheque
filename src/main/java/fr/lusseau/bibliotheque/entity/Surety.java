@@ -25,8 +25,8 @@ public class Surety {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idSurety")
-	private int idSurety;
+	@Column(name = "id")
+	private Integer id;
 	
 	@Column(unique = true, name = "value")
 	private double value;
@@ -59,8 +59,8 @@ public class Surety {
 	 * @param nbBooks
 	 * @param users
 	 */
-	public Surety(int idSurety, @NotNull @Min(0) double value, @NotNull @Min(0) int nbBooks) {
-		this.idSurety = idSurety;
+	public Surety(Integer id, @NotNull @Min(0) double value, @NotNull @Min(0) int nbBooks) {
+		this.id = id;
 		this.value = value;
 		this.nbBooks = nbBooks;
 	}
@@ -69,16 +69,16 @@ public class Surety {
 	 * Method in charge of getting idSurety's value .
 	 * @return the idSurety
 	 */
-	public int getIdSurety() {
-		return idSurety;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idSurety's value.
 	 * @param idSurety the idSurety to set
 	 */
-	public void setIdSurety(int idSurety) {
-		this.idSurety = idSurety;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**

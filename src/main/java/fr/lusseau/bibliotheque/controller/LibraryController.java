@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.request.LibraryRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.LibraryRequest;
 import fr.lusseau.bibliotheque.entity.Library;
 import fr.lusseau.bibliotheque.service.impl.LibraryServiceImpl;
 import io.swagger.annotations.Api;
@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiResponses;
  */
 @CrossOrigin("*")
 @RestController
-@RequestMapping("libraries")
+@RequestMapping("/admin/library")
 @Api(value = "Library Rest Controller: contient toutes les operations pour la gestion des bibliotheques")
 public class LibraryController {
 
@@ -52,22 +52,22 @@ public class LibraryController {
 	 * @return
 	 */
 	@PostMapping("/addLibrary")
-	@ApiOperation(value = "Ajouter une nouvelle Bibliotheque", response = LibraryRequestDTO.class)
+	@ApiOperation(value = "Ajouter une nouvelle Bibliotheque", response = LibraryRequest.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : la Bibliotheque existe déjà"),
 			@ApiResponse(code = 201, message = "Création : l'Bibliotheque a été correctement créée"),
 			@ApiResponse(code = 304, message = "Non modifiée : la Bibliotheque n'a pas été créée") })
-	public ResponseEntity<LibraryRequestDTO> createNewLibrary(@RequestBody LibraryRequestDTO libraryRequestDTO) {
+	public ResponseEntity<LibraryRequest> createNewLibrary(@RequestBody LibraryRequest libraryRequestDTO) {
 		Library existingLibrary = libraryService.findByName(libraryRequestDTO.getName());
 		if (existingLibrary != null) {
-			return new ResponseEntity<LibraryRequestDTO>(HttpStatus.CONFLICT);
+			return new ResponseEntity<LibraryRequest>(HttpStatus.CONFLICT);
 		}
 		Library libraryResquest = mapLibraryDTOToLibrary(libraryRequestDTO);
 		Library libraryResponse = libraryService.saveLibrary(libraryResquest);
 		if (libraryResponse != null) {
-			LibraryRequestDTO libraryDTO = mapLibraryToLibraryDTO(libraryResponse);
-			return new ResponseEntity<LibraryRequestDTO>(libraryDTO, HttpStatus.CREATED);
+			LibraryRequest libraryDTO = mapLibraryToLibraryDTO(libraryResponse);
+			return new ResponseEntity<LibraryRequest>(libraryDTO, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<LibraryRequestDTO>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<LibraryRequest>(HttpStatus.NOT_MODIFIED);
 	}
 
 	
@@ -75,22 +75,22 @@ public class LibraryController {
 	 * Methode en charge de lister toutes les Bibliotheques de la base de données.
 	 * @return
 	 */
-	@GetMapping("")
+	@GetMapping("/allLibraries")
 	@ApiOperation(value="Liste toutes les Bibliotheques", response = Library.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
 	})
-	public ResponseEntity<List<LibraryRequestDTO>> listLibrary() {
+	public ResponseEntity<List<LibraryRequest>> listLibrary() {
 		
 		List<Library> libraries = libraryService.findAllLibrary();
 		if (libraries != null &&  !CollectionUtils.isEmpty(libraries)) {
-			List<LibraryRequestDTO> libraryDTOs = libraries.stream().map(library -> { 
+			List<LibraryRequest> libraryDTOs = libraries.stream().map(library -> { 
 				return mapLibraryToLibraryDTO(library);
 			}).collect(Collectors.toList());
-			return new ResponseEntity<List<LibraryRequestDTO>>(libraryDTOs, HttpStatus.OK);
+			return new ResponseEntity<List<LibraryRequest>>(libraryDTOs, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<LibraryRequestDTO>>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<List<LibraryRequest>>(HttpStatus.NO_CONTENT);
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class LibraryController {
 			@ApiResponse(code = 200, message = "Ok: La Bibliotheque a été mise à jour"),
 			@ApiResponse(code = 304, message = "Non modifié: La Bibliotheque N'A PAS ETE MISE A JOUR !") })
 	public ResponseEntity<Library> updateLibrary(@RequestBody Library libraryRequest) {
-		if (!libraryService.checkIsLibraryExists(libraryRequest.getIdLibrary())) {
+		if (!libraryService.checkIsLibraryExists(libraryRequest.getId())) {
 			return new ResponseEntity<Library>(HttpStatus.NOT_FOUND);
 		}
 		Library library = libraryService.updateLibrary(libraryRequest);
@@ -155,9 +155,9 @@ public class LibraryController {
 	 * @param customer
 	 * @return
 	 */
-	private LibraryRequestDTO mapLibraryToLibraryDTO(Library library) {
+	private LibraryRequest mapLibraryToLibraryDTO(Library library) {
 		ModelMapper mapper = new ModelMapper();
-		LibraryRequestDTO libraryDTO = mapper.map(library, LibraryRequestDTO.class);
+		LibraryRequest libraryDTO = mapper.map(library, LibraryRequest.class);
 		return libraryDTO;
 	}
 
@@ -167,7 +167,7 @@ public class LibraryController {
 	 * @param customerDTO
 	 * @return
 	 */
-	private Library mapLibraryDTOToLibrary(LibraryRequestDTO libraryDTO) {
+	private Library mapLibraryDTOToLibrary(LibraryRequest libraryDTO) {
 		ModelMapper mapper = new ModelMapper();
 		Library library = mapper.map(libraryDTO, Library.class);
 		return library;

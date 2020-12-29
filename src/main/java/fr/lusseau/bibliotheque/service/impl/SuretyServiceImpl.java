@@ -4,7 +4,6 @@
 package fr.lusseau.bibliotheque.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class SuretyServiceImpl implements SuretyService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Surety saveSurety(Surety surety) {
+	public Surety save(Surety surety) {
 		return dao.save(surety);
 	}
 
@@ -39,24 +38,16 @@ public class SuretyServiceImpl implements SuretyService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Surety updateSurety(Surety surety) {
-		return dao.save(surety);
+	public void deleteSurety(Integer id) {
+		dao.deleteById(id);
 	}
 
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public void deleteSurety(Integer idSurety) {
-		dao.deleteById(idSurety);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean checkIfSuretyExists(Integer idSurety) {
-		return dao.existsById(idSurety);
+	public boolean checkIfSuretyExists(Integer id) {
+		return dao.existsById(id);
 	}
 	
 	/**
@@ -71,16 +62,41 @@ public class SuretyServiceImpl implements SuretyService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Optional<Surety> findById(Integer idSurety) {
-		return dao.findById(idSurety);
+	public Surety getOne(Integer id) {
+		return dao.getOne(id);
 	}
+	
 	
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Surety findByNbBooks(Integer nbBooks) {
+	public Surety findByNbBooks(int nbBooks) {
 		return dao.findByNbBooks(nbBooks);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Surety findByValue(double value) {
+		return dao.findByValue(value);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByValue(double value) {
+		return dao.existsByValue(value);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByNbBooks(int nbBooks) {
+		return dao.existsByNbBooks(nbBooks);
 	}
 
 }

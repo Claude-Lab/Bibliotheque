@@ -15,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,20 +22,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.lusseau.bibliotheque.configuration.security.JwtTokenProvider;
-import fr.lusseau.bibliotheque.dao.RoleDAO;
 import fr.lusseau.bibliotheque.dto.registration.UserRegistration;
+import fr.lusseau.bibliotheque.dto.request.LoginRequest;
 import fr.lusseau.bibliotheque.entity.Role;
 import fr.lusseau.bibliotheque.entity.RoleName;
 import fr.lusseau.bibliotheque.entity.User;
 import fr.lusseau.bibliotheque.exceptions.AppException;
 import fr.lusseau.bibliotheque.payload.JwtAuthenticationResponse;
-import fr.lusseau.bibliotheque.payload.LoginRequest;
 import fr.lusseau.bibliotheque.payload.RestApiResponse;
+import fr.lusseau.bibliotheque.service.RoleService;
 import fr.lusseau.bibliotheque.service.UserService;
+import fr.lusseau.bibliotheque.utils.UserMapper;
+import fr.lusseau.bibliotheque.utils.impl.UserMapperImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 
 /**
  * Class in charge of defining .
@@ -56,7 +58,7 @@ public class AuthController {
 	UserService userService;
 
 	@Autowired
-	RoleDAO roleDao;
+	RoleService roleService;
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -66,7 +68,8 @@ public class AuthController {
 
 	@Autowired
 	JwtTokenProvider tokenProvider;
-	
+
+	UserMapper mapper = new UserMapperImpl();
 
 	/**
 	 * Method in charge of login user.
@@ -105,66 +108,34 @@ public class AuthController {
 	public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistration newUser) {
 
 		if (userService.existsByEmail(newUser.getEmail())) {
-			return new ResponseEntity<Object>(new RestApiResponse(false, "Email is already taken!"), HttpStatus.CONFLICT);
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Email is already taken!"),
+					HttpStatus.CONFLICT);
 		}
-		
-		if  (userService.existsByUsername(newUser.getUsername())) {
-			return new ResponseEntity<Object>(new RestApiResponse(false, "Username is already taken!"), HttpStatus.CONFLICT);
+
+		if (userService.existsByUsername(newUser.getUsername())) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Username is already taken!"),
+					HttpStatus.CONFLICT);
 		}
-		
+
 		// create user.
-		User user  = new User(newUser.getFirstname(), newUser.getLastname(), newUser.getUsername(),
-				newUser.getEmail(), newUser.getPassword(), newUser.getPhone(), newUser.getAddress(), newUser.getZip(), newUser.getCity(),
-				newUser.getCreatedAt(), newUser.getUpdatedAt(), newUser.getRoles(), newUser.getSurety(), newUser.getLoans());
-		
+		User user = new User(newUser.getFirstname(), newUser.getLastname(), newUser.getUsername(), newUser.getEmail(),
+				newUser.getPassword(), newUser.getPhone(), newUser.getAddress(), newUser.getZip(), newUser.getCity(),
+				newUser.getCreatedAt(), newUser.getUpdatedAt(), newUser.getRoles(), newUser.getSurety(),
+				newUser.getLoans());
+
 		user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-		
-		Role userRole = roleDao.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
-		
+
+		Role userRole = roleService.findByName(RoleName.ROLE_USER)
+				.orElseThrow(() -> new AppException("User Role not set."));
+
 		user.setRoles(Collections.singleton(userRole));
-		
-		
+
 		User userResponse = userService.saveUser(user);
-        if (userResponse != null) {
-        	UserRegistration userDTO = convertToDto(user);
-            return new ResponseEntity<UserRegistration>(userDTO, HttpStatus.CREATED);
-        }
-		
-
-        return new ResponseEntity<Object>(new RestApiResponse(true, "User registered successfully"),HttpStatus.CREATED);
-		
-      
-	}
-
-	/**
-	 * Transforme un entity User en un POJO UserDTO.
-	 * 
-	 * @param User
-	 * @return
-	 */
-	protected UserRegistration convertToDto(User user) {
-		UserRegistration dto = new UserRegistration(user.getFirstname(), user.getLastname(), user.getUsername(),
-				user.getEmail(), user.getPassword(), user.getPhone(), user.getAddress(), user.getZip(), user.getCity(),
-				user.getCreatedAt(), user.getUpdatedAt(), user.getRoles(), user.getSurety(), user.getLoans());
-
-		return dto;
-	}
-
-	/**
-	 * Transforme un POJO UserDTO en en entity User.
-	 * 
-	 * @param UserRegistration
-	 * @return
-	 */
-	protected User convertToEntity(UserRegistration dto) {
-		User user = new User(dto.getFirstname(), dto.getLastname(), dto.getUsername(), dto.getEmail(),
-				dto.getPassword(), dto.getPhone(), dto.getAddress(), dto.getZip(), dto.getCity(), dto.getCreatedAt(),
-				dto.getUpdatedAt(), dto.getRoles(), dto.getSurety(), dto.getLoans());
-		if (!StringUtils.isEmpty(dto.getId())) {
-			user.setId(dto.getId());
+		if (userResponse != null) {
+			UserRegistration userDTO = mapper.entityToUserRegistration(user);
+			return new ResponseEntity<UserRegistration>(userDTO, HttpStatus.CREATED);
 		}
-		return user;
+		return new ResponseEntity<Object>(new RestApiResponse(true, "User registered successfully"),
+				HttpStatus.CREATED);
 	}
-
 }

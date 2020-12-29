@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * Class in charge of defining Editor entity.
@@ -27,16 +29,18 @@ public class Editor {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idEditor")
-	private int idEditor;
+	@Column(name = "id")
+	private int id;
 	
+	@NotBlank
 	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 	
+	@NotBlank
 	@Column(name = "email", unique = true, nullable = true)
 	private String email;
 	
-
+	@NotNull
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name="idContact", nullable=false )
 	private Contact contact;
@@ -67,8 +71,8 @@ public class Editor {
 	 * @param contact
 	 * @param books
 	 */
-	public Editor(int idEditor, String name, String email, Contact contact) {
-		this.idEditor = idEditor;
+	public Editor(int id, String name, String email, Contact contact) {
+		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.contact = contact;
@@ -78,16 +82,16 @@ public class Editor {
 	 * Method in charge of getting idEditor's value .
 	 * @return the idEditor
 	 */
-	public int getIdEditor() {
-		return idEditor;
+	public int getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idEditor's value.
 	 * @param idEditor the idEditor to set
 	 */
-	public void setIdEditor(int idEditor) {
-		this.idEditor = idEditor;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -138,59 +142,5 @@ public class Editor {
 		this.email = email;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + idEditor;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Editor)) {
-			return false;
-		}
-		Editor other = (Editor) obj;
-		if (contact == null) {
-			if (other.contact != null) {
-				return false;
-			}
-		} else if (!contact.equals(other.contact)) {
-			return false;
-		}
-		if (email == null) {
-			if (other.email != null) {
-				return false;
-			}
-		} else if (!email.equals(other.email)) {
-			return false;
-		}
-		if (idEditor != other.idEditor) {
-			return false;
-		}
-		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name)) {
-			return false;
-		}
-		return true;
-	}
-
-	
 	
 }

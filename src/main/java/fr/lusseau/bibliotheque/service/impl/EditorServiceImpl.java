@@ -4,7 +4,6 @@
 package fr.lusseau.bibliotheque.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +26,13 @@ public class EditorServiceImpl implements EditorService {
 
 	@Autowired
 	private EditorDAO dao;
+	
+
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Editor saveEditor(Editor editor) {
+	public Editor save(Editor editor) {
 		return dao.save(editor);
 	}
 
@@ -39,7 +40,7 @@ public class EditorServiceImpl implements EditorService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Editor updateEditor(Editor editor) {
+	public Editor update(Editor editor) {
 		return dao.save(editor);
 	}
 
@@ -47,8 +48,8 @@ public class EditorServiceImpl implements EditorService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public void deleteEditor(Integer idEditor) {
-		dao.deleteById(idEditor);
+	public void delete(Integer id) {
+		dao.deleteById(id);
 	}
 
 	/**
@@ -57,14 +58,6 @@ public class EditorServiceImpl implements EditorService {
 	@Override
 	public List<Editor> findByNameContaining(String name) {
 		return dao.findByNameContaining(name);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean checkIfEditorExists(Integer idEditor) {
-		return dao.existsById(idEditor);
 	}
 	
 	/**
@@ -87,8 +80,18 @@ public class EditorServiceImpl implements EditorService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Optional<Editor> findById(Integer idEditor) {
-		return dao.findById(idEditor);
+	public Editor getOne(Integer id) {
+		return dao.getOne(id);
+	}
+	
+	/**
+	 * Method in charge of 
+	 * @param name
+	 * @return
+	 */
+	@Override
+	public boolean existsByName(String name) {
+		return dao.existsByName(name);
 	}
 
 }

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.lusseau.bibliotheque.dto.request.StateRequestDTO;
+import fr.lusseau.bibliotheque.dto.request.StateRequest;
 import fr.lusseau.bibliotheque.entity.State;
 import fr.lusseau.bibliotheque.service.impl.StateServiceImpl;
 import io.swagger.annotations.Api;
@@ -53,22 +53,22 @@ public class StateController {
 	 * @return
 	 */
 	@PostMapping("/addState")
-	@ApiOperation(value = "Ajouter un nouvel état", response = StateRequestDTO.class)
+	@ApiOperation(value = "Ajouter un nouvel état", response = StateRequest.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : le livre existe déjà"),
 			@ApiResponse(code = 201, message = "Création : l'état a été correctement créé"),
 			@ApiResponse(code = 304, message = "Non modifiée : l'état n'a pas été créé") })
-	public ResponseEntity<StateRequestDTO> createNewState(@RequestBody StateRequestDTO stateDTORequest) {
+	public ResponseEntity<StateRequest> createNewState(@RequestBody StateRequest stateDTORequest) {
 		State existingCategory = stateService.findStateByLabel(stateDTORequest.getLabel());
 		if (existingCategory != null) {
-			return new ResponseEntity<StateRequestDTO>(HttpStatus.CONFLICT);
+			return new ResponseEntity<StateRequest>(HttpStatus.CONFLICT);
 		}
 		State stateRequest = mapStateDTOToState(stateDTORequest);
 		State stateResponse = stateService.saveState(stateRequest);
 		if (stateResponse != null) {
-			StateRequestDTO stateDTO = mapStateToStateDTO(stateRequest);
-			return new ResponseEntity<StateRequestDTO>(stateDTO, HttpStatus.CREATED);
+			StateRequest stateDTO = mapStateToStateDTO(stateRequest);
+			return new ResponseEntity<StateRequest>(stateDTO, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<StateRequestDTO>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<StateRequest>(HttpStatus.NOT_MODIFIED);
 	}
 
 	/**
@@ -81,17 +81,17 @@ public class StateController {
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
 	})
-	public ResponseEntity<List<StateRequestDTO>> StatesList() {
+	public ResponseEntity<List<StateRequest>> StatesList() {
 		
 		List<State> states = stateService.findAll();
 		if (!CollectionUtils.isEmpty(states)) {
-			List<StateRequestDTO> stateDTOs = states.stream().map(state -> { 
+			List<StateRequest> stateDTOs = states.stream().map(state -> { 
 				return mapStateToStateDTO(state);
 			}).collect(Collectors.toList());
 			
-			return new ResponseEntity<List<StateRequestDTO>>(stateDTOs, HttpStatus.OK);
+			return new ResponseEntity<List<StateRequest>>(stateDTOs, HttpStatus.OK);
 		}
-		return new ResponseEntity<List<StateRequestDTO>>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<List<StateRequest>>(HttpStatus.NO_CONTENT);
 	}
 	
 	/**
@@ -114,22 +114,22 @@ public class StateController {
 	 * @return
 	 */
 	@PutMapping("/states/updatestate")
-	@ApiOperation(value = "Modifie un état existant", response = StateRequestDTO.class)
+	@ApiOperation(value = "Modifie un état existant", response = StateRequest.class)
 	@ApiResponses(value = { @ApiResponse(code = 404, message = "Not Found : L'état n'existe pas"),
 			@ApiResponse(code = 200, message = "Ok: L'état a été mis à jour"),
 			@ApiResponse(code = 304, message = "Non modifié: L'état N'A PAS ETE MIS A JOUR !") })
-	public ResponseEntity<StateRequestDTO> updateState(@RequestBody StateRequestDTO stateDTORequest) {
+	public ResponseEntity<StateRequest> updateState(@RequestBody StateRequest stateDTORequest) {
 		if (!stateService.checkIfIdExists(stateDTORequest.getIdState())) {
-			return new ResponseEntity<StateRequestDTO>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<StateRequest>(HttpStatus.NOT_FOUND);
 		}
 		
 		State stateRequest = mapStateDTOToState(stateDTORequest);
 		State stateResponse = stateService.updateState(stateRequest);
 		if (stateResponse != null) {
-			StateRequestDTO stateDTO = mapStateToStateDTO(stateRequest);
-			return new ResponseEntity<StateRequestDTO>(stateDTO, HttpStatus.CREATED);
+			StateRequest stateDTO = mapStateToStateDTO(stateRequest);
+			return new ResponseEntity<StateRequest>(stateDTO, HttpStatus.CREATED);
 		}
-		return new ResponseEntity<StateRequestDTO>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<StateRequest>(HttpStatus.NOT_MODIFIED);
 	}
 	
 	/**
@@ -138,9 +138,9 @@ public class StateController {
 	 * @param customer
 	 * @return
 	 */
-	private StateRequestDTO mapStateToStateDTO(State state) {
+	private StateRequest mapStateToStateDTO(State state) {
 		ModelMapper mapper = new ModelMapper();
-		StateRequestDTO stateDTO = mapper.map(state, StateRequestDTO.class);
+		StateRequest stateDTO = mapper.map(state, StateRequest.class);
 		return stateDTO;
 	}
 
@@ -150,7 +150,7 @@ public class StateController {
 	 * @param customerDTO
 	 * @return
 	 */
-	private State mapStateDTOToState(StateRequestDTO stateDTO) {
+	private State mapStateDTOToState(StateRequest stateDTO) {
 		ModelMapper mapper = new ModelMapper();
 		State state = mapper.map(stateDTO, State.class);
 		return state;

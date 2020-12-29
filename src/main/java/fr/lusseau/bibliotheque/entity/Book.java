@@ -36,8 +36,8 @@ public class Book  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idBook")
-	private Integer idBook;
+	@Column(name = "id")
+	private Integer id;
 	
 	@Column(name = "title", nullable = false)
 	private String title;
@@ -90,23 +90,94 @@ public class Book  {
 	 * Constructor.
 	 */
 	public Book() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
+	
+
+	/**
+	 * Constructor.
+	 * @param title
+	 * @param isbn
+	 * @param releaseDate
+	 * @param registerDate
+	 * @param nbOfCopies
+	 * @param authors
+	 * @param categories
+	 * @param description
+	 * @param editor
+	 * @param library
+	 * @param state
+	 * @param loans
+	 */
+	public Book(String title, String isbn, LocalDate releaseDate, LocalDate registerDate, Integer nbOfCopies,
+			Set<Author> authors, Set<Category> categories, String description, Editor editor, Library library,
+			State state, Set<Loan> loans) {
+		super();
+		this.title = title;
+		this.isbn = isbn;
+		this.releaseDate = releaseDate;
+		this.registerDate = registerDate;
+		this.nbOfCopies = nbOfCopies;
+		this.authors = authors;
+		this.categories = categories;
+		this.description = description;
+		this.editor = editor;
+		this.library = library;
+		this.state = state;
+		this.loans = loans;
+	}
+
+
+	/**
+	 * Constructor.
+	 * @param id
+	 * @param title
+	 * @param isbn
+	 * @param releaseDate
+	 * @param registerDate
+	 * @param nbOfCopies
+	 * @param authors
+	 * @param categories
+	 * @param description
+	 * @param editor
+	 * @param library
+	 * @param state
+	 * @param loans
+	 */
+	public Book(Integer id, String title, String isbn, LocalDate releaseDate, LocalDate registerDate,
+			Integer nbOfCopies, Set<Author> authors, Set<Category> categories, String description, Editor editor,
+			Library library, State state, Set<Loan> loans) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.isbn = isbn;
+		this.releaseDate = releaseDate;
+		this.registerDate = registerDate;
+		this.nbOfCopies = nbOfCopies;
+		this.authors = authors;
+		this.categories = categories;
+		this.description = description;
+		this.editor = editor;
+		this.library = library;
+		this.state = state;
+		this.loans = loans;
+	}
+
 
 	/**
 	 * Method in charge of getting idBook's value .
 	 * @return the idBook
 	 */
-	public Integer getIdBook() {
-		return idBook;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idBook's value.
 	 * @param idBook the idBook to set
 	 */
-	public void setIdBook(Integer idBook) {
-		this.idBook = idBook;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**
@@ -301,135 +372,5 @@ public class Book  {
 		this.loans = loans;
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((authors == null) ? 0 : authors.hashCode());
-		result = prime * result + ((categories == null) ? 0 : categories.hashCode());
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((editor == null) ? 0 : editor.hashCode());
-		result = prime * result + ((idBook == null) ? 0 : idBook.hashCode());
-		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
-		result = prime * result + ((library == null) ? 0 : library.hashCode());
-		result = prime * result + ((loans == null) ? 0 : loans.hashCode());
-		result = prime * result + ((nbOfCopies == null) ? 0 : nbOfCopies.hashCode());
-		result = prime * result + ((registerDate == null) ? 0 : registerDate.hashCode());
-		result = prime * result + ((releaseDate == null) ? 0 : releaseDate.hashCode());
-		result = prime * result + ((state == null) ? 0 : state.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Book)) {
-			return false;
-		}
-		Book other = (Book) obj;
-		if (authors == null) {
-			if (other.authors != null) {
-				return false;
-			}
-		} else if (!authors.equals(other.authors)) {
-			return false;
-		}
-		if (categories == null) {
-			if (other.categories != null) {
-				return false;
-			}
-		} else if (!categories.equals(other.categories)) {
-			return false;
-		}
-		if (description == null) {
-			if (other.description != null) {
-				return false;
-			}
-		} else if (!description.equals(other.description)) {
-			return false;
-		}
-		if (editor == null) {
-			if (other.editor != null) {
-				return false;
-			}
-		} else if (!editor.equals(other.editor)) {
-			return false;
-		}
-		if (idBook == null) {
-			if (other.idBook != null) {
-				return false;
-			}
-		} else if (!idBook.equals(other.idBook)) {
-			return false;
-		}
-		if (isbn == null) {
-			if (other.isbn != null) {
-				return false;
-			}
-		} else if (!isbn.equals(other.isbn)) {
-			return false;
-		}
-		if (library == null) {
-			if (other.library != null) {
-				return false;
-			}
-		} else if (!library.equals(other.library)) {
-			return false;
-		}
-		if (loans == null) {
-			if (other.loans != null) {
-				return false;
-			}
-		} else if (!loans.equals(other.loans)) {
-			return false;
-		}
-		if (nbOfCopies == null) {
-			if (other.nbOfCopies != null) {
-				return false;
-			}
-		} else if (!nbOfCopies.equals(other.nbOfCopies)) {
-			return false;
-		}
-		if (registerDate == null) {
-			if (other.registerDate != null) {
-				return false;
-			}
-		} else if (!registerDate.equals(other.registerDate)) {
-			return false;
-		}
-		if (releaseDate == null) {
-			if (other.releaseDate != null) {
-				return false;
-			}
-		} else if (!releaseDate.equals(other.releaseDate)) {
-			return false;
-		}
-		if (state == null) {
-			if (other.state != null) {
-				return false;
-			}
-		} else if (!state.equals(other.state)) {
-			return false;
-		}
-		if (title == null) {
-			if (other.title != null) {
-				return false;
-			}
-		} else if (!title.equals(other.title)) {
-			return false;
-		}
-		return true;
-	}
 	
-	
-
 }

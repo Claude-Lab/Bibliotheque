@@ -9,31 +9,31 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  25 oct. 2020 - 15:01:05
+ * @date  25 oct. 2020 - 14:28:16
  * @author Claude LUSSEAU
  *
  */
-@ApiModel(value = "Request State Model")
-public class StateRequestDTO implements Comparable<StateRequestDTO> {
+@ApiModel(value = "Request Role Model")
+public class RoleRequest implements Comparable<RoleRequest> {
 	
-	@ApiModelProperty(value = "State id")
-	private int idState;
-
-	@ApiModelProperty(value = "State label")
+	@ApiModelProperty(value = "Role id")
+	private int idRole;
+	
+	@ApiModelProperty(value = "Role label")
 	private String label;
 	
 	/**
 	 * @{inheritDoc}
 	*/
 	@Override
-	public int compareTo(StateRequestDTO o) {
+	public int compareTo(RoleRequest o) {
 		return o.getLabel().compareToIgnoreCase(this.label);
 	}
 	
 	/**
 	 * Constructor.
 	 */
-	public StateRequestDTO() {
+	public RoleRequest() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -41,36 +41,36 @@ public class StateRequestDTO implements Comparable<StateRequestDTO> {
 	 * Constructor.
 	 * @param label
 	 */
-	public StateRequestDTO(String label) {
+	public RoleRequest(String label) {
 		super();
 		this.label = label;
 	}
 
 	/**
 	 * Constructor.
-	 * @param idState
+	 * @param idRole
 	 * @param label
 	 */
-	public StateRequestDTO(int idState, String label) {
+	public RoleRequest(int idRole, String label) {
 		super();
-		this.idState = idState;
+		this.idRole = idRole;
 		this.label = label;
 	}
 
 	/**
-	 * Method in charge of getting idState's value .
-	 * @return the idState
+	 * Method in charge of getting idRole's value .
+	 * @return the idRole
 	 */
-	public int getIdState() {
-		return idState;
+	public int getIdRole() {
+		return idRole;
 	}
 
 	/**
-	 * Method in charge of setting idState's value.
-	 * @param idState the idState to set
+	 * Method in charge of setting idRole's value.
+	 * @param idRole the idRole to set
 	 */
-	public void setIdState(int idState) {
-		this.idState = idState;
+	public void setIdRole(int idRole) {
+		this.idRole = idRole;
 	}
 
 	/**

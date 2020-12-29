@@ -75,6 +75,7 @@ public class UserPrincipal implements UserDetails {
 		this.lastname = lastname;
 		this.username = username;
 		this.email = email;
+		this.password = password;
 		this.phone = phone;
 		this.address = address;
 		this.zip = zip;

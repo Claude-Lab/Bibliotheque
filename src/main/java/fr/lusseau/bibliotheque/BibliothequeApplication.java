@@ -41,13 +41,6 @@ public class BibliothequeApplication {
 		SpringApplication.run(BibliothequeApplication.class, args);
 	}
 	
-//	//Creating bean keycloakConfigResolver
-//    @Bean
-//    public KeycloakSpringBootConfigResolver keycloakConfigResolver() {
-//        return new KeycloakSpringBootConfigResolver();
-//    }
-	
-
 	@Bean
     public Docket api() { 
         return new Docket(DocumentationType.SWAGGER_2)  

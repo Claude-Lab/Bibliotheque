@@ -27,8 +27,8 @@ public class Library {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idLibrary")
-	private int idLibrary;
+	@Column(name = "id")
+	private int id;
 	
 	@Column(unique = true, name = "name")
 	private String name;
@@ -62,13 +62,13 @@ public class Library {
 
 	/**
 	 * Constructor.
-	 * @param idLibrary
+	 * @param id
 	 * @param name
 	 * @param contact
 	 * @param books
 	 */
-	public Library(int idLibrary, String name, Contact contact, String email) {
-		this.idLibrary = idLibrary;
+	public Library(int id, String name, Contact contact, String email) {
+		this.id = id;
 		this.name = name;
 		this.contact = contact;
 		this.email = email;
@@ -78,16 +78,16 @@ public class Library {
 	 * Method in charge of getting idLibrary's value .
 	 * @return the idLibrary
 	 */
-	public int getIdLibrary() {
-		return idLibrary;
+	public int getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idLibrary's value.
 	 * @param idLibrary the idLibrary to set
 	 */
-	public void setIdLibrary(int idLibrary) {
-		this.idLibrary = idLibrary;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -136,59 +136,6 @@ public class Library {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((contact == null) ? 0 : contact.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + idLibrary;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Library)) {
-			return false;
-		}
-		Library other = (Library) obj;
-		if (contact == null) {
-			if (other.contact != null) {
-				return false;
-			}
-		} else if (!contact.equals(other.contact)) {
-			return false;
-		}
-		if (email == null) {
-			if (other.email != null) {
-				return false;
-			}
-		} else if (!email.equals(other.email)) {
-			return false;
-		}
-		if (idLibrary != other.idLibrary) {
-			return false;
-		}
-		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name)) {
-			return false;
-		}
-		return true;
 	}
 
 	

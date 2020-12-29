@@ -10,71 +10,76 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Class in charge of defining .
  * @Version Bibliotheque -v1,0
- * @date  25 oct. 2020 - 08:46:15
+ * @date  25 oct. 2020 - 16:31:37
  * @author Claude LUSSEAU
  *
  */
-@ApiModel(value = "Request Library Model")
-public class LibraryRequestDTO implements Comparable<LibraryRequestDTO> {
+@ApiModel(value = "Request Editor Model")
+public class EditorRequest  {
 	
-	@ApiModelProperty(value = "Library id")
-	private int idLibrary;
+	@ApiModelProperty(value = "Editor id")
+	private int id;
 	
-	@ApiModelProperty(value = "Library name")
+	@ApiModelProperty(value = "Editor name")
 	private String name;
 	
-	@ApiModelProperty(value = "Library contact")
+	@ApiModelProperty(value = "Editor email")
+	private String email;
+	
+	@ApiModelProperty(value = "Editor contact")
 	private Contact contact;
 	
-
+	
 	/**
 	 * Constructor.
 	 */
-	public LibraryRequestDTO() {
+	public EditorRequest() {
 	}
 
 
 	/**
 	 * Constructor.
 	 * @param name
+	 * @param email
 	 * @param contact
 	 */
-	public LibraryRequestDTO(String name, Contact contact) {
-		super();
+	public EditorRequest(String name, String email, Contact contact) {
 		this.name = name;
+		this.email = email;
 		this.contact = contact;
 	}
 
 
 	/**
 	 * Constructor.
-	 * @param idLibrary
+	 * @param id
 	 * @param name
+	 * @param email
 	 * @param contact
 	 */
-	public LibraryRequestDTO(int idLibrary, String name, Contact contact) {
-		super();
-		this.idLibrary = idLibrary;
+	public EditorRequest(int id, String name, String email, Contact contact) {
+		this.id = id;
 		this.name = name;
+		this.email = email;
 		this.contact = contact;
 	}
 
 
 	/**
-	 * Method in charge of getting idLibrary's value .
-	 * @return the idLibrary
+	 * Method in charge of getting id's value .
+	 * @return the id
 	 */
-	public int getIdLibrary() {
-		return idLibrary;
+	public int getId() {
+		return id;
 	}
 
 
 	/**
-	 * Method in charge of setting idLibrary's value.
-	 * @param idLibrary the idLibrary to set
+	 * Method in charge of setting id's value.
+	 * @param id the id to set
 	 */
-	public void setIdLibrary(int idLibrary) {
-		this.idLibrary = idLibrary;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 
@@ -97,6 +102,24 @@ public class LibraryRequestDTO implements Comparable<LibraryRequestDTO> {
 
 
 	/**
+	 * Method in charge of getting email's value .
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+
+	/**
+	 * Method in charge of setting email's value.
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	/**
 	 * Method in charge of getting contact's value .
 	 * @return the contact
 	 */
@@ -113,14 +136,5 @@ public class LibraryRequestDTO implements Comparable<LibraryRequestDTO> {
 		this.contact = contact;
 	}
 
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int compareTo(LibraryRequestDTO o) {
-		return o.getName().compareTo(this.name);
-	}
-	
 	
 }

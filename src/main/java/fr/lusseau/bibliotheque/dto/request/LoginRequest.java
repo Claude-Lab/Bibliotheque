@@ -1,7 +1,7 @@
 /**
  * 
  */
-package fr.lusseau.bibliotheque.payload;
+package fr.lusseau.bibliotheque.dto.request;
 
 import javax.validation.constraints.NotBlank;
 
@@ -13,12 +13,20 @@ import javax.validation.constraints.NotBlank;
  *
  */
 public class LoginRequest {
-    
-	@NotBlank
+	
+    @NotBlank
     private String usernameOrEmail;
 
     @NotBlank
     private String password;
+    
+    /**
+	 * Constructor.
+	 */
+	public LoginRequest() {
+		// TODO Auto-generated constructor stub
+	}
+    
 
     public String getUsernameOrEmail() {
         return usernameOrEmail;

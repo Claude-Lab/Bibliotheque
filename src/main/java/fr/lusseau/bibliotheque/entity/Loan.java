@@ -30,8 +30,8 @@ public class Loan {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "idLoan")
-	private Integer idLoan;
+	@Column(name = "id")
+	private Integer id;
     
 	@Column(name = "beginDate", nullable = false)
     private LocalDate beginDate;
@@ -56,23 +56,63 @@ public class Loan {
 	 * Constructor.
 	 */
 	public Loan() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
+	
+	
+
+	/**
+	 * Constructor.
+	 * @param beginDate
+	 * @param endDate
+	 * @param status
+	 * @param book
+	 * @param user
+	 */
+	public Loan(LocalDate beginDate, LocalDate endDate, LoanStatus status, Book book, User user) {
+		super();
+		this.beginDate = beginDate;
+		this.endDate = endDate;
+		this.status = status;
+		this.book = book;
+		this.user = user;
+	}
+
+	/**
+	 * Constructor.
+	 * @param id
+	 * @param beginDate
+	 * @param endDate
+	 * @param status
+	 * @param book
+	 * @param user
+	 */
+	public Loan(Integer id, LocalDate beginDate, LocalDate endDate, LoanStatus status, Book book, User user) {
+		super();
+		this.id = id;
+		this.beginDate = beginDate;
+		this.endDate = endDate;
+		this.status = status;
+		this.book = book;
+		this.user = user;
+	}
+
+
 
 	/**
 	 * Method in charge of getting idLoan's value .
 	 * @return the idLoan
 	 */
-	public Integer getIdLoan() {
-		return idLoan;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idLoan's value.
 	 * @param idLoan the idLoan to set
 	 */
-	public void setIdLoan(Integer idLoan) {
-		this.idLoan = idLoan;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**
@@ -121,59 +161,6 @@ public class Loan {
 	 */
 	public void setStatus(LoanStatus status) {
 		this.status = status;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((beginDate == null) ? 0 : beginDate.hashCode());
-		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-		result = prime * result + ((idLoan == null) ? 0 : idLoan.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		return result;
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Loan)) {
-			return false;
-		}
-		Loan other = (Loan) obj;
-		if (beginDate == null) {
-			if (other.beginDate != null) {
-				return false;
-			}
-		} else if (!beginDate.equals(other.beginDate)) {
-			return false;
-		}
-		if (endDate == null) {
-			if (other.endDate != null) {
-				return false;
-			}
-		} else if (!endDate.equals(other.endDate)) {
-			return false;
-		}
-		if (idLoan == null) {
-			if (other.idLoan != null) {
-				return false;
-			}
-		} else if (!idLoan.equals(other.idLoan)) {
-			return false;
-		}
-		if (status != other.status) {
-			return false;
-		}
-		return true;
 	}
 
 }
