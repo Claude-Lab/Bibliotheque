@@ -21,9 +21,11 @@ import fr.lusseau.bibliotheque.entity.Library;
 public interface LibraryDAO extends JpaRepository<Library, Integer>{
 
 	
-	public List<Library> findByNameContaining(String name);
+	List<Library> findByNameContaining(String name);
 	
-	public Library findByName(String name);
+	Library findByName(String name);
+	
+	boolean existsByName(String name);
 	
 
 }

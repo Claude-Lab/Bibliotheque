@@ -15,13 +15,16 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @ApiModel(value = "Request Library Model")
-public class LibraryRequest implements Comparable<LibraryRequest> {
+public class LibraryRequest {
 	
 	@ApiModelProperty(value = "Library id")
-	private int idLibrary;
+	private int id;
 	
 	@ApiModelProperty(value = "Library name")
 	private String name;
+	
+	@ApiModelProperty(value = "Library email")
+	private String email;
 	
 	@ApiModelProperty(value = "Library contact")
 	private Contact contact;
@@ -39,42 +42,44 @@ public class LibraryRequest implements Comparable<LibraryRequest> {
 	 * @param name
 	 * @param contact
 	 */
-	public LibraryRequest(String name, Contact contact) {
+	public LibraryRequest(String name, String email, Contact contact) {
 		super();
 		this.name = name;
+		this.email = email;
 		this.contact = contact;
 	}
 
 
 	/**
 	 * Constructor.
-	 * @param idLibrary
+	 * @param id
 	 * @param name
 	 * @param contact
 	 */
-	public LibraryRequest(int idLibrary, String name, Contact contact) {
+	public LibraryRequest(int id, String name, String email, Contact contact) {
 		super();
-		this.idLibrary = idLibrary;
+		this.id = id;
 		this.name = name;
+		this.email = email;
 		this.contact = contact;
 	}
 
 
 	/**
-	 * Method in charge of getting idLibrary's value .
-	 * @return the idLibrary
+	 * Method in charge of getting id's value .
+	 * @return the id
 	 */
-	public int getIdLibrary() {
-		return idLibrary;
+	public int getId() {
+		return id;
 	}
 
 
 	/**
-	 * Method in charge of setting idLibrary's value.
-	 * @param idLibrary the idLibrary to set
+	 * Method in charge of setting id's value.
+	 * @param id the id to set
 	 */
-	public void setIdLibrary(int idLibrary) {
-		this.idLibrary = idLibrary;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 
@@ -94,6 +99,24 @@ public class LibraryRequest implements Comparable<LibraryRequest> {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+
+	/**
+	 * Method in charge of getting email's value .
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+
+	/**
+	 * Method in charge of setting email's value.
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 
 	/**
@@ -112,15 +135,5 @@ public class LibraryRequest implements Comparable<LibraryRequest> {
 	public void setContact(Contact contact) {
 		this.contact = contact;
 	}
-
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int compareTo(LibraryRequest o) {
-		return o.getName().compareTo(this.name);
-	}
-	
 	
 }

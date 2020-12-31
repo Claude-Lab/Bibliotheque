@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * Class in charge of defining Library entity.
@@ -30,13 +33,16 @@ public class Library {
 	@Column(name = "id")
 	private int id;
 	
+	@NotBlank
 	@Column(unique = true, name = "name")
 	private String name;
 	
+	@NotBlank
+	@Email
 	@Column(unique = true, name = "email")
 	private String email;
 	
-	
+	@NotNull
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY )
 	@JoinColumn( name="idContact", nullable=false )
 	private Contact contact;
@@ -54,7 +60,7 @@ public class Library {
 	 * @param contact
 	 * @param books
 	 */
-	public Library(String name, Contact contact, String email) {
+	public Library(String name, String email, Contact contact) {
 		this.name = name;
 		this.contact = contact;
 		this.email = email;

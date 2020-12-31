@@ -14,21 +14,14 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @ApiModel(value = "Request State Model")
-public class StateRequest implements Comparable<StateRequest> {
+public class StateRequest {
 	
 	@ApiModelProperty(value = "State id")
-	private int idState;
+	private int id;
 
 	@ApiModelProperty(value = "State label")
 	private String label;
 	
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int compareTo(StateRequest o) {
-		return o.getLabel().compareToIgnoreCase(this.label);
-	}
 	
 	/**
 	 * Constructor.
@@ -51,9 +44,9 @@ public class StateRequest implements Comparable<StateRequest> {
 	 * @param idState
 	 * @param label
 	 */
-	public StateRequest(int idState, String label) {
+	public StateRequest(int id, String label) {
 		super();
-		this.idState = idState;
+		this.id = id;
 		this.label = label;
 	}
 
@@ -61,16 +54,16 @@ public class StateRequest implements Comparable<StateRequest> {
 	 * Method in charge of getting idState's value .
 	 * @return the idState
 	 */
-	public int getIdState() {
-		return idState;
+	public int getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idState's value.
 	 * @param idState the idState to set
 	 */
-	public void setIdState(int idState) {
-		this.idState = idState;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**

@@ -4,6 +4,7 @@
 package fr.lusseau.bibliotheque.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import fr.lusseau.bibliotheque.entity.Library;
 
@@ -16,18 +17,22 @@ import fr.lusseau.bibliotheque.entity.Library;
  */
 public interface LibraryService {
 
-	public Library saveLibrary (Library library);
+	Library save (Library library);
 
-	public Library updateLibrary (Library library);
+	Library update (Library library);
 	
-	public void deleteLibrary (Integer idLibrary);
+	void delete (Integer id);
 	
-	public List<Library> findByNameContaining(String name);
+	Optional<Library> findById(Integer id);
 	
-	public boolean checkIsLibraryExists(Integer idLibrary);
+	List<Library> findAll();
 	
-	public Library findByName(String name);
+	List<Library> findByNameContaining(String name);
 	
-	public Library findOne(Integer idLibrary);
+	Library findByName(String name);
+	
+	Library getOne(Integer id);
+	
+	boolean existsByName(String name);
 
 }

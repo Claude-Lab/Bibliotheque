@@ -16,17 +16,19 @@ import fr.lusseau.bibliotheque.entity.State;
  */
 public interface StateService {
 	
-	public State saveState (State sate);
+	public State save(State sate);
 	
-	public State updateState (State state);
+	public State update(State state);
 	
-	public void deleteState(Integer idState);
+	void delete(Integer id);
+	
+	State getOne(Integer id);
+	
+	boolean existsByLabel(String label);
 	
 	public State findStateByLabel(String label);
 	
 	public List<State> findByLabelContaining(String label);
-	
-	public boolean checkIfIdExists(Integer idState);
 	
 	public List<State> findAll();
 

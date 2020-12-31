@@ -22,5 +22,7 @@ public interface StateDAO extends JpaRepository<State, Integer> {
 
 	State findByLabel(String label);
 	
-	public List<State> findByLabelContaining(String label);
+	List<State> findByLabelContaining(String label);
+	
+	boolean existsByLabel(String label);
 }

@@ -33,26 +33,11 @@ public class StateServiceImpl implements StateService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public State saveState(State state) {
+	public State save(State state) {
 		return dao.save(state);
 	}
 
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public State updateState(State state) {
-		return dao.save(state);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public void deleteState(Integer idState) {
-		dao.deleteById(idState);
-	}
-
+	
 	/**
 	 * @{inheritDoc}
 	*/
@@ -68,14 +53,6 @@ public class StateServiceImpl implements StateService {
 	public List<State> findByLabelContaining(String label) {
 		return dao.findByLabelContaining(label);
 	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public boolean checkIfIdExists(Integer idState) {
-		return dao.existsById(idState);
-	}
 	
 	/**
 	 * @{inheritDoc}
@@ -83,6 +60,39 @@ public class StateServiceImpl implements StateService {
 	@Override
 	public List<State> findAll() {
 		return dao.findAll();
+	}
+
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public State update(State state) {
+		return dao.save(state);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public void delete(Integer id) {
+		dao.deleteById(id);
+		
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	public State getOne(Integer id) {
+		return dao.getOne(id);
+	}
+
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByLabel(String label) {
+		return dao.existsByLabel(label);
 	}
 
 }

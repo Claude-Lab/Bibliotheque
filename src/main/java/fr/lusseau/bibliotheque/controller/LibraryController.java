@@ -4,12 +4,11 @@
 package fr.lusseau.bibliotheque.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.lusseau.bibliotheque.dto.request.LibraryRequest;
 import fr.lusseau.bibliotheque.entity.Library;
-import fr.lusseau.bibliotheque.service.impl.LibraryServiceImpl;
+import fr.lusseau.bibliotheque.payload.RestApiResponse;
+import fr.lusseau.bibliotheque.service.LibraryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -31,146 +31,141 @@ import io.swagger.annotations.ApiResponses;
 
 /**
  * Classe en charge de
+ * 
  * @Version Bibliotheque -v1,0
- * @date  21 août 2020 - 14:11:15
+ * @date 21 août 2020 - 14:11:15
  * @author Claude LUSSEAU
  *
  */
-@CrossOrigin("*")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/admin/library")
 @Api(value = "Library Rest Controller: contient toutes les operations pour la gestion des bibliotheques")
 public class LibraryController {
 
 	@Autowired
-	LibraryServiceImpl libraryService;
-	
+	LibraryService service;
+
 	/**
-	 * Methode en charge d'ajouter une nouvelle Bibliotheque dans la base de données.
+	 * Methode en charge d'ajouter une nouvelle Bibliotheque dans la base de
+	 * données.
 	 * 
 	 * @param Library
 	 * @return
 	 */
 	@PostMapping("/addLibrary")
-	@ApiOperation(value = "Ajouter une nouvelle Bibliotheque", response = LibraryRequest.class)
+	@ApiOperation(value = "Ajouter une nouvelle Bibliotheque", response = Library.class)
 	@ApiResponses(value = { @ApiResponse(code = 409, message = "Erreur : la Bibliotheque existe déjà"),
 			@ApiResponse(code = 201, message = "Création : l'Bibliotheque a été correctement créée"),
 			@ApiResponse(code = 304, message = "Non modifiée : la Bibliotheque n'a pas été créée") })
-	public ResponseEntity<LibraryRequest> createNewLibrary(@RequestBody LibraryRequest libraryRequestDTO) {
-		Library existingLibrary = libraryService.findByName(libraryRequestDTO.getName());
-		if (existingLibrary != null) {
-			return new ResponseEntity<LibraryRequest>(HttpStatus.CONFLICT);
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> createNewLibrary(@RequestBody Library library) {
+
+		if (service.existsByName(library.getName())) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Library with this name is already taken!"),
+					HttpStatus.CONFLICT);
 		}
-		Library libraryResquest = mapLibraryDTOToLibrary(libraryRequestDTO);
-		Library libraryResponse = libraryService.saveLibrary(libraryResquest);
-		if (libraryResponse != null) {
-			LibraryRequest libraryDTO = mapLibraryToLibraryDTO(libraryResponse);
-			return new ResponseEntity<LibraryRequest>(libraryDTO, HttpStatus.CREATED);
+
+		library = new Library(library.getName(), library.getEmail(), library.getContact());
+		Library libraryResponse = service.save(library);
+		if (libraryResponse == null) {
+			return new ResponseEntity<Library>(library, HttpStatus.NOT_IMPLEMENTED);
 		}
-		return new ResponseEntity<LibraryRequest>(HttpStatus.NOT_MODIFIED);
+		return new ResponseEntity<Object>(new RestApiResponse(true, "Library registered successfully"),
+				HttpStatus.CREATED);
 	}
 
-	
 	/**
 	 * Methode en charge de lister toutes les Bibliotheques de la base de données.
+	 * 
 	 * @return
 	 */
 	@GetMapping("/allLibraries")
-	@ApiOperation(value="Liste toutes les Bibliotheques", response = Library.class)
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Ok: liste réussie"),
-			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
-	})
-	public ResponseEntity<List<LibraryRequest>> listLibrary() {
-		
-		List<Library> libraries = libraryService.findAllLibrary();
-		if (libraries != null &&  !CollectionUtils.isEmpty(libraries)) {
-			List<LibraryRequest> libraryDTOs = libraries.stream().map(library -> { 
-				return mapLibraryToLibraryDTO(library);
-			}).collect(Collectors.toList());
-			return new ResponseEntity<List<LibraryRequest>>(libraryDTOs, HttpStatus.OK);
+	@ApiOperation(value = "Liste toutes les Bibliotheques", response = List.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok: liste réussie"),
+			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
+	public ResponseEntity<List<Library>> librariesList() {
+
+		List<Library> libraries = service.findAll();
+		if (!CollectionUtils.isEmpty(libraries)) {
+			return new ResponseEntity<List<Library>>(libraries, HttpStatus.OK);
+
 		}
-		return new ResponseEntity<List<LibraryRequest>>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<List<Library>>(HttpStatus.NO_CONTENT);
 	}
-	
+
+	/**
+	 * Methode en charge de d'afficher une Bibliothèques de la base de données.
+	 * 
+	 * @return
+	 */
+	@GetMapping("/{id}")
+	@ApiOperation(value = "affiche une Bibliotheques", response = Library.class)
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok !"),
+			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
+	public ResponseEntity<?> getLibrary(@PathVariable Integer id) {
+
+		if (service.getOne(id) == null) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Library not found !"), HttpStatus.NOT_FOUND);
+		}
+		Library library = service.getOne(id);
+		return new ResponseEntity<Object>(library, HttpStatus.OK);
+	}
+
 	/**
 	 * Methode en charge de supprimer une Bibliotheques de la base de données.
 	 * 
 	 * @param idBibliotheque
 	 * @return
 	 */
-	@DeleteMapping("/deleteLibrary/{idLibrary}")
+	@DeleteMapping("/delete/{id}")
 	@ApiOperation(value = "Supprimer une Bibliotheque. Si la Bibliotheque n'existe pas, rien ne se passe", response = String.class)
 	@ApiResponse(code = 204, message = "Pas de donnée: Bibliotheque correctement supprimée")
-	public ResponseEntity<String> deleteLibrary(@PathVariable Integer idLibrary) {
-		libraryService.deleteLibrary(idLibrary);
-		return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+	public ResponseEntity<?> deleteLibrary(@PathVariable Integer id) {
+
+		Library library = service.getOne(id);
+		if (library != null) {
+			service.delete(id);
+			return new ResponseEntity<Object>(new RestApiResponse(true, "Library has been successfully deleted !"),
+					HttpStatus.OK);
+		}
+		return new ResponseEntity<Object>(new RestApiResponse(false, "Library not found !"), HttpStatus.NOT_FOUND);
 	}
-	
-	
-	
+
 	/**
 	 * Methode en charge de la mise à jour d'une Bibliotheque.
+	 * 
 	 * @param BibliothequeRequest
 	 * @return
 	 */
-	@PutMapping("/updateLibrary")
+	@PutMapping("/update/{id}")
 	@ApiOperation(value = "Modifie une Bibliotheque existante", response = Library.class)
 	@ApiResponses(value = { @ApiResponse(code = 404, message = "Not Found : L'Bibliotheque.trice n'existe pas"),
 			@ApiResponse(code = 200, message = "Ok: La Bibliotheque a été mise à jour"),
 			@ApiResponse(code = 304, message = "Non modifié: La Bibliotheque N'A PAS ETE MISE A JOUR !") })
-	public ResponseEntity<Library> updateLibrary(@RequestBody Library libraryRequest) {
-		if (!libraryService.checkIsLibraryExists(libraryRequest.getId())) {
-			return new ResponseEntity<Library>(HttpStatus.NOT_FOUND);
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
+	public ResponseEntity<?> updateLibrary(@RequestBody LibraryRequest update, Library library,
+			@PathVariable("id") Integer id) {
+		
+		if (service.existsByName(update.getName())) {
+			return new ResponseEntity<Object>(new RestApiResponse(false, "Library with this name is already taken!"),
+					HttpStatus.CONFLICT);
 		}
-		Library library = libraryService.updateLibrary(libraryRequest);
+		library = service.getOne(id);
 		if (library != null) {
+			library.setName(update.getName());
+			library.setEmail(update.getEmail());
+			library.setContact(update.getContact());
 			
-			return new ResponseEntity<Library>(library, HttpStatus.OK);
+			Library response = service.update(library);
+			if (response != null) {
+				return new ResponseEntity<Object>(response, HttpStatus.OK);
+			}
+
 		}
-		return new ResponseEntity<Library>(HttpStatus.NOT_MODIFIED);
-	}
-	
-	/**
-	 * Methode en charge de d'afficher une Bibliothèques de la base de données.
-	 * @return
-	 */
-	@GetMapping("/{idLibrary}")
-	@ApiOperation(value="affiche une Bibliotheques", response = Library.class)
-	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Ok !"),
-			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"),
-	})
-	public ResponseEntity<Library> findLibrary(@PathVariable Integer idLibrary) {
-		Library library = libraryService.findOne(idLibrary);
-		if (library != null) {
-			return new ResponseEntity<Library>(library, HttpStatus.OK);
-		}
-		return new ResponseEntity<Library>(HttpStatus.NO_CONTENT);
-	}
-	
-	/**
-	 * Transforme un entity Customer en un POJO CustomerDTO
-	 * 
-	 * @param customer
-	 * @return
-	 */
-	private LibraryRequest mapLibraryToLibraryDTO(Library library) {
-		ModelMapper mapper = new ModelMapper();
-		LibraryRequest libraryDTO = mapper.map(library, LibraryRequest.class);
-		return libraryDTO;
+		return new ResponseEntity<Object>(HttpStatus.NOT_MODIFIED);
 	}
 
-	/**
-	 * Transforme un POJO CustomerDTO en en entity Customer
-	 * 
-	 * @param customerDTO
-	 * @return
-	 */
-	private Library mapLibraryDTOToLibrary(LibraryRequest libraryDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Library library = mapper.map(libraryDTO, Library.class);
-		return library;
-	}
-	
 }

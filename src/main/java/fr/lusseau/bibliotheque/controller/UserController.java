@@ -96,7 +96,7 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	@PutMapping("/updateUser/{id}")
+	@PutMapping("/update/{id}")
 	@ApiOperation(value = "Update user", response = User.class)
 	@ApiResponses(value = { @ApiResponse(code = 500, message = "Erreur: Pseudonyme ou email déjà existant"),
 			@ApiResponse(code = 200, message = "Ok: liste réussie"),
