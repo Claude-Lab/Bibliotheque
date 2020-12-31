@@ -16,19 +16,23 @@ import fr.lusseau.bibliotheque.entity.Book;
  */
 public interface BookService {
 
-	public Book saveBook (Book book);
+	Book save(Book book);
 	
-	public Book updateBook (Book book);
+	Book update(Book book);
 	
-	public void deleteBook(Integer idBook);
+	void delete(Integer idBook);
 	
-	public List<Book> findByTitleContainingIgnoreCase(String title);
+	List<Book> findByTitleContainingIgnoreCase(String title);
 		
-	public boolean checkIfIdExists(Integer idBook);
+	Book findByTitle(String title);
 	
-	public Book findByTitle(String title);
+	List<Book> findAll();
 	
-	public List<Book> findAll();
+	Book getOne(Integer id);
+	
+	boolean existsByIsbn(String isbn);
+	
+	boolean existsByTitle(String title);
 	
 	
 }

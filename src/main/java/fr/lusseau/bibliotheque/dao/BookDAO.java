@@ -17,7 +17,7 @@ import fr.lusseau.bibliotheque.entity.Book;
  * @author Claude LUSSEAU
  *
  */
-@RepositoryRestResource(collectionResourceRel = "book", path = "books")
+@RepositoryRestResource
 public interface BookDAO extends JpaRepository<Book, Integer> {
 
 
@@ -26,5 +26,9 @@ public interface BookDAO extends JpaRepository<Book, Integer> {
 	Book findByTitle(String title);
 	
 	long count();
+
+	boolean existsByIsbn(String isbn);
+	
+	boolean existsByTitle(String title);
 	
 }

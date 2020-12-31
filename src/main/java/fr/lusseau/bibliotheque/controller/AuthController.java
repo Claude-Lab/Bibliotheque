@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -105,6 +106,7 @@ public class AuthController {
 			@ApiResponse(code = 201, message = "Création: le compte de la personne à été correctement enregistrée en base"),
 			@ApiResponse(code = 304, message = "Non modifié: la personne n'a pas été correctement insérée") })
 	@PostMapping("/signup")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE')")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistration newUser) {
 
 		if (userService.existsByEmail(newUser.getEmail())) {

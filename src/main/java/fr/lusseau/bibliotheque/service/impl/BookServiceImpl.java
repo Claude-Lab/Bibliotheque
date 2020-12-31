@@ -31,7 +31,7 @@ public class BookServiceImpl implements BookService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Book saveBook(Book book) {
+	public Book save(Book book) {
 		return dao.save(book);
 	}
 
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public Book updateBook(Book book) {
+	public Book update(Book book) {
 		return dao.save(book);
 	}
 
@@ -47,7 +47,7 @@ public class BookServiceImpl implements BookService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public void deleteBook(Integer idBook) {
+	public void delete(Integer idBook) {
 		dao.deleteById(idBook);
 	}
 
@@ -64,14 +64,6 @@ public class BookServiceImpl implements BookService {
 	 * @{inheritDoc}
 	*/
 	@Override
-	public boolean checkIfIdExists(Integer idBook) {
-		return dao.existsById(idBook);
-	}
-
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
 	public Book findByTitle(String title) {
 		return dao.findByTitle(title);
 	}
@@ -82,5 +74,29 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public List<Book> findAll() {
 		return dao.findAll();
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public Book getOne(Integer id) {
+		return dao.getOne(id);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByIsbn(String isbn) {
+		return dao.existsByIsbn(isbn);
+	}
+	
+	/**
+	 * @{inheritDoc}
+	*/
+	@Override
+	public boolean existsByTitle(String title) {
+		return dao.existsByTitle(title);
 	}
 }
