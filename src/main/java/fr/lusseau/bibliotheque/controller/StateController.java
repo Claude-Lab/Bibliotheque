@@ -47,10 +47,9 @@ public class StateController {
 	StateService service;
 
 	/**
-	 * Methode en charge de d'ajouter une nouvelle catégorie dans la base de
-	 * données.
+	 * Methode en charge de d'ajouter un nouvel état dans la base de données.
 	 * 
-	 * @param categorie
+	 * @param state
 	 * @return
 	 */
 	@PostMapping("/addState")
@@ -74,7 +73,7 @@ public class StateController {
 	}
 
 	/**
-	 * Methode en charge de lister toutes les catégories de la base de données.
+	 * Methode en charge de lister tous les etats de la base de données.
 	 * 
 	 * @return
 	 */
