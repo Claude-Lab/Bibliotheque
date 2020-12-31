@@ -62,7 +62,7 @@ public class StateController {
 	public ResponseEntity<?> createNewState(@RequestBody State state) {
 
 		if (service.existsByLabel(state.getLabel())) {
-			return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+			return new ResponseEntity<Object>(new RestApiResponse(false, "State with this label is already taken!"), HttpStatus.CONFLICT);
 		}
 		state = new State(state.getLabel());
 		State response = service.save(state);
