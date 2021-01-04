@@ -28,6 +28,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * Classe en charge de la gestion des auteurs.
@@ -96,9 +97,10 @@ public class AuthorController {
 	 * 
 	 * @return
 	 */
-	@GetMapping("/{id}")
-	@ApiOperation(value = "affiche un auteur", response = Author.class)
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Ok !"),
+	@GetMapping(value = "/{id}", consumes = { "application/json" }) 
+	@Operation(summary = "affiche un auteur", description = "", tags = { "auteur" })
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Ok !"),
 			@ApiResponse(code = 204, message = "Pas de donnée: pas de résultat"), })
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_EMPLOYE') or hasRole('ROLE_USER')")
 	public ResponseEntity<?> getAuthor(@PathVariable Integer id) {
@@ -107,7 +109,6 @@ public class AuthorController {
 			return new ResponseEntity<Object>(author, HttpStatus.OK);
 		}
 		return new ResponseEntity<Object>(new RestApiResponse(false, "Author not found !"), HttpStatus.NOT_FOUND);
-
 	}
 	
 

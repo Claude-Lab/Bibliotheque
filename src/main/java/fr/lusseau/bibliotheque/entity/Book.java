@@ -3,6 +3,7 @@
  */
 package fr.lusseau.bibliotheque.entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +32,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Book")
-public class Book  {
+public class Book implements Serializable {
 	
+	private static final long serialVersionUID = 7283861920767250742L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -161,6 +163,65 @@ public class Book  {
 		this.library = library;
 		this.state = state;
 		this.loans = loans;
+	}
+
+
+	/**
+	 * Constructor.
+	 * @param title
+	 * @param isbn
+	 * @param releaseDate
+	 * @param registerDate
+	 * @param nbOfCopies
+	 * @param authors
+	 * @param categories
+	 * @param description
+	 * @param editor
+	 * @param library
+	 * @param state
+	 */
+	public Book(String title, String isbn, LocalDate releaseDate, LocalDate registerDate, Integer nbOfCopies,
+			String description, Editor editor, State state, Library library, Set<Category> categories, Set<Author> authors) {
+		this.title = title;
+		this.isbn = isbn;
+		this.releaseDate = releaseDate;
+		this.registerDate = registerDate;
+		this.nbOfCopies = nbOfCopies;
+		this.authors = authors;
+		this.categories = categories;
+		this.description = description;
+		this.editor = editor;
+		this.library = library;
+		this.state = state;
+	}
+	
+	
+
+
+	/**
+	 * Constructor.
+	 * @param title
+	 * @param isbn
+	 * @param releaseDate
+	 * @param registerDate
+	 * @param nbOfCopies
+	 * @param authors
+	 * @param description
+	 * @param editor
+	 * @param library
+	 * @param state
+	 */
+	public Book(String title, String isbn, LocalDate releaseDate, LocalDate registerDate, Integer nbOfCopies,
+			String description, Editor editor, Library library, State state) {
+		this.title = title;
+		this.isbn = isbn;
+		this.releaseDate = releaseDate;
+		this.registerDate = registerDate;
+		this.nbOfCopies = nbOfCopies;
+		this.description = description;
+		this.editor = editor;
+		this.library = library;
+		this.state = state;
 	}
 
 

@@ -72,7 +72,7 @@ dependencies {
     testCompile group: 'org.jboss.arquillian.graphene', name: 'graphene-webdriver', version: '2.3.2', ext: 'pom'
     compile group: 'org.jboss.arquillian.extension', name: 'arquillian-phantom-driver', version: '1.2.1.1'
     compile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.4.1.Final'
-    
+        
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}

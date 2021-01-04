@@ -26,10 +26,10 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Relation(value = "book", collectionRelation = "books")
 @ApiModel(value = "Register Book Model")
-public class BookRegister  implements Comparable<BookRegister> {
+public class BookRegister {
 	
 	@ApiModelProperty(value = "Book id")
-	private Integer idBook;
+	private Integer id;
 	
 	@ApiModelProperty(value = "Book title")
 	private String title;
@@ -63,15 +63,7 @@ public class BookRegister  implements Comparable<BookRegister> {
 	
 	@ApiModelProperty(value = "Book authors")
 	private Set<Author> authors = new HashSet<Author>();
-	
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int compareTo(BookRegister o) {
-		return ((o.getTitle().compareToIgnoreCase(this.title)) & (o.getIsbn().compareToIgnoreCase(this.isbn)));
-	}
-	
+		
 	/**
 	 * Constructor.
 	 */
@@ -112,7 +104,7 @@ public class BookRegister  implements Comparable<BookRegister> {
 
 	/**
 	 * Constructor.
-	 * @param idBook
+	 * @param id
 	 * @param title
 	 * @param isbn
 	 * @param releaseDate
@@ -125,11 +117,11 @@ public class BookRegister  implements Comparable<BookRegister> {
 	 * @param categories
 	 * @param authors
 	 */
-	public BookRegister(Integer idBook, String title, String isbn, LocalDate releaseDate, LocalDate registerDate,
+	public BookRegister(Integer id, String title, String isbn, LocalDate releaseDate, LocalDate registerDate,
 			Integer nbOfCopies, String description, Editor editor, State state, Library library,
 			Set<Category> categories, Set<Author> authors) {
 		super();
-		this.idBook = idBook;
+		this.id = id;
 		this.title = title;
 		this.isbn = isbn;
 		this.releaseDate = releaseDate;
@@ -147,16 +139,16 @@ public class BookRegister  implements Comparable<BookRegister> {
 	 * Method in charge of getting idBook's value .
 	 * @return the idBook
 	 */
-	public Integer getIdBook() {
-		return idBook;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idBook's value.
 	 * @param idBook the idBook to set
 	 */
-	public void setIdBook(Integer idBook) {
-		this.idBook = idBook;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**

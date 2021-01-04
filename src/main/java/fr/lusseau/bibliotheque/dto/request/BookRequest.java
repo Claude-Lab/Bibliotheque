@@ -22,10 +22,10 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @Relation(value = "book", collectionRelation = "books")
 @ApiModel(value = "Request Book Model")
-public class BookRequest implements Comparable<BookRequest> {
+public class BookRequest  {
 
 	@ApiModelProperty(value = "Book id")
-	private Integer idBook;
+	private Integer id;
 	
 	@ApiModelProperty(value = "Book title")
 	private String title;
@@ -54,13 +54,6 @@ public class BookRequest implements Comparable<BookRequest> {
 	@ApiModelProperty(value = "Book library")
 	private Library library;
 	
-	/**
-	 * @{inheritDoc}
-	*/
-	@Override
-	public int compareTo(BookRequest o) {
-		return ((o.getTitle().compareToIgnoreCase(this.title)) & (o.getIsbn().compareToIgnoreCase(this.isbn)));
-	}
 	
 	/**
 	 * Constructor.
@@ -108,10 +101,10 @@ public class BookRequest implements Comparable<BookRequest> {
 	 * @param state
 	 * @param library
 	 */
-	public BookRequest(Integer idBook, String title, String isbn, LocalDate releaseDate, LocalDate registerDate,
+	public BookRequest(Integer id, String title, String isbn, LocalDate releaseDate, LocalDate registerDate,
 			Integer nbOfCopies, String description, Editor editor, State state, Library library) {
 		super();
-		this.idBook = idBook;
+		this.id = id;
 		this.title = title;
 		this.isbn = isbn;
 		this.releaseDate = releaseDate;
@@ -127,16 +120,16 @@ public class BookRequest implements Comparable<BookRequest> {
 	 * Method in charge of getting idBook's value .
 	 * @return the idBook
 	 */
-	public Integer getIdBook() {
-		return idBook;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
 	 * Method in charge of setting idBook's value.
 	 * @param idBook the idBook to set
 	 */
-	public void setIdBook(Integer idBook) {
-		this.idBook = idBook;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	/**
